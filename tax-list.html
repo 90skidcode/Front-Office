@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Hotel</title>
+
+    <!-- Favicon -->
+    <link rel="shortcut icon" href="assets/images/logo/favicon.png">
+
+    <!-- page css -->
+    <link href="assets/vendors/datatables/dataTables.bootstrap.min.css" rel="stylesheet">
+    <!-- Core css -->
+    <link href="assets/css/app.min.css" rel="stylesheet">
+
+</head>
+
+<body>
+    <div class="app is-folded">
+        <div class="layout">
+            <!-- Header START -->
+            <div class="header no-print">
+                <div class="logo logo-dark">
+                    <a href="index.html">
+                        <img src="assets/images/logo/logo.png" alt="Logo">
+                        <img class="logo" src="assets/images/logo/logo.png" alt="Logo">
+                    </a>
+                </div>
+                <div class="logo logo-white">
+                    <a href="index.html">
+                        <img src="assets/images/logo/logo-white.png" alt="Logo">
+                        <img class="logo" src="assets/images/logo/logo-white.png" alt="Logo">
+                    </a>
+                </div>
+
+            </div>
+            <!-- Header END -->
+
+            <!-- Side Nav START -->
+            <div class="side-nav no-print">
+                <div class="side-nav-inner">
+                    <ul class="side-nav-menu scrollable">
+
+                    </ul>
+                </div>
+            </div>
+            <!-- Side Nav END -->
+
+            <!-- Page Container START -->
+            <div class="page-container">
+                <!-- Content Wrapper START -->
+                <div class="main-content">
+                    <div class="page-header">
+                        <h2 class="header-title">Tax</h2>
+                        <div class="header-sub-title">
+                            <nav class="breadcrumb breadcrumb-dash">
+                                <a href="#" class="breadcrumb-item"><i class="anticon anticon-home m-r-5"></i>Home</a>
+                                <a class="breadcrumb-item" href="#">Tax</a>
+                                <span class="breadcrumb-item active">Tax List</span>
+                            </nav>
+                        </div>
+                    </div>
+                    <div class="notification-toast top-right" id="notification-toast"></div>
+                    <div class="card">
+                        <div class="card-body">
+                            <h4>Tax List</h4>
+
+                            <div class="m-t-0">
+                                <table id="data-table" class="table">
+                                    <thead>
+                                        <tr>
+                                            <th>ID</th>
+                                            <th>Name</th>
+                                            <th>Precentage</th>
+                                            <th>Action</th>
+                                        </tr>
+                                    </thead>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Content Wrapper END -->
+        </div>
+        <!-- Page Container END -->
+
+    </div>
+    </div>
+    <script src="assets/js/jquery.js"></script>
+    <script src="assets/js/vendors.min.js"></script>
+    <script src="assets/js/app.min.js"></script>
+    <script src="assets/vendors/datatables/jquery.dataTables.min.js"></script>
+    <script src="assets/vendors/datatables/dataTables.bootstrap.min.js"></script>
+
+    <script src="assets/js/script.js"></script>
+    <script>
+        var data = {
+            'type': 'list',
+            'from': 'tax'
+        }
+        $.ajax({
+            url: 'assets/php/database.php',
+            type: "POST",
+            data: data,
+            success: function(response) {
+                var tabledata = [{
+                    "data": "bmt_tax_id"
+                }, {
+                    "data": "bmt_name"
+                }, {
+                    "data": "bmt_percentage"
+                }, /* EDIT */ /* DELETE */ {
+                    "data": "bmt_precentage",
+                    mRender: function(data, type, row) {
+                        return `<td class="text-right">
+                                    <a href="tax-add.html?id=${row.bmt_tax_id}" class="btn btn-icon btn-hover btn-sm btn-rounded pull-right">
+                                        <i class="anticon anticon-edit text-primary"></i>
+                                    </a>
+                                    <button class="btn btn-icon btn-hover btn-sm btn-rounded btn-delete-table" data-delete="${row.bmt_tax_id}" data-toggle="modal" data-target="#delete">
+                                        <i class="anticon anticon-delete text-danger"></i>
+                                    </button>
+                                </td>`;
+                    }
+                }];
+                dataTableDisplay(response, tabledata, false)
+            }
+        });
+
+        $(document).on('click', ".btn-delete", function() {
+            var data = {
+                'type': 'delete',
+                'from': 'tax',
+                'condition': {
+                    'bmt_tax_id': $(".btn-delete").attr('data-detete')
+                }
+            }
+            $.ajax({
+                url: 'assets/php/database.php',
+                type: "POST",
+                data: data,
+                success: function(response) {
+                    showToast('Record Deleted Sucessfully', 'success');
+                    setTimeout(function() {
+                        location.reload();
+                    }, 3100);
+                }
+            })
+        })
+    </script>
+</body>
+
+</html>

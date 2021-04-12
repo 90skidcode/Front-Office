@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="description" content="Free Web tutorials">
+    <meta name="keywords" content="HTML, CSS, JavaScript">
+    <meta name="author" content="John Doe">
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+    <title>Hotel</title>
+
+    <!-- Favicon -->
+    <link rel="shortcut icon" href="assets/images/logo/favicon.png">
+    <!-- page css -->
+    <link href="assets/vendors/select2/select2.css" rel="stylesheet">
+    <!-- Core css -->
+    <link href="assets/css/app.min.css" rel="stylesheet">
+
+</head>
+
+<body>
+    <div class="app is-folded">
+        <div class="layout">
+            <!-- Header START -->
+            <div class="header no-print">
+                <div class="logo logo-dark">
+                    <a href="index.html">
+                        <img src="assets/images/logo/logo.png" alt="Logo">
+                        <img class="logo" src="assets/images/logo/logo.png" alt="Logo">
+                    </a>
+                </div>
+                <div class="logo logo-white">
+                    <a href="index.html">
+                        <img src="assets/images/logo/logo-white.png" alt="Logo">
+                        <img class="logo" src="assets/images/logo/logo-white.png" alt="Logo">
+                    </a>
+                </div>
+
+            </div>
+            <!-- Header END -->
+
+            <!-- Side Nav START -->
+            <div class="side-nav no-print">
+                <div class="side-nav-inner">
+                    <ul class="side-nav-menu scrollable">
+
+                    </ul>
+                </div>
+            </div>
+            <!-- Side Nav END -->
+
+            <!-- Page Container START -->
+            <div class="page-container">
+                <!-- Content Wrapper START -->
+                <div class="main-content">
+                    <div class="notification-toast top-right" id="notification-toast"></div>
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="m-t-5 float-left">
+                                <div class="form-row">
+                                    <h6 class="h6 font-weight-bold col-md-12">Checkin Details</h6>
+                                    <div class="form-group col-md-3">
+                                        <label for="inputEmail4">Checkin No</label>
+                                        <input type="text" class="form-control booking_no" name="booking_no" readonly required>
+                                        <input type="hidden" class="form-control reservation_no" name="reservation_no">
+                                    </div>
+                                    <div class="form-group col-md-3">
+                                        <label for="inputEmail4">Booking Type</label>
+                                        <select class="select2 booking_type" name="booking_type">
+                                            <option value="I">Individual</option>
+                                            <option value="G">Group</option>                                            
+                                        </select>
+                                    </div>
+                                    <div class="form-group col-md-3">
+                                        <label for="travel_agency_id">Booked Via</label>
+                                        <select class="select2" id="travel_agency_id" name="travel_agency_id">
+                                                                  
+                                        </select>
+                                    </div>
+                                    <div class="form-group col-md-3">
+                                        <label for="travel_agency_transaction_no">Transaction No</label>
+                                        <input type="text" class="form-control" id="travel_agency_transaction_no" name="travel_agency_transaction_no">
+                                    </div>
+                                </div>
+                                <form id="customer-add">
+                                    <div class="form-row">
+                                        <h6 class="h6 font-weight-bold col-md-12">Customer Details</h6>
+                                        <div class="form-group col-md-1">
+                                            <label for="inputEmail4">Title</label>
+                                            <select class="select2" name="customer_title">
+                                                <option value="Mr."> Mr.</option>
+                                                <option value="Mrs."> Mrs.</option>
+                                                <option value="Ms."> Ms.</option>   
+                                                <option value="Miss."> Miss.</option>                                            
+                                            </select>
+                                        </div>
+                                        <div class="form-group col-md-2">
+                                            <label for="inputEmail4">First Name</label>
+                                            <input type="text" class="form-control" name="customer_fname" required>
+                                            <input type="hidden" class="form-control" name="customer_id">
+                                        </div>
+                                        <div class="form-group col-md-2">
+                                            <label for="inputEmail4">Last Name</label>
+                                            <input type="text" class="form-control" name="customer_lname" required>
+                                        </div>
+                                        <div class="form-group col-md-2">
+                                            <label for="inputEmail4">Gender</label>
+                                            <select class="select2" name="customer_gender">
+                                                <option value="Male">Male</option>
+                                                <option value="Female">Female</option>
+                                                <option value="Transgender">Transgender</option>                                               
+                                            </select>
+                                        </div>
+                                        <div class="form-group col-md-2">
+                                            <label for="inputEmail4">Nationality</label>
+                                            <select class="select2" name="customer_nationality">
+                                                 <option value="Afghan">Afghan</option><option value="Albanian">Albanian</option><option value="Algerian">Algerian</option><option value="American">American</option><option value="Andorran">Andorran</option><option value="Angolan">Angolan</option><option value="Antiguans">Antiguans</option><option value="Argentinean">Argentinean</option><option value="Armenian">Armenian</option><option value="Australian">Australian</option><option value="Austrian">Austrian</option><option value="Azerbaijani">Azerbaijani</option><option value="Bahamian">Bahamian</option><option value="Bahraini">Bahraini</option><option value="Bangladeshi">Bangladeshi</option><option value="Barbadian">Barbadian</option><option value="Barbudans">Barbudans</option><option value="Batswana">Batswana</option><option value="Belarusian">Belarusian</option><option value="Belgian">Belgian</option><option value="Belizean">Belizean</option><option value="Beninese">Beninese</option><option value="Bhutanese">Bhutanese</option><option value="Bolivian">Bolivian</option><option value="Bosnian">Bosnian</option><option value="Brazilian">Brazilian</option><option value="British">British</option><option value="Bruneian">Bruneian</option><option value="Bulgarian">Bulgarian</option><option value="Burkinabe">Burkinabe</option><option value="Burmese">Burmese</option><option value="Burundian">Burundian</option><option value="Cambodian">Cambodian</option><option value="Cameroonian">Cameroonian</option><option value="Canadian">Canadian</option><option value="Cape Verdean">Cape Verdean</option><option value="Central African">Central African</option><option value="Chadian">Chadian</option><option value="Chilean">Chilean</option><option value="Chinese">Chinese</option><option value="Colombian">Colombian</option><option value="Comoran">Comoran</option><option value="Congolese">Congolese</option><option value="Costa Rican">Costa Rican</option><option value="Croatian">Croatian</option><option value="Cuban">Cuban</option><option value="Cypriot">Cypriot</option><option value="Czech">Czech</option><option value="Danish">Danish</option><option value="Djibouti">Djibouti</option><option value="Dominican">Dominican</option><option value="Dutch">Dutch</option><option value="East Timorese">East Timorese</option><option value="Ecuadorean">Ecuadorean</option><option value="Egyptian">Egyptian</option><option value="Emirian">Emirian</option><option value="Equatorial Guinean">Equatorial Guinean</option><option value="Eritrean">Eritrean</option><option value="Estonian">Estonian</option><option value="Ethiopian">Ethiopian</option><option value="Fijian">Fijian</option><option value="Filipino">Filipino</option><option value="Finnish">Finnish</option><option value="French">French</option><option value="Gabonese">Gabonese</option><option value="Gambian">Gambian</option><option value="Georgian">Georgian</option><option value="German">German</option><option value="Ghanaian">Ghanaian</option><option value="Greek">Greek</option><option value="Grenadian">Grenadian</option><option value="Guatemalan">Guatemalan</option><option value="Guinea-Bissauan">Guinea-Bissauan</option><option value="Guinean">Guinean</option><option value="Guyanese">Guyanese</option><option value="Haitian">Haitian</option><option value="Herzegovinian">Herzegovinian</option><option value="Honduran">Honduran</option><option value="Hungarian">Hungarian</option><option value="I-Kiribati">I-Kiribati</option><option value="Icelander">Icelander</option><option value="Indian" selected>Indian</option><option value="Indonesian">Indonesian</option><option value="Iranian">Iranian</option><option value="Iraqi">Iraqi</option><option value="Irish">Irish</option><option value="Israeli">Israeli</option><option value="Italian">Italian</option><option value="Ivorian">Ivorian</option><option value="Jamaican">Jamaican</option><option value="Japanese">Japanese</option><option value="Jordanian">Jordanian</option><option value="Kazakhstani">Kazakhstani</option><option value="Kenyan">Kenyan</option><option value="Kittian and Nevisian">Kittian and Nevisian</option><option value="Kuwaiti">Kuwaiti</option><option value="Kyrgyz">Kyrgyz</option><option value="Laotian">Laotian</option><option value="Latvian">Latvian</option><option value="Lebanese">Lebanese</option><option value="Liberian">Liberian</option><option value="Libyan">Libyan</option><option value="Liechtensteiner">Liechtensteiner</option><option value="Lithuanian">Lithuanian</option><option value="Luxembourger">Luxembourger</option><option value="Macedonian">Macedonian</option><option value="Malagasy">Malagasy</option><option value="Malawian">Malawian</option><option value="Malaysian">Malaysian</option><option value="Maldivan">Maldivan</option><option value="Malian">Malian</option><option value="Maltese">Maltese</option><option value="Marshallese">Marshallese</option><option value="Mauritanian">Mauritanian</option><option value="Mauritian">Mauritian</option><option value="Mexican">Mexican</option><option value="Micronesian">Micronesian</option><option value="Moldovan">Moldovan</option><option value="Monacan">Monacan</option><option value="Mongolian">Mongolian</option><option value="Moroccan">Moroccan</option><option value="Mosotho">Mosotho</option><option value="Motswana">Motswana</option><option value="Mozambican">Mozambican</option><option value="Namibian">Namibian</option><option value="Nauruan">Nauruan</option><option value="Nepalese">Nepalese</option><option value="New Zealander">New Zealander</option><option value="Nicaraguan">Nicaraguan</option><option value="Nigerian">Nigerian</option><option value="Nigerien">Nigerien</option><option value="North Korean">North Korean</option><option value="Northern Irish">Northern Irish</option><option value="Norwegian">Norwegian</option><option value="Omani">Omani</option><option value="Pakistani">Pakistani</option><option value="Palauan">Palauan</option><option value="Panamanian">Panamanian</option><option value="Papua New Guinean">Papua New Guinean</option><option value="Paraguayan">Paraguayan</option><option value="Peruvian">Peruvian</option><option value="Polish">Polish</option><option value="Portuguese">Portuguese</option><option value="Qatari">Qatari</option><option value="Romanian">Romanian</option><option value="Russian">Russian</option><option value="Rwandan">Rwandan</option><option value="Saint Lucian">Saint Lucian</option><option value="Salvadoran">Salvadoran</option><option value="Samoan">Samoan</option><option value="San Marinese">San Marinese</option><option value="Sao Tomean">Sao Tomean</option><option value="Saudi">Saudi</option><option value="Scottish">Scottish</option><option value="Senegalese">Senegalese</option><option value="Serbian">Serbian</option><option value="Seychellois">Seychellois</option><option value="Sierra Leonean">Sierra Leonean</option><option value="Singaporean">Singaporean</option><option value="Slovakian">Slovakian</option><option value="Slovenian">Slovenian</option><option value="Solomon Islander">Solomon Islander</option><option value="Somali">Somali</option><option value="South African">South African</option><option value="South Korean">South Korean</option><option value="Spanish">Spanish</option><option value="Sri Lankan">Sri Lankan</option><option value="Sudanese">Sudanese</option><option value="Surinamer">Surinamer</option><option value="Swazi">Swazi</option><option value="Swedish">Swedish</option><option value="Swiss">Swiss</option><option value="Syrian">Syrian</option><option value="Taiwanese">Taiwanese</option><option value="Tajik">Tajik</option><option value="Tanzanian">Tanzanian</option><option value="Thai">Thai</option><option value="Togolese">Togolese</option><option value="Tongan">Tongan</option><option value="Trinidadian or Tobagonian">Trinidadian or Tobagonian</option><option value="Tunisian">Tunisian</option><option value="Turkish">Turkish</option><option value="Tuvaluan">Tuvaluan</option><option value="Ugandan">Ugandan</option><option value="Ukrainian">Ukrainian</option><option value="Uruguayan">Uruguayan</option><option value="Uzbekistani">Uzbekistani</option><option value="Venezuelan">Venezuelan</option><option value="Vietnamese">Vietnamese</option><option value="Welsh">Welsh</option><option value="Yemenite">Yemenite</option><option value="Zambian">Zambian</option><option value="Zimbabwean">Zimbabwean</option>
+                                            </select>
+                                        </div>
+                                        <div class="form-group col-md-3">
+                                            <label for="inputEmail4">Phone No</label>
+                                            <input type="number" class="form-control" name="customer_phone" required>
+                                        </div>
+                                        <div class="form-group col-md-3">
+                                            <label for="inputEmail4">Country</label>
+                                            <select class="select2" id="country" name="customer_country">
+                                                                                                                             
+                                            </select>
+                                        </div>
+                                        <div class="form-group col-md-2">
+                                            <label for="inputEmail4">State</label>
+                                            <select class="select2" id="state" name="customer_state">
+                                                                                                                                   
+                                            </select>
+                                        </div>
+                                        <div class="form-group col-md-2">
+                                            <label for="inputEmail4">City</label>
+                                            <select class="select2" id="city" name="customer_city">                                                                        
+                                            </select>
+                                        </div>
+                                        <div class="form-group col-md-2">
+                                            <label for="inputEmail4">Pincode</label>
+                                            <input type="number" class="form-control" name="customer_pincode" required>
+                                        </div>
+                                        <div class="form-group col-md-3">
+                                            <label for="inputEmail4">Address</label>
+                                            <textarea class="form-control" name="customer_address" required></textarea>
+                                        </div>
+                                        <div class="form-group col-md-2 d-none">
+                                            <label for="inputEmail4">Docs</label>
+                                            <input type="text" class="form-control" name="customer_doc">
+                                        </div>
+                                        <div class="form-group col-md-12">
+                                            <label class="pointer btn btn-primary" for="upload">Upload Customer Files</label>
+                                            <input type="file" id="upload" accept="image/*">
+                                        </div>
+                                        <div class="row image-prev-area d-none">
+
+                                        </div>
+                                    </div>
+                                </form>
+                                <form id="booking-add">
+                                    <div class="form-row">
+                                        <h6 class="h6 font-weight-bold col-md-12">Meal Plan</h6>
+                                        <div class="form-group col-md-3">
+                                            <label for="meal_plan_id">Meal Plan</label>
+                                            <select class="select2" id="meal_plan_id" name="meal_plan_id">
+                                               <option value="">Select Meal Plan</option>                                          
+                                            </select>
+                                        </div>
+                                        <div class="form-group col-md-3">
+                                            <label for="meal_price">Meal Price (Per Person)</label>
+                                            <input type="number" class="form-control text-right" readonly name="meal_price" required>
+                                        </div>
+                                        <div class="form-group col-md-3">
+                                            <label for="meal_count">Meal Count</label>
+                                            <input type="number" class="form-control text-right" name="meal_count" required>
+                                        </div>
+                                        <div class="form-group col-md-3">
+                                            <label for="meal_total">Meal Total Amount</label>
+                                            <input type="number" class="form-control text-right meal_total" name="meal_total" readonly>
+                                        </div>
+                                    </div>
+
+                                    <h6 class="h6 font-weight-bold col-md-12 p-0 m-t-10">Room Details</h6>
+
+                                    <div class="table-responsive">
+                                        <table class="table table-bordered ">
+                                            <thead class="thead-light">
+                                                <tr>
+                                                    <th class="text-center border-right-0 border-bottom-0 w-5"></th>
+                                                    <th class="text-left border-right-0 border-bottom-0 w-15">Room Type</th>
+                                                    <th class="text-left border-right-0 border-bottom-0">No of Night</th>
+                                                    <th class="text-left border-right-0 border-bottom-0  w-20">From Date/To Date</th>
+                                                    <th class="text-center border-right-0 border-bottom-0">Rooms Number</th>
+                                                    <th class="text-center border-right-0 border-bottom-0 ">No of Guest (Adult/Child)</th>
+                                                    <th class="text-center border-right-0 border-bottom-0">Charges for Extra Bed</th>
+                                                    <th class="text-right border-right-0 border-bottom-0 ">Price</th>
+                                                    <th class="text-right border-right-0 border-bottom-0">Discount%</th>
+                                                    <th class="text-right border-bottom-0 item-total">Total</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr class="insertroom">
+                                                    <td class="text-center border-right-0 border-bottom-0 p-0 action-btn">
+                                                        <button type="button" data-toggle="tooltip" title="Delete" class="btn btn-icon btn-outline-danger btn-lg">
+                                                                    <i class="fa fa-trash"></i>
+                                                                </button>
+                                                    </td>
+                                                    <td>
+                                                        <select class="select2 room_category" id="room_category" name="room_category" required>
+                                                            <option  value="">Select a Room Type</option>
+                                                        </select>
+                                                    </td>
+                                                    <td>
+                                                        <input type="number" name="hotel_no_of_night" data-getdate="current_date" data-setdate="set_date" autocomplete="off" required="required" data-item="no_of_night" class="no_of_night form-control text-right">
+                                                        <input type="hidden" name="room_status" data-getdate="current_date" data-setdate="set_date" autocomplete="off" value="I" data-item="room_status" class="room_status form-control text-right">
+                                                    </td>
+                                                    <td>
+                                                        <input type="datetime-local" name="hotel_from_date" autocomplete="off" required="required" data-item="from_date" class="from_date current_date form-control text-right">
+                                                        <input type="datetime-local" tabindex="-1" name="hotel_to_date" autocomplete="off" required="required" data-item="to_date" class="to_date set_date form-control text-right" readonly>
+                                                    </td>
+                                                    <td class="room_no_row">
+                                                        <select class="room_no form-control" id="room_no" name="room_no" required>
+                                                            <option value="">Select a Room No</option>
+                                                            </select>
+                                                    </td>
+                                                    <td>
+                                                        <input type="number" name="hotel_no_of_adults" autocomplete="off" required="required" data-item="no_of_adults" class="no_of_adults form-control text-right">
+                                                        <input type="number" name="hotel_no_of_childs" autocomplete="off" required="required" data-item="no_of_childs" class="no_of_childs form-control text-right">
+                                                    </td>
+                                                    <td>
+                                                        <input type="number" name="hotel_no_of_extra_bed" required="required" value="0" data-item="charges_for_extra_bed" class="charges_for_extra_bed form-control text-right">
+                                                    </td>
+                                                    <td>
+                                                        <input type="number" name="hotel_price" autocomplete="off" required="required" data-item="price" readonly class="price form-control text-right">
+                                                    </td>
+                                                    <td>
+                                                        <input type="number" name="hotel_discount" autocomplete="off" value="0" required="required" data-item="discount" class="discount form-control text-right">
+                                                        <input type="text" name="discount_amount" tabindex="-1" name autocomplete="off" value="0" readonly data-item="discount-amount" class="discount-amount form-control text-right">
+                                                    </td>
+                                                    <td>
+                                                        <input type="text" readonly name="room_total" class="total form-control text-right border-0">
+                                                    </td>
+                                                </tr>
+                                                <tr id="addItem">
+                                                    <td class="text-center border-right-0">
+                                                        <button type="button" id="button-add-item" count="1" data-toggle="tooltip" title="Add" data-original-title="Add" class="btn btn-icon btn-outline-success btn-lg">
+                                                            <i class="fa fa-plus"></i>
+                                                        </button>
+                                                    </td>
+                                                    <td colspan="9" class="text-right"></td>
+                                                </tr>
+                                                <tr id="totaldiscount" class="padding-5">
+                                                    <td colspan="5" class="text-right"></td>
+                                                    <td colspan="2" class="text-right"> <label for="items" class="form-control-label"><b>Total Discount Amount</b></label></td>
+                                                    <td colspan="1" class="text-right"></td>
+                                                    <td colspan="2" class="text-right"> <input type="text" readonly name="total_discount" class="totaldiscount form-control text-right border-0"></td>
+                                                </tr>
+                                                <tr id="beforetaxtotal" class="padding-5">
+                                                    <td colspan="5" class="text-right"></td>
+                                                    <td colspan="2" class="text-right"> <label for="items" class="form-control-label"><b>Total Amount Before Tax</b></label></td>
+                                                    <td colspan="1" class="text-right"></td>
+                                                    <td colspan="2" class="text-right"> <input type="text" readonly name="total_beforetax" class="beforetaxtotal form-control text-right border-0"></td>
+                                                </tr>
+
+                                                <tr id="cgst" class="padding-5">
+                                                    <td colspan="5" class="text-right"></td>
+                                                    <td colspan="2" class="text-right"> <label for="items" class="form-control-label"><b>ADD CGST</b></label></td>
+                                                    <td colspan="1" class="text-right">
+                                                        <div class="input-group">
+                                                            <input type="text" required class="form-control hotel_cgst_percentage" name="tax_cgst_percentage">
+                                                            <div class="input-group-append">
+                                                                <span class="input-group-text" id="basic-addon2">%</span>
+                                                            </div>
+                                                        </div>
+                                                    </td>
+                                                    <td colspan="2" class="text-right"> <input type="text" readonly name="cgst" class="cgst form-control text-right border-0"></td>
+                                                </tr>
+
+                                                <tr id="sgst" class="padding-5">
+                                                    <td colspan="5" class="text-right"></td>
+                                                    <td colspan="2" class="text-right"> <label for="items" class="form-control-label"><b>ADD SGST</b></label></td>
+                                                    <td colspan="1" class="text-right">
+                                                        <div class="input-group">
+                                                            <input type="text" required class="form-control hotel_sgst_percentage" name="tax_sgst_percentage">
+                                                            <div class="input-group-append">
+                                                                <span class="input-group-text" id="basic-addon2">%</span>
+                                                            </div>
+                                                        </div>
+                                                    </td>
+                                                    <td colspan="2" class="text-right"> <input type="text" readonly name="sgst" class="sgst form-control text-right border-0"></td>
+                                                </tr>
+                                                <tr id="gst" class="padding-5">
+                                                    <td colspan="5" class="text-left words"></td>
+                                                    <td colspan="2" class="text-right"> <label for="items" class="form-control-label"><b>Tax Amount GST</b></label></td>
+                                                    <td colspan="1" class="text-right"></td>
+                                                    <td colspan="2" class="text-right"> <input type="text" readonly name="total_taxamount" class="gst form-control text-right border-0"></td>
+                                                </tr>
+                                                <tr id="aftertaxamount" class="padding-5">
+                                                    <td colspan="5" class="text-left text-capitalize font-weight-bold amountinwords"></td>
+                                                    <td colspan="2" class="text-right"> <label for="items" class="form-control-label"><b>Total Amount after Tax</b></label></td>
+                                                    <td colspan="1" class="text-right"></td>
+                                                    <td colspan="2" class="text-right"> <input type="text" name="total_amount" readonly class="aftertaxamount font-weight-bolder form-control text-right border-0"></td>
+                                                </tr>
+                                                <tr id="afteradvance" class="padding-5">
+                                                    <td colspan="5" class="text-left"></td>
+                                                    <td colspan="2" class="text-right"> <label for="items" name="advance" class="form-control-label"><b>Total Advance</b></label></td>
+                                                    <td colspan="1" class="paymentmode">
+                                                        <select class="select2" id="payment_mode" name="payment_mode">
+                                                                                                   
+                                                        </select>
+                                                    </td>
+                                                    <td colspan="2" class="text-right"> <input type="text" name="advance" class="advance font-weight-bolder form-control text-right"></td>
+                                                </tr>
+                                                <tr id="aftertaxamount" class="padding-5">
+                                                    <td colspan="3" class="text-right"> <label for="items" name="remarks" class="form-control-label"><b>Remarks</b></label></td>
+                                                    <td colspan="7" class="text-right"> <textarea required name="remarks" class="remarks font-weight-bolder form-control"></textarea></td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+
+                                </form>
+                            </div>
+                            <button type="button" class="btn btn-primary btn-save">Save</button>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Content Wrapper END -->
+        </div>
+        <!-- Page Container END -->
+    </div>
+    </div>
+    <script src="assets/js/jquery.js"></script>
+    <script src="assets/js/vendors.min.js"></script>
+    <script src="assets/vendors/select2/select2.min.js"></script>
+    <script src="assets/js/script.js"></script>
+    <script src="assets/json/countries.js"></script>
+    <script src="assets/json/cities.js"></script>
+    <script src="assets/json/states.js"></script>
+    <script src="assets/page/booking-add.js"></script>
+    <script src="assets/js/app.min.js"></script>
+
+
+</body>
+
+</html>

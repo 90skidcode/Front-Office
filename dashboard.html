@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Hotel</title>
+
+    <!-- Favicon -->
+    <link rel="shortcut icon" href="assets/images/logo/favicon.png">
+    <!-- page css -->
+    <link href="assets/vendors/select2/select2.css" rel="stylesheet">
+    <!-- Core css -->
+    <link href="assets/css/app.min.css" rel="stylesheet">
+
+</head>
+
+<body>
+    <div class="app is-folded">
+        <div class="layout">
+            <!-- Header START -->
+            <div class="header no-print">
+                <div class="logo logo-dark">
+                    <a href="index.html">
+                        <img src="assets/images/logo/logo.png" alt="Logo">
+                        <img class="logo" src="assets/images/logo/logo.png" alt="Logo">
+                    </a>
+                </div>
+                <div class="logo logo-white">
+                    <a href="index.html">
+                        <img src="assets/images/logo/logo-white.png" alt="Logo">
+                        <img class="logo" src="assets/images/logo/logo-white.png" alt="Logo">
+                    </a>
+                </div>
+
+            </div>
+            <!-- Header END -->
+
+            <!-- Side Nav START -->
+            <div class="side-nav no-print">
+                <div class="side-nav-inner">
+                    <ul class="side-nav-menu scrollable">
+                    </ul>
+                </div>
+            </div>
+            <!-- Side Nav END -->
+            <div class="notification-toast top-right" id="notification-toast"></div>
+            <!-- Page Container START -->
+            <div class="page-container">
+                <!-- Content Wrapper START -->
+                <div class="main-content">
+                    <div class="row">
+                        <div class="col-md-6 col-lg-3">
+                            <div class="card">
+                                <div class="card-body">
+                                    <div class="media align-items-center">
+                                        <div class="avatar avatar-icon avatar-lg avatar-cyan">
+                                            <i class="anticon anticon-login"></i>
+                                        </div>
+                                        <div class="m-l-15">
+                                            <h2 class="m-b-0 today-check-in">0</h2>
+                                            <p class="m-b-0 text-muted">Today Check In</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6 col-lg-3">
+                            <div class="card">
+                                <div class="card-body">
+                                    <div class="media align-items-center">
+                                        <div class="avatar avatar-icon avatar-lg avatar-red">
+                                            <i class="anticon anticon-logout"></i>
+                                        </div>
+                                        <div class="m-l-15">
+                                            <h2 class="m-b-0  today-check-out">0</h2>
+                                            <p class="m-b-0 text-muted">Today Check Out</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6 col-lg-3">
+                            <div class="card">
+                                <div class="card-body">
+                                    <div class="media align-items-center">
+                                        <div class="avatar avatar-icon avatar-lg avatar-gold">
+                                            <i class="anticon anticon-user-add"></i>
+                                        </div>
+                                        <div class="m-l-15">
+                                            <h2 class="m-b-0  expected-check-in">0</h2>
+                                            <p class="m-b-0 text-muted">Expected Check In</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6 col-lg-3">
+                            <div class="card">
+                                <div class="card-body">
+                                    <div class="media align-items-center">
+                                        <div class="avatar avatar-icon avatar-lg avatar-volcano">
+                                            <i class="anticon anticon-user-delete"></i>
+                                        </div>
+                                        <div class="m-l-15">
+                                            <h2 class="m-b-0 expected-check-out">0</h2>
+                                            <p class="m-b-0 text-muted">Expected Check Out</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12 col-lg-12">
+                            <div class="card">
+                                <div class="card-body">
+                                    <div id='avalible-chart'>
+                                        <div class="filter-area">
+                                            <div class="form-row" hidden>
+                                                <div class="form-group col-md-3">
+                                                    <label for="inputEmail4">Floor</label>
+                                                    <select class="select2" name="hotel_room_floor_no">
+                                                        <option value="All">All</option>
+                                                        <option value="Ground Floor">Ground Floor</option>
+                                                    </select>
+                                                </div>
+                                                <div class="form-group col-md-3">
+                                                    <label for="inputEmail4">Room category</label>
+                                                    <select class="select2" name="hotel_room_category">
+                                                        <option value="All">All</option>
+                                                        <option value="Delux">Delux</option>
+                                                    </select>
+                                                </div>
+                                                <div class="form-group col-md-3">
+                                                    <label for="inputEmail4">Room Staus</label>
+                                                    <select class="select2" name="hotel_room_status">
+                                                        <option value="All">All</option>
+                                                        <option value="Avaliable">Avaliable</option>
+                                                    </select>
+                                                </div>
+                                                <div class="form-group col-md-3">
+                                                    <label for="inputEmail4">Date</label>
+                                                    <input type="date" class="form-control" name="hotel_room_date">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="available-list">
+                                            <div class="floor">
+                                                <h5 class="text-left">Floor Status</h5>
+                                                <div class="form-row paint-layout">
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="room-status-count text-center m-t-10">
+                                            <div class="form-row">
+                                                <div class="col-md-2">
+                                                    <div class="form-row">
+                                                        <div class="col-md-3 available text-center">
+                                                            <div class="room-status-count available">0</div>
+                                                        </div>
+                                                        <div class="col-md-9">
+                                                            <p class="room-status  m-0 text-left"> - Avaliable</p>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-2">
+                                                    <div class="form-row">
+                                                        <div class="col-md-3 inhouse text-center">
+                                                            <div class="room-status-count inhouse">0</div>
+                                                        </div>
+                                                        <div class="col-md-9">
+                                                            <p class="room-status  m-0  text-left"> - In House</p>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-2">
+                                                    <div class="form-row">
+                                                        <div class="col-md-3 dirty text-center">
+                                                            <div class="room-status-count dirty">0</div>
+                                                        </div>
+                                                        <div class="col-md-9">
+                                                            <p class="room-status m-0 text-left"> - Dirty</p>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-2">
+                                                    <div class="form-row">
+                                                        <div class="col-md-3 outofservice text-center">
+                                                            <div class="room-status-count outofservice">0</div>
+                                                        </div>
+                                                        <div class="col-md-9">
+                                                            <p class="room-status  m-0  text-left"> - Out Of Service</p>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-2">
+                                                    <div class="form-row">
+                                                        <div class="col-md-3 outoforder text-center">
+                                                            <div class="room-status-count outoforder">0</div>
+                                                        </div>
+                                                        <div class="col-md-9">
+                                                            <p class="room-status  m-0 text-left"> - Out Of Order</p>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-2">
+                                                    <div class="form-row">
+                                                        <div class="col-md-3 reserved text-center">
+                                                            <div class="room-status-count reserved">0</div>
+                                                        </div>
+                                                        <div class="col-md-9">
+                                                            <p class="room-status  m-0 text-left"> - Reserved</p>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!--<div class="row">
+                            <div class="col-md-12 col-lg-12">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <div id='calendar'></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>-->
+                    </div>
+                </div>
+                <!-- Content Wrapper END -->
+            </div>
+            <!-- Page Container END -->
+        </div>
+    </div>
+    <script src="assets/js/jquery.js"></script>
+    <script src="assets/js/vendors.min.js"></script>
+    <script src="assets/vendors/select2/select2.min.js"></script>
+    <script src="assets/js/script.js"></script>
+    <script src="assets/js/app.min.js"></script>
+    <script src="assets/page/dashboard-frontoffice.js"></script>
+
+</body>
+
+</html>

@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Room</title>
+    <!-- Favicon -->
+    <link rel="shortcut icon" href="assets/images/logo/favicon.png">
+    <!-- page css -->
+    <link href="assets/vendors/select2/select2.css" rel="stylesheet">
+    <!-- page css -->
+    <link href="assets/vendors/datatables/dataTables.bootstrap.min.css" rel="stylesheet">
+    <!-- Core css -->
+    <link href="assets/css/app.min.css" rel="stylesheet">
+
+</head>
+
+<body>
+    <div class="app is-folded">
+        <div class="layout">
+            <!-- Header START -->
+            <div class="header no-print">
+                <div class="logo logo-dark">
+                    <a href="index.html">
+                        <img src="assets/images/logo/logo.png" alt="Logo">
+                        <img class="logo" src="assets/images/logo/logo.png" alt="Logo">
+                    </a>
+                </div>
+                <div class="logo logo-white">
+                    <a href="index.html">
+                        <img src="assets/images/logo/logo-white.png" alt="Logo">
+                        <img class="logo" src="assets/images/logo/logo-white.png" alt="Logo">
+                    </a>
+                </div>
+
+            </div>
+            <!-- Header END -->
+
+            <!-- Side Nav START -->
+            <div class="side-nav no-print">
+                <div class="side-nav-inner">
+                    <ul class="side-nav-menu scrollable">
+
+                    </ul>
+                </div>
+            </div>
+            <!-- Side Nav END -->
+
+            <!-- Page Container START -->
+            <div class="page-container">
+                <!-- Content Wrapper START -->
+                <div class="main-content">
+                    <div class="notification-toast top-right" id="notification-toast"></div>
+                    <div class="card">
+                        <div class="card-body  float-left">
+                            <div class="col-md-12 p-0 float-left">
+                                <h4 class="float-left">Resevation List</h4>
+                                <a href="reservation-add.html" class="btn btn-sm btn-primary float-right">Add Reservation</a>
+                            </div>
+                            <div class="m-t-0">
+                                <table id="table-resevation-list" class="table table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th>Reservation No</th>
+                                            <th>Customer Name</th>
+                                            <th>Customer Phone No</th>
+                                            <th>Travel Agency</th>
+                                            <th>Meal Count</th>
+                                            <th>Advance</th>
+                                            <th>Amount</th>
+                                            <th>Action</th>
+                                        </tr>
+                                    </thead>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Content Wrapper END -->
+        </div>
+        <!-- Page Container END -->
+    </div>
+
+    <!-- Modal Floor -->
+    <div class="modal fade" id="advance-modal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Add Advance</h5>
+                    <button type="button" class="close" data-dismiss="modal">
+                    <i class="anticon anticon-close"></i>
+                </button>
+                </div>
+                <div class="modal-body">
+                    <form id="advance-payment-add">
+                        <div class="form-row">
+                            <div class="form-group col-md-3">
+                                <label id="total_amount"></label>
+                            </div>
+                            <div class="form-group col-md-5">
+                                <label id="total_advance"></label>
+                            </div>
+                            <div class="form-group col-md-4">
+                                <label id="total_balance"></label>
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label for="payment_mode">Payment Mode</label>
+                                <select class="select2" class="payment_mode" id="payment_mode" name="payment_mode">
+                                                                                                   
+                                </select>
+                            </div>
+
+                            <div class="form-group col-md-6">
+                                <label for="advance">Advance</label>
+                                <input type="number" name="advance" required class="advance font-weight-bolder form-control text-right">
+                                <input type="hidden" name="customer_id" class="form-control customer-id">
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary save-advance" data-print="false">Save</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Floor -->
+    <div class="modal fade" id="advance-list-modal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Advance List</h5>
+                    <button type="button" class="close" data-dismiss="modal">
+                        <i class="anticon anticon-close"></i>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <button class="btn btn-sm btn-primary float-right btn-advance" data-total="" data-advance="" data-reservation="" data-toggle="modal" data-target="#advance-modal"> Add Advance</button>
+                    <div class="form-row table-advance-list">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+    <script src="assets/js/jquery.js"></script>
+    <script src="assets/js/vendors.min.js"></script>
+    <script src="assets/vendors/select2/select2.min.js"></script>
+    <script src="assets/js/app.min.js"></script>
+    <script src="assets/vendors/datatables/jquery.dataTables.min.js"></script>
+    <script src="assets/vendors/datatables/dataTables.bootstrap.min.js"></script>
+
+    <script src="assets/js/script.js"></script>
+    <script src="assets/page/resevation-list.js"></script>
+</body>
+
+</html>

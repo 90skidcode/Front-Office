@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Hotel</title>
+
+    <!-- Favicon -->
+    <link rel="shortcut icon" href="assets/images/logo/favicon.png">
+    <!-- page css -->
+    <link href="assets/vendors/select2/select2.css" rel="stylesheet">
+    <!-- multi-select css -->
+    <link rel="stylesheet" href="assets/vendors/multi-select/css/multi-select.css">
+    <!-- Core css -->
+    <link href="assets/css/app.min.css" rel="stylesheet">
+
+</head>
+
+<body>
+    <div class="app is-folded">
+        <div class="layout">
+            <!-- Header START -->
+            <div class="header no-print">
+                <div class="logo logo-dark">
+                    <a href="index.html">
+                        <img src="assets/images/logo/logo.png" alt="Logo">
+                        <img class="logo" src="assets/images/logo/logo.png" alt="Logo">
+                    </a>
+                </div>
+                <div class="logo logo-white">
+                    <a href="index.html">
+                        <img src="assets/images/logo/logo-white.png" alt="Logo">
+                        <img class="logo" src="assets/images/logo/logo-white.png" alt="Logo">
+                    </a>
+                </div>
+
+            </div>
+            <!-- Header END -->
+
+            <!-- Side Nav START -->
+            <div class="side-nav no-print">
+                <div class="side-nav-inner">
+                    <ul class="side-nav-menu scrollable">
+
+                    </ul>
+                </div>
+            </div>
+            <!-- Side Nav END -->
+
+            <!-- Page Container START -->
+            <div class="page-container">
+                <!-- Content Wrapper START -->
+                <div class="main-content">
+                    <div class="page-header">
+                        <h2 class="header-title">Expenses</h2>
+                        <div class="header-sub-title">
+                            <nav class="breadcrumb breadcrumb-dash">
+                                <a href="#" class="breadcrumb-item"><i class="anticon anticon-home m-r-5"></i>Expenses</a>
+                                <a class="breadcrumb-item" href="#">Expenses</a>
+                                <span class="breadcrumb-item active">Add expenses</span>
+                            </nav>
+                        </div>
+                    </div>
+                    <div class="notification-toast top-right" id="notification-toast"></div>
+                    <div class="card">
+                        <div class="card-body">
+                            <h4>Add expenses</h4>
+                            <div class="m-t-25">
+                                <form id="expenses-add">
+                                    <div class="form-row">
+                                        <div class="form-group col-md-3">
+                                            <label for="inputEmail4">Date</label>
+                                            <input type="date" class="form-control" id="currentDate" name="expenses_date">
+                                        </div>
+                                        <div class="form-group col-md-3">
+                                            <label for="inputEmail4">Expenses Type</label>
+                                            <select class="select2" id="expenses_type" data-hasModel="expenses_type_modal" name="expenses_type">
+                                              
+                                            </select>
+                                        </div>
+                                        <div class="form-group col-md-3">
+                                            <label for="inputEmail4">Payment Type</label>
+                                            <select class="select2" id="expenses_payment_type" data-hasModel="expenses_payment_type_modal" name="expenses_payment_type">
+                                               
+                                            </select>
+                                        </div>
+                                        <div class="form-group col-md-3">
+                                            <label for="inputEmail4">Amount</label>
+                                            <input type="number" class="form-control" name="expenses_amount" required>
+                                        </div>
+                                        <div class="form-group col-md-6">
+                                            <label for="inputEmail4">Expenses Description</label>
+                                            <textarea type="text" class="form-control" name="expenses_description"></textarea>
+                                        </div>
+                                        <div class="form-group col-md-6">
+                                            <label for="inputEmail4">Expenses Remarks</label>
+                                            <textarea type="text" class="form-control" name="expenses_remarks"></textarea>
+                                        </div>
+                                    </div>
+                                    <button type="button" class="btn btn-primary btn-save expenses-add">Save</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Content Wrapper END -->
+            </div>
+            <!-- Page Container END -->
+        </div>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal fade" id="expenses_type_modal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Add Hotel expenses Type</h5>
+                    <button type="button" class="close" data-dismiss="modal">
+                    <i class="anticon anticon-close"></i>
+                </button>
+                </div>
+                <div class="modal-body">
+                    <form class="expenses_type_modal">
+                        <div class="form-row">
+                            <div class="form-group col-md-12">
+                                <label for="inputEmail4">Expenses Type</label>
+                                <input type="text" class="form-control" name="expenses_type">
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary save-expenses-type">Save</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal fade" id="expenses_payment_type_modal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Add Payment Type</h5>
+                    <button type="button" class="close" data-dismiss="modal">
+                    <i class="anticon anticon-close"></i>
+                </button>
+                </div>
+                <div class="modal-body">
+                    <form class="expenses_payment_type_modal">
+                        <div class="form-row">
+                            <div class="form-group col-md-12">
+                                <label for="inputEmail4">Payment Type</label>
+                                <input type="text" class="form-control" name="payment_mode">
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary save-expenses-payment-type">Save</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <script src="assets/js/jquery.js"></script>
+    <script src="assets/js/vendors.min.js"></script>
+    <script src="assets/vendors/select2/select2.min.js"></script>
+    <!-- multi-select Js -->
+    <script src="assets/vendors/multi-select/js/jquery.quicksearch.js"></script>
+    <script src="assets/vendors/multi-select/js/jquery.multi-select.js"></script>
+
+    <script src="assets/js/script.js"></script>
+    <script src="assets/js/app.min.js"></script>
+    <script src="assets/page/expenses-add.js"></script>
+
+
+</body>
+
+</html>

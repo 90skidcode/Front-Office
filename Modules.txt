@@ -1,0 +1,47 @@
+MODULES:
+
+Rooms:
+Add/view/edit/delete
+
+Guest:
+Add/view/edit/delete
+
+Reservations:
+Single reservation
+Add/view/edit/delete
+
+Amend
+view/edit/delete
+
+Booking:
+Single booking
+Add/view/edit/delete
+
+Group
+Add/view/edit/delete
+
+Amend
+View/edit/delete
+
+Expense:
+Expense master
+Add/view/edit/delete
+
+Miscellaneous expenses
+Add/view/edit/delete
+
+Users
+Add/view/edit/delete
+
+Login 
+
+Register
+
+Report
+Print as pdf and excel
+
+Details shown:
+Rooms availability
+Room status
+
+Night audit

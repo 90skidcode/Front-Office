@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Hotel</title>
+
+    <!-- Favicon -->
+    <link rel="shortcut icon" href="assets/images/logo/favicon.png">
+    <!-- page css -->
+    <link href="assets/vendors/select2/select2.css" rel="stylesheet">
+    <!-- multi-select css -->
+    <link rel="stylesheet" href="assets/vendors/multi-select/css/multi-select.css">
+    <!-- Core css -->
+    <link href="assets/css/app.min.css" rel="stylesheet">
+
+</head>
+
+<body>
+
+    <div class="app is-folded">
+        <div class="layout">
+
+            <!-- Header START -->
+            <div class="header no-print">
+                <div class="logo logo-dark">
+                    <a href="index.html">
+                        <img src="assets/images/logo/logo.png" alt="Logo">
+                        <img class="logo" src="assets/images/logo/logo.png" alt="Logo">
+                    </a>
+                </div>
+                <div class="logo logo-white">
+                    <a href="index.html">
+                        <img src="assets/images/logo/logo-white.png" alt="Logo">
+                        <img class="logo" src="assets/images/logo/logo-white.png" alt="Logo">
+                    </a>
+                </div>
+
+            </div>
+            <!-- Header END -->
+
+            <!-- Side Nav START -->
+            <div class="side-nav no-print">
+                <div class="side-nav-inner">
+                    <ul class="side-nav-menu scrollable">
+
+                    </ul>
+                </div>
+            </div>
+            <!-- Side Nav END -->
+
+            <!-- Page Container START -->
+            <div class="page-container">
+                <!-- Content Wrapper START -->
+                <div class="main-content">
+
+                    <div class="notification-toast top-right" id="notification-toast"></div>
+                    <div class="card">
+                        <div class="card-body">
+                            <h4>Add Room</h4>
+                            <div class="m-t-25">
+                                <form id="room-add">
+                                    <div class="form-row">
+                                        <div class="form-group col-md-3">
+                                            <label for="inputEmail4">Room No</label>
+                                            <input type="text" class="form-control" name="room_no" required>
+                                        </div>
+                                        <div class="form-group col-md-3">
+                                            <label for="inputEmail4">Room Name</label>
+                                            <input type="text" class="form-control" name="room_name" required>
+                                        </div>
+                                        <div class="form-group col-md-3">
+                                            <label for="inputEmail4">Room category</label>
+                                            <select class="select2" name="room_category_id" id="hotel_room_category" required>
+                                                
+                                            </select>
+                                        </div>
+                                        <div class="form-group col-md-3">
+                                            <label for="inputEmail4">Floor</label>
+                                            <select class="select2" name="room_floor_id" id="hotel_room_floor_no" data-hasModel="hotel_floor_modal" required>
+                                                
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <button type="button" class="btn btn-primary btn-save room-add">Save</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Content Wrapper END -->
+            </div>
+            <!-- Page Container END -->
+        </div>
+    </div>
+
+    <!-- Modal Floor -->
+    <div class="modal fade" id="hotel_floor_modal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Add Hotel Floor</h5>
+                    <button type="button" class="close" data-dismiss="modal">
+                    <i class="anticon anticon-close"></i>
+                </button>
+                </div>
+                <div class="modal-body">
+                    <form class="hotel_floor_modal">
+                        <div class="form-row">
+                            <div class="form-group col-md-12">
+                                <label for="inputEmail4">Floor Name</label>
+                                <input type="text" class="form-control" name="floor_name">
+                            </div>
+                        </div>
+
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary save-floor">Save</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <script src="assets/js/jquery.js"></script>
+    <script src="assets/js/vendors.min.js"></script>
+    <script src="assets/vendors/select2/select2.min.js"></script>
+    <!-- multi-select Js -->
+    <script src="assets/vendors/multi-select/js/jquery.quicksearch.js"></script>
+    <script src="assets/vendors/multi-select/js/jquery.multi-select.js"></script>
+
+    <script src="assets/js/script.js"></script>
+    <script src="assets/js/app.min.js"></script>
+    <script src="assets/page/rooms-add.js"></script>
+</body>
+
+</html>

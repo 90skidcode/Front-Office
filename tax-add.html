@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Hotel</title>
+
+    <!-- Favicon -->
+    <link rel="shortcut icon" href="assets/images/logo/favicon.png">
+
+    <!-- page css -->
+    <link href="assets/vendors/select2/select2.css" rel="stylesheet">
+    <!-- Core css -->
+    <link href="assets/css/app.min.css" rel="stylesheet">
+
+</head>
+
+<body>
+    <div class="app is-folded">
+        <div class="layout">
+            <!-- Header START -->
+            <div class="header no-print">
+                <div class="logo logo-dark">
+                    <a href="index.html">
+                        <img src="assets/images/logo/logo.png" alt="Logo">
+                        <img class="logo" src="assets/images/logo/logo.png" alt="Logo">
+                    </a>
+                </div>
+                <div class="logo logo-white">
+                    <a href="index.html">
+                        <img src="assets/images/logo/logo-white.png" alt="Logo">
+                        <img class="logo" src="assets/images/logo/logo-white.png" alt="Logo">
+                    </a>
+                </div>
+
+            </div>
+            <!-- Header END -->
+
+            <!-- Side Nav START -->
+            <div class="side-nav no-print">
+                <div class="side-nav-inner">
+                    <ul class="side-nav-menu scrollable">
+
+                    </ul>
+                </div>
+            </div>
+            <!-- Side Nav END -->
+
+            <!-- Page Container START -->
+            <div class="page-container">
+                <!-- Content Wrapper START -->
+                <div class="main-content">
+                    <div class="page-header">
+                        <h2 class="header-title">Room</h2>
+                        <div class="header-sub-title">
+                            <nav class="breadcrumb breadcrumb-dash">
+                                <a href="#" class="breadcrumb-item"><i class="anticon anticon-home m-r-5"></i>Home</a>
+                                <a class="breadcrumb-item" href="#">Room</a>
+                                <span class="breadcrumb-item active">Add Room</span>
+                            </nav>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-body">
+                            <h4>Add Room</h4>
+                            <div class="m-t-25">
+                                <form id="room-add">
+                                    <div class="form-row">
+                                        <div class="form-group col-md-4">
+                                            <label for="inputEmail4">Room ID</label>
+                                            <input type="text" class="form-control" name="bmt_room_id" required readonly>
+                                        </div>
+                                        <div class="form-group col-md-4">
+                                            <label for="inputEmail4">Name</label>
+                                            <input type="text" class="form-control" name="bmt_name" required>
+                                        </div>
+                                        <div class="form-group col-md-4">
+                                            <label for="inputEmail4">Percentage</label>
+                                            <input type="number" class="form-control" name="bmt_percentage" required>
+                                        </div>
+
+                                    </div>
+
+                                    <button type="submit" class="btn btn-primary btn-save ">Save</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Content Wrapper END -->
+            </div>
+            <!-- Page Container END -->
+        </div>
+    </div>
+    <script src="assets/js/jquery.js"></script>
+    <script src="assets/js/vendors.min.js"></script>
+    <script src="assets/vendors/select2/select2.min.js"></script>
+
+    <script src="assets/js/script.js"></script>
+    <script src="assets/js/app.min.js"></script>
+    <script>
+        if (getParameter('id')) {
+            var data = {
+                'type': 'list',
+                'from': 'room',
+                "condition": {
+                    'bmt_room_id': getParameter('id')
+                }
+            }
+            $.ajax({
+                url: 'assets/php/database.php',
+                type: "POST",
+                data: data,
+                success: function(response) {
+                    var response = JSON.parse(response);
+                    if (!$.isEmptyObject(response)) {
+                        $.each(response[0], function(index, value) {
+                            if ($('[name="' + index + '"]').hasClass('select2')) {
+                                $("#" + index).select2('val', value).trigger('change')
+                            } else {
+                                $('[name="' + index + '"]').val(value);
+                            }
+                        });
+                    }
+                }
+            });
+        } else {
+            var data = {
+                'type': 'count',
+                'from': 'room'
+            }
+            $.ajax({
+                url: 'assets/php/database.php',
+                type: "POST",
+                data: data,
+                success: function(response) {
+                    var response = JSON.parse(response);
+                    if (!$.isEmptyObject(response)) {
+                        $('[name="bmt_room_id"]').val("TAX-" + (parseInt(response[0]['bmt_id']) + 1))
+                    }
+                }
+            });
+        }
+
+        $("#room-add").validate({
+            ignore: ':hidden:not(:checkbox)',
+            errorElement: 'label',
+            errorClass: 'is-invalid',
+            validClass: 'is-valid',
+            rules: {
+                bmt_room_id: {
+                    required: true
+                },
+                bmt_name: {
+                    required: true
+                },
+                bmt_percentage: {
+                    required: true
+                }
+            },
+            submitHandler: function(form) {
+                if (getParameter('id')) {
+                    var data = {
+                        "type": 'update',
+                        "from": 'room',
+                        "values": $("#room-add").serializeObject(),
+                        "condition": {
+                            "bmt_room_id": getParameter('id')
+                        }
+                    }
+
+                    $.ajax({
+                        url: 'assets/php/database.php',
+                        type: "POST",
+                        data: data,
+                        success: function(response) {
+                            showToast('Record updated Sucessfully', 'success');
+                            setTimeout(function() {
+                                location.reload();
+                            }, 3100);
+
+                        }
+                    });
+                } else {
+                    var data = {
+                        "type": 'add',
+                        "from": 'room',
+                        "values": $("#room-add").serializeObject()
+                    }
+
+                    $.ajax({
+                        url: 'assets/php/database.php',
+                        type: "POST",
+                        data: data,
+                        success: function(response) {
+                            showToast('Record added Sucessfully', 'success');
+                            setTimeout(function() {
+                                location.reload();
+                            }, 3100);
+                        }
+                    });
+                }
+            }
+        });
+    </script>
+</body>
+
+</html>
