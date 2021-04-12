@@ -526,7 +526,7 @@ $(document).on('keyup blur', '.price', function() {
 });
 */
 
-$(document).on('keyup blur', '.discount', function() {
+$(document).on('keyup blur', '.discount,.price', function() {
     let ele = $(this).closest('tr');
     let discountPercentage = emptySetToZero(ele.find('.discount').val());
     (discountPercentage) ? ele.find('.discount-amount').val(((ele.find('.price').val() / 100) * discountPercentage).toFixed(2)): ele.find('.discount-amount').val((ele.find('.price').val()).toFixed(2));
@@ -673,7 +673,7 @@ function addCheckin() {
             object['meal_price'] = $('[name="meal_price"]').val();
             object['meal_count'] = $('[name="meal_count"]').val();
             object['meal_total'] = $('[name="meal_total"]').val();
-            $("tr.insertroom input").each(function() {
+            $("tr.insertroom .form-control").each(function() {
                 object[$(this).attr('name')] = [$('[name=' + $(this).attr('name') + ']').val()];
             });
             $("tr:not(.insertroom) input").each(function() {
