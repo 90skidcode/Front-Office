@@ -288,25 +288,22 @@ $(document).on('change', '#meal_plan_id', function() {
         mealCalculationClear();
 })
 
-$(document).on('blur', '[name = "meal_price"],[name = "meal_count"]', function() {
-    mealPriceCalculation();
+$(document).on('blur', '[name = "meal_price"],[name = "meal_count"],[name = "meal_total"]', function() {
+    taxAmountCalculation();
 })
 
 function mealPriceUpdate(responce, id) {
     $("[name=meal_price]").val(responce[0].meal_price);
-    mealPriceCalculation();
+    taxAmountCalculation();
 }
 
 function mealCalculationClear() {
     $("[name=meal_price]").val(0);
     $('[name="meal_count"]').val(0);
-    mealPriceCalculation();
-}
-
-function mealPriceCalculation() {
-    $("[name=meal_total]").val(emptySetToZero($("[name=meal_price]").val()) * emptySetToZero($("[name=meal_count]").val()));
+    $('[name="meal_total"]').val(0);
     taxAmountCalculation();
 }
+
 
 /**
  * Get Customer Details
@@ -594,7 +591,7 @@ function taxAmountCalculation() {
     $(".sgst").val(sgstTotal);
     $(".gst").val((Number(cgstTotal) + Number(sgstTotal)).toFixed(2));
     let total = (emptySetToZero(Math.round(Number(totalAmountBeforeTax) + Number($(".gst").val()) + Number($(".meal_total").val()))));
-    $(".aftertaxamount").val(total);
+    $(".aftertaxamount").val(total.toFixed(2));
     if (total) {
         $(".words").html('<b>Total Amount Words</b>');
         $(".amountinwords").html(inWords(total));

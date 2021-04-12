@@ -883,7 +883,7 @@ function removeItemOnce(array, value) {
 
 /**
  *  Wheel Scroll Stop in JS
- *
+ */
 
 $('input').on("wheel mousewheel ", function(e) {
     if (e.originalEvent.deltaY > 0) {
