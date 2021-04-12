@@ -714,7 +714,7 @@ function redirectToListing() {
     var id = url.searchParams.get("id");
     var type = url.searchParams.get("type");
     if (!isEmptyValue(id) && !type) {
-        window.location = 'booking-ament-list.html';
+        window.location = 'booking-amend-list.html';
     } else if (!isEmptyValue(id) && type == 'reservation') {
         window.location = 'booking-list.html';
     }
