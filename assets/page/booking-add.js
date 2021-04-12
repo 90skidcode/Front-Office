@@ -383,7 +383,7 @@ $(document).on('click', '#button-add-item', function() {
                                 <input type="number" name="hotel_no_of_extra_bed" value="off" required="required" data-item="charges_for_extra_bed" class="charges_for_extra_bed form-control text-right">
                             </td> 
                             <td>
-                                <input type="number" name="hotel_price" readonly autocomplete="off" required="required" data-item="price" class="price form-control text-right">
+                                <input type="number" name="hotel_price" autocomplete="off" required="required" data-item="price" class="price form-control text-right">
                             </td>
                             <td>
                                 <input type="number" name="hotel_discount" autocomplete="off" value="0" required="required" data-item="discount" class="discount form-control text-right">
