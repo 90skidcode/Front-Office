@@ -52,18 +52,21 @@ function displayBookingList(response, dataTableId) {
                     <a href="booking-add.html?id=${row.booking_no}" class="btn btn-icon btn-hover btn-sm btn-rounded pull-right">
                         <i class="anticon anticon-edit text-primary"></i>
                     </a>
-                    <button class="btn btn-icon btn-hover btn-sm btn-rounded btn-advance" data-total="${row.total_amount}" data-advance="${row.advance}" data-booking="${row.booking_no}" data-toggle="modal" data-target="#advance-modal">
+                    <button class="btn btn-icon btn-hover btn-sm btn-rounded btn-advance" title='Add Advance'  data-type="booking"  data-customerid="${row.customer_id}" data-total="${row.total_amount}" data-advance="${row.advance}" data-booking="${row.booking_no}" data-toggle="modal" data-target="#advance-modal">
                         <i class="anticon anticon-dollar text-primary"></i>
                     </button>
-                    <button class="btn btn-icon btn-hover btn-sm btn-rounded btn-advance-list" data-total="${row.total_amount}" data-advance="${row.advance}" data-booking="${row.booking_no}" data-toggle="modal" data-target="#advance-list-modal">
+                    <button class="btn btn-icon btn-hover btn-sm btn-rounded btn-advance-list" title='Advance List' data-type="booking"  data-total="${row.total_amount}" data-advance="${row.advance}" data-booking="${row.booking_no}" data-toggle="modal" data-target="#advance-list-modal">
                         <i class="anticon anticon-solution text-primary"></i>
-                    </button>     
+                    </button>      
                     <a href="booking-print.html?id=${row.booking_no}" class="btn btn-icon btn-hover btn-sm btn-rounded pull-right">
                         <i class="anticon anticon-printer text-primary"></i>
-                    </a>                   
-                    <button class="btn btn-icon btn-hover btn-sm btn-rounded btn-delete-table" data-delete="${row.booking_no}" data-toggle="modal" data-target="#delete">
+                    </a>    
+                    <a href="booking-add.html?id=${row.booking_no}&type=checkout" title='Checkout Booking' class="btn btn-icon btn-hover btn-sm btn-rounded pull-right">
+                        <i class="anticon anticon-logout text-danger"></i>
+                    </a>                 
+                    <!--<button class="btn btn-icon btn-hover btn-sm btn-rounded btn-delete-table" data-delete="${row.booking_no}" data-toggle="modal" data-target="#delete">
                         <i class="anticon anticon-delete text-danger"></i>
-                    </button>
+                    </button>-->
                 </td>`;
         }
     }];
@@ -76,7 +79,7 @@ $(document).on('click', ".btn-advance", function() {
     $("#total_advance").html("Advance Total : Rs." + $(this).attr('data-advance'));
     let balance = Number($(this).attr('data-total')) - Number($(this).attr('data-advance'));
     $("#total_balance").html("Balance : Rs." + balance);
-    $(".save-advance").attr('data-reservation', $(this).attr('data-reservation'));
+    $(".save-advance").attr('data-booking', $(this).attr('data-booking'));
 })
 
 $(document).on('click', ".btn-advance-list", function() {
@@ -96,7 +99,7 @@ $(document).on('click', ".btn-advance-list", function() {
                     </tbody>
                 </table>`;
     $(".table-advance-list").html(html);
-    let data = { "list_key": "get_advance_detail", "advance_no": $(this).attr('data-reservation') }
+    let data = { "list_key": "get_advance_detail", "advance_no": $(this).attr('data-booking') }
     commonAjax('services.php', 'POST', data, '', '', '', { "functionName": "displayAdvanceList", "param1": "#table-advance-list tbody" });
 })
 
@@ -137,18 +140,15 @@ $(document).on('click', ".save-advance", function() {
         let data = { "list_key": "advance_insert" };
         data['booking_no'] = $(this).attr('data-booking');
         data['payment_mode'] = $("#payment_mode").val();
+        data['customer_id'] = $(".customer-id").val();
         data['advance'] = $(".advance").val();
-        let successFunction = false;
+        let printFlag = false;
         if ($(this).attr('data-print') == 'true')
-            successFunction = true;
-        commonAjax('', 'POST', data, '', "Advance Added Succesfully", "Advance Added Failed!!! Please try Again.", { "functionName": "succesAdvanceUpdate", "param1": successFunction });
+            printFlag = true;
+        commonAjax('', 'POST', data, '', "Advance Added Succesfully", "Advance Added Failed!!! Please try Again.", { "functionName": "succesAdvanceUpdate", "param1": printFlag });
     }
 })
 
 function succesAdvanceUpdate(res, printFlag) {
     $("#advance-modal").modal('hide');
-
-    if (printFlag) {
-
-    }
 }

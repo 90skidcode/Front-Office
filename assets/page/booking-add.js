@@ -94,9 +94,7 @@ function setCheckinValue(responce) {
                     $('tbody tr:nth-child(' + (index + 1) + ') .action-btn').html(' ');
                     $('tbody tr:nth-child(' + (index + 1) + ')').find('input').prop('readonly', true);
                     $('tbody tr:nth-child(' + (index + 1) + ')').find('select').closest('td').css({ 'pointer-events': 'none', 'cursor': 'not-allowed' });
-
                 }
-
             })
             $('[name="meal_count"]').trigger('blur');
         }, 2000);
@@ -165,10 +163,7 @@ function setCheckinValueByReservation(responce) {
             $('.no_of_childs').val('')
         }, 2000);
     })
-
-
     docShow(true);
-
     $('[name="advance"]').prop('readonly', true);
     $('.paymentmode').html(' ');
     $('.remarks').val('');

@@ -24,7 +24,8 @@ function checkEditorAddPrint(databasename, conditionkey, imageFlag) {
 
 function setPrintValue(responce) {
     let master = responce.result[0];
-
+    var url = new URL(window.location.href);
+    var id = url.searchParams.get("id");
     $('.invoive-info').html(`  <div class="col-md-4 col-xs-12 invoice-client-info">
                 <h6>Billed To</h6>
                 <h6 class="m-0">${master.customer_title} ${master.customer_fname} ${master.customer_lname}</h6>
@@ -37,7 +38,7 @@ function setPrintValue(responce) {
                 <p class="m-0">Id : <b>${master.advance_no}</b></p>
             </div>
                 <div class="col-md-4 col-sm-6">
-                <h6 class="m-b-20">Invoice Number <span>#123685479624</span></h6>               
+                <h6 class="m-b-20">Invoice Number <span>#ADV${id}</span></h6>               
             </div>`);
 
     $('.meal-details').html(`

@@ -50,10 +50,10 @@ function displayBookingList(response, dataTableId) {
                     <a href="booking-add.html?id=${row.booking_no}" title='Edit' class="btn btn-icon btn-hover btn-sm btn-rounded pull-right">
                         <i class="anticon anticon-edit text-primary"></i>
                     </a>
-                    <button class="btn btn-icon btn-hover btn-sm btn-rounded btn-advance" title='Add Advance' data-total="${row.total_amount}" data-advance="${row.advance}" data-booking="${row.booking_no}" data-toggle="modal" data-target="#advance-modal">
+                    <button class="btn btn-icon btn-hover btn-sm btn-rounded btn-advance" title='Add Advance'  data-type="booking"  data-customerid="${row.customer_id}" data-total="${row.total_amount}" data-advance="${row.advance}" data-booking="${row.booking_no}" data-toggle="modal" data-target="#advance-modal">
                         <i class="anticon anticon-dollar text-primary"></i>
                     </button>
-                    <button class="btn btn-icon btn-hover btn-sm btn-rounded btn-advance-list" title='Advance List' data-total="${row.total_amount}" data-advance="${row.advance}" data-booking="${row.booking_no}" data-toggle="modal" data-target="#advance-list-modal">
+                    <button class="btn btn-icon btn-hover btn-sm btn-rounded btn-advance-list" title='Advance List' data-type="booking"  data-total="${row.total_amount}" data-advance="${row.advance}" data-booking="${row.booking_no}" data-toggle="modal" data-target="#advance-list-modal">
                         <i class="anticon anticon-solution text-primary"></i>
                     </button>     
                     <a href="booking-print.html?id=${row.booking_no}" title='Print Booking' class="btn btn-icon btn-hover btn-sm btn-rounded pull-right">
@@ -68,56 +68,6 @@ function displayBookingList(response, dataTableId) {
     dataTableDisplay(response.result, tableHeader, false, dataTableId)
 }
 
-
-$(document).on('click', ".btn-advance", function() {
-    $("#total_amount").html("Total  : Rs." + $(this).attr('data-total'));
-    $("#total_advance").html("Advance Total : Rs." + $(this).attr('data-advance'));
-    let balance = Number($(this).attr('data-total')) - Number($(this).attr('data-advance'));
-    $("#total_balance").html("Balance : Rs." + balance);
-    $(".save-advance").attr('data-reservation', $(this).attr('data-reservation'));
-})
-
-$(document).on('click', ".btn-advance-list", function() {
-    let html = `<table width="100%" id="table-advance-list" class="table table-striped responsive-table">
-                    <thead>
-                        <tr>
-                            <th>Date</th>
-                            <th>Payment Mode</th>
-                            <th>Advance Amount</th>
-                            <th>Action</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td class="text-center" colspan="4">No Record Found!!!</td>
-                        </tr>
-                    </tbody>
-                </table>`;
-    $(".table-advance-list").html(html);
-    let data = { "list_key": "get_advance_detail", "advance_no": $(this).attr('data-reservation') }
-    commonAjax('services.php', 'POST', data, '', '', '', { "functionName": "displayAdvanceList", "param1": "#table-advance-list tbody" });
-})
-
-function displayAdvanceList(response, dataTableId) {
-    console.log(response.result);
-    let html = ``;
-    $.each(response.result, function(i, v) {
-        html += `  <tr>
-                        <td>${v.created_at}</td>
-                        <td>${v.payment_mode}</td>
-                        <td>${v.advance_amount}</td>
-                        <td>                                   
-                            <button class="btn btn-icon btn-hover btn-sm btn-rounded btn-delete-table" data-type="advance" data-delete="${v.advance_master_id}" data-toggle="modal" data-target="#delete">
-                                <i class="anticon anticon-delete text-danger"></i>
-                            </button>
-                        </td>
-                    </tr>`;
-    });
-
-    if (html.trim())
-        $(dataTableId).html(html);
-}
-
 $(document).on('click', ".btn-delete", function() {
     var data = {};
     if (typeof($(this).attr('data-type')) != 'undefined') {
@@ -127,27 +77,4 @@ $(document).on('click', ".btn-delete", function() {
 
     $("#delete").modal('hide');
     commonAjax('', 'POST', data, '', 'Record Deleted Sucessfully', '', { "functionName": "locationReload" });
-})
-
-$(document).on('click', ".save-advance", function() {
-    if (checkRequired('#advance-payment-add')) {
-        let data = { "list_key": "advance_insert" };
-        data['booking_no'] = $(this).attr('data-booking');
-        data['payment_mode'] = $("#payment_mode").val();
-        data['advance'] = $(".advance").val();
-        let printFlag = false;
-        if ($(this).attr('data-print') == 'true')
-            printFlag = true;
-        commonAjax('', 'POST', data, '', "Advance Added Succesfully", "Advance Added Failed!!! Please try Again.", { "functionName": "succesAdvanceUpdate", "param1": printFlag });
-    }
-})
-
-function succesAdvanceUpdate(res, printFlag) {
-    $("#advance-modal").modal('hide');
-
-    if (printFlag) {
-
-    } else {
-        location.reload();
-    }
-}
+});

@@ -62,7 +62,7 @@ function setReservationValue(responce) {
                     $('tbody tr:nth-child(' + (index + 1) + ') [name="' + i + '"]').trigger('change');
             })
         }, 2000);
-    })
+    });
 
     docShow(true);
 

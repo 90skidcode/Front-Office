@@ -49,8 +49,11 @@ function displayReservationList(response, dataTableId) {
             return `<td class="text-right">
                     <a href="reservation-add.html?id=${row.reservation_no}" class="btn btn-icon btn-hover btn-sm btn-rounded pull-right">
                         <i class="anticon anticon-edit text-primary"></i>
-                    </a>                   
-                    <button class="btn btn-icon btn-hover btn-sm btn-rounded btn-advance-list" data-customerid="${row.customer_id}" data-total="${row.total_amount}" data-advance="${row.advance}" data-reservation="${row.reservation_no}" data-toggle="modal" data-target="#advance-list-modal">
+                    </a>          
+                    <button class="btn btn-icon btn-hover btn-sm btn-rounded btn-advance" title='Add Advance' data-type="reservation" data-customerid="${row.customer_id}" data-total="${row.total_amount}" data-advance="${row.advance}" data-reservation="${row.reservation_no}" data-toggle="modal" data-target="#advance-modal">
+                        <i class="anticon anticon-dollar text-primary"></i>
+                    </button>         
+                    <button class="btn btn-icon btn-hover btn-sm btn-rounded btn-advance-list" data-type="reservation"  data-customerid="${row.customer_id}" data-total="${row.total_amount}" data-advance="${row.advance}" data-reservation="${row.reservation_no}" data-toggle="modal" data-target="#advance-list-modal">
                         <i class="anticon anticon-solution text-primary"></i>
                     </button>     
                     <a href="reservation-print.html?id=${row.reservation_no}" class="btn btn-icon btn-hover btn-sm btn-rounded pull-right">
@@ -68,64 +71,6 @@ function displayReservationList(response, dataTableId) {
     dataTableDisplay(response.result, tableHeader, false, dataTableId)
 }
 
-
-$(document).on('click', ".btn-advance", function() {
-    $("#total_amount").html("Total  : Rs." + $(this).attr('data-total'));
-    $("#total_advance").html("Advance Total : Rs." + $(this).attr('data-advance'));
-    let balance = Number($(this).attr('data-total')) - Number($(this).attr('data-advance'));
-    $("#total_balance").html("Balance : Rs." + balance);
-    $('.customer-id').val($(this).attr('data-customerid'));
-    $(".save-advance").attr('data-reservation', $(this).attr('data-reservation'));
-    $('#advance-list-modal').modal('hide');
-})
-
-$(document).on('click', ".btn-advance-list", function() {
-    let html = `<table width="100%" id="table-advance-list" class="table table-striped responsive-table">
-                    <thead>
-                        <tr>
-                            <th>Date</th>
-                            <th>Payment Mode</th>
-                            <th>Advance Amount</th>
-                            <th>Action</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td class="text-center" colspan="4">No Record Found!!!</td>
-                        </tr>
-                    </tbody>
-                </table>`;
-    $(".table-advance-list").html(html);
-    $('.btn-advance').attr({
-        'data-total': $(this).attr('data-total'),
-        'data-advance': $(this).attr('data-advance'),
-        'data-reservation': $(this).attr('data-reservation'),
-        'data-reservation': $(this).attr('data-reservation'),
-        'data-customerid': $(this).attr('data-customerid')
-    });
-    let data = { "list_key": "get_advance_detail", "advance_no": $(this).attr('data-reservation') }
-    commonAjax('services.php', 'POST', data, '', '', '', { "functionName": "displayAdvanceList", "param1": "#table-advance-list tbody" });
-})
-
-function displayAdvanceList(response, dataTableId) {
-    let html = ``;
-    $.each(response.result, function(i, v) {
-        html += `  <tr>
-                        <td>${v.created_at}</td>
-                        <td>${v.payment_mode}</td>
-                        <td>${v.advance_amount}</td>
-                        <td>                                   
-                        <a href="advance-print.html?id=${v.advance_master_id}" class="btn btn-icon btn-hover btn-sm btn-rounded pull-right">
-                            <i class="anticon anticon-printer text-primary"></i>
-                        </a>
-                        </td>
-                    </tr>`;
-    });
-
-    if (html.trim())
-        $(dataTableId).html(html);
-}
-
 $(document).on('click', ".btn-delete", function() {
     var data = {};
     if (typeof($(this).attr('data-type')) != 'undefined') {
@@ -136,27 +81,3 @@ $(document).on('click', ".btn-delete", function() {
     $("#delete").modal('hide');
     commonAjax('', 'POST', data, '', 'Record Deleted Sucessfully', '', { "functionName": "locationReload" });
 })
-
-$(document).on('click', ".save-advance", function() {
-    if (checkRequired('#advance-payment-add')) {
-        let data = { "list_key": "advance_insert" };
-        data['reservation_no'] = $(this).attr('data-reservation');
-        data['payment_mode'] = $("#payment_mode").val();
-        data['customer_id'] = $(".customer-id").val();
-        data['advance'] = $(".advance").val();
-        let printFlag = false;
-        if ($(this).attr('data-print') == 'true')
-            printFlag = true;
-        commonAjax('', 'POST', data, '', "Advance Added Succesfully", "Advance Added Failed!!! Please try Again.", { "functionName": "succesAdvanceUpdate", "param1": printFlag });
-    }
-})
-
-function succesAdvanceUpdate(res, printFlag) {
-    $("#advance-modal").modal('hide');
-
-    if (printFlag) {
-
-    } else {
-        location.reload();
-    }
-}
