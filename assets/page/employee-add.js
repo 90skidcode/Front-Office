@@ -160,7 +160,7 @@ $(document).ready(function() {
                 }, false);
                 return xhr;
             },
-            url: 'http://glowmedia.in/frontoffice/admin/api/upload.php',
+            url: 'https://glowmedia.in/frontoffice/admin/api/upload.php',
             type: 'POST',
             data: formData,
             success: function(data) {

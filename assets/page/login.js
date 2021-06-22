@@ -34,7 +34,7 @@ sessionStorage.clear();
 
 function commonAjax(url, type, data, resetFormSelector, sMessage, eMessage, sCallBack, eCallBack) {
     loader(true);
-    let serverUrl = 'http://glowmedia.in/frontoffice/admin/api/';
+    let serverUrl = 'https://glowmedia.in/frontoffice/admin/api/';
     $.ajax({
         url: (isEmptyValue(url)) ? serverUrl + 'services.php' : serverUrl + url,
         type: type,
