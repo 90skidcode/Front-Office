@@ -524,7 +524,7 @@ function checkRequired(selector) {
 
 function commonAjax(url, type, data, resetFormSelector, sMessage, eMessage, sCallBack, eCallBack) {
     loader(true);
-    let serverUrl = 'http://glowmedia.in/frontoffice/admin/api/';
+    let serverUrl = 'https://glowmedia.in/frontoffice/admin/api/';
     $.ajax({
         url: (isEmptyValue(url)) ? serverUrl + 'services.php' : serverUrl + url,
         type: type,
@@ -824,7 +824,7 @@ function docShow(imageFlag) {
                                     <i class="anticon anticon-close"></i>
                                 </span>
                             </span>
-                            <img class="w-100" src="http://glowmedia.in/frontoffice/admin/api/uploads/${v}" alt="">                        
+                            <img class="w-100" src=".in/frontoffice/admin/api/uploads/${v}" alt="">                        
                         </div>`;
             })
             $(".image-prev-area").append(html);
