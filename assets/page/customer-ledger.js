@@ -2,46 +2,43 @@ displayCustomerListInit()
 
 
 function displayCustomerListInit() {
-    let data = { "list_key": "list_general_tables", "table_name": "customer_master", "column": "*", "condition": { "status": "1" } }
-    commonAjax('services.php', 'POST', data, '', '', '', { "functionName": "displayCustomerList", "param1": "table-customer-list" });
+    let data = { "list_key": "get_ledger_list" }
+    commonAjax('services.php', 'POST', data, '', '', '', { "functionName": "displayCustomerList", "param1": "table-customer-ledger" });
 }
 
 function displayCustomerList(response, dataTableId) {
     var tableHeader = [{
-        "data": "customer_fname"
+        "data": "customer_fname",
+        mRender: function(data, type, row) {
+            return row.customer_fname.toUpperCase();
+        }
     }, {
         "data": "customer_phone"
     }, {
-        "data": "customer_pincode"
-    }, {
-        "data": "customer_address"
-    }, /* EDIT */ /* DELETE */ {
-        "data": "room_name",
+        "data": "room_no",
         mRender: function(data, type, row) {
-            return `<td class="text-right">
-                    <a href="customer-add.html?id=${row.customer_id}" class="btn btn-icon btn-hover btn-sm btn-rounded pull-right">
-                        <i class="anticon anticon-edit text-primary"></i>
-                    </a>
-                    <button class="btn btn-icon btn-hover btn-sm btn-rounded btn-delete-table" data-delete="${row.customer_id}" data-toggle="modal" data-target="#delete">
-                        <i class="anticon anticon-delete text-danger"></i>
-                    </button>
-                </td>`;
+            let room = row.room_no.split(',');
+            if (room.length == 1) {
+                return `<td class="text-right">               
+                <a class="btn btn-primary  btn-sm btn-rounded " href="customer-ledger-details.html?booking_no=${row.booking_no}">
+                    ${row.room_no}
+                </a>
+            </td>`;
+            } else if (room.length > 1) {
+                let html = `<td class="text-right">               
+                <a class="btn btn-hover btn-sm btn-rounded" href="customer-ledger-details.html?booking_no=${row.booking_no}">
+                    All
+                </a>`
+                $.each(room, function name(i, v) {
+                    html += `<a class="btn btn-hover btn-sm btn-rounded" href="customer-ledger-details.html?booking_no=${row.booking_no}&room_no=${v}">
+                    ${v}
+                </a>`
+                });
+                html += `</td>`;
+                return html;
+            }
+
         }
     }];
     dataTableDisplay(response.result, tableHeader, false, dataTableId);
 }
-
-$(document).on('click', ".btn-delete", function() {
-    var data = {
-        'query': 'update',
-        'databasename': 'customer_master',
-        'condition': {
-            'customer_id': $(".btn-delete").attr('data-detete')
-        },
-        'values': {
-            'status': '0'
-        }
-    }
-    $("#delete").modal('hide');
-    commonAjax('database.php', 'POST', data, '', 'Record Deleted Sucessfully', '', { "functionName": "locationReload" })
-})
