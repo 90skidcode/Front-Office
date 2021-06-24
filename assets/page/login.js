@@ -1,7 +1,7 @@
 $(document).ready(function() {
     $(document).on("click", ".sign-in", function() {
+        loader(true);
         let data = { "list_key": "master_login", "user_name": $('#userName').val(), "user_password": $('#password').val() }
-
         commonAjax('services.php', 'POST', data, '', '', "Please Check your Username and Password", {
             "functionName": "login"
         })
@@ -13,8 +13,53 @@ function login(responce) {
     if (responce.status_code == 200) {
         sessionStorage.setItem("user", JSON.stringify(responce.result));
         location.href = "dashboard.html";
+    } else {
+        loader(true);
+        showToast('Please check User name and Password!!', 'error');
     }
+
 }
+
+/* Add Loader to body */
+$('body').prepend(`<div class="loader-area">
+    <div class="loader-overlay">
+        <div class="loader"></div>
+    </div>
+</div>`);
+
+/**
+ * ShoW Toast
+ * @param {string} msg Message
+ * @param {string} type it shoul be success/error
+ */
+
+function showToast(msg, type) {
+    let background = "";
+    let icon = '';
+    (type == 'error') ? background = 'badge-danger': background = 'badge-success';
+    (type == 'success') ? icon = 'anticon-check-circle': icon = 'anticon-info-circle'
+    var toastHTML = `<div class="toast fade hide" data-delay="5000">
+        <div class="toast-header ${background}">
+            <i class="anticon ${icon} m-r-5 text-white"></i>
+            <strong class="mr-auto">${type.toUpperCase()}</strong>
+            <button type="button" class="ml-2 close text-white" data-dismiss="toast" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="toast-body">
+            ${msg}
+        </div>
+    </div>`
+
+    $('#notification-toast').append(toastHTML)
+    $('#notification-toast .toast').toast('show');
+    setTimeout(function() {
+        $('#notification-toast .toast:first-child').remove();
+    }, 5000);
+}
+
+
+
 
 localStorage.clear();
 sessionStorage.clear();

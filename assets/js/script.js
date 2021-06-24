@@ -61,6 +61,14 @@ else {
                     </ul>
                 </li>
                 <li class="nav-item dropdown">
+                    <a href="customer-ledger.html" data-href="customer-ledger.html">
+                        <span class="icon-holder">
+                            <i class="anticon anticon-audit"></i>
+                        </span>
+                        <span class="title">Customer Ledger</span>           
+                    </a>        
+                </li>
+                <li class="nav-item dropdown">
                     <a href="customer-list.html" data-href="customer-add.html">
                         <span class="icon-holder">
                             <i class="anticon anticon-usergroup-add"></i>
