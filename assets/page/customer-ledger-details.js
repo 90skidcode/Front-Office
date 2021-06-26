@@ -14,5 +14,28 @@ function displayCustomerListInit() {
 }
 
 function displayCustomerList(response) {
-    $('h4.float-left').html(response.result[0].customer_fname + "Ledger Details");
+    var bookingArray = response.result.Booking[0];
+    var bookingDate = new Date(bookingArray.created_at).toString().split("GMT");
+    $('h4.float-left').html(bookingArray.customer_fname.toUpperCase() + " Ledger Details");
+    let customerDom = ` <ul>
+                            <li>
+                                <p><b>Customer Name</b></p>
+                                <p>${bookingArray.customer_fname}</p>
+                            </li>
+                            <li>
+                                <p><b>Booking No</b></p>
+                                <p>${bookingArray.booking_no}</p>
+                            </li>                            
+                            <li>
+                                <p><b>Booking Date</b></p>
+                                <p>${bookingDate[0]}</p>
+                            </li>
+                            <li>
+                                <p><b>Room No</b></p>
+                                <p>${bookingArray.room_no}</p>
+                            </li>
+                            
+                        </ul>`;
+    $(".customer-info").html(customerDom);
+
 }
