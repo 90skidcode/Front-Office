@@ -12883,7 +12883,7 @@ hr {
 }
 
 .bg-success-light {
-    background-color: #28a74536 !important;
+    background-color: #28a74565 !important;
 }
 
 .bg-info {
@@ -12896,6 +12896,10 @@ hr {
 
 .bg-danger {
     background-color: #de4436 !important
+}
+
+.bg-danger-light {
+    background-color: #de443665 !important
 }
 
 .img-fit-cover {
