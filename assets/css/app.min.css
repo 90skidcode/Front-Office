@@ -28962,7 +28962,8 @@ div.dataTables_info {
 /* =======================   Pills ================== */
 
 .nav-pills,
-.tab-content {
+.tab-content,
+.summary.card {
     padding: 15px;
     background-color: #fff;
     -webkit-box-shadow: 0 3px 10px 0 rgba(0, 0, 0, 0.05);
@@ -29005,4 +29006,30 @@ div.dataTables_info {
     width: 100%;
     box-shadow: 7px 3px 10px 8px rgb(0 0 0 / 5%);
     padding: 15px 20px;
+}
+
+.list {
+    float: left;
+    width: 100%;
+}
+
+.list p {
+    float: left;
+    padding: 5px;
+    margin: 0;
+    text-align: center;
+    border-bottom: 1px solid #edf2f9;
+}
+
+.list P:first-child {
+    width: 65%;
+}
+
+.list P:last-child {
+    width: 35%;
+    text-align: left;
+}
+
+.summary .card-header {
+    box-shadow: 7px 3px 10px 8px rgb(0 0 0 / 5%);
 }

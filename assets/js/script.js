@@ -910,3 +910,12 @@ $('input').on("wheel mousewheel ", function(e) {
         return;
     }
 });
+
+/**
+ * 
+ * @param {Numbers} x eg : 1234567
+ * @returns Rs.12,34,567.00
+ */
+function numberWithCommas(x) {
+    return "Rs." + x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+}

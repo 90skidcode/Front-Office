@@ -41,7 +41,7 @@ function displayCustomerList(response) {
     let customerDom = ` <ul>
                             <li>
                                 <p><b>Customer Name</b></p>
-                                <p>${bookingArray[0].customer_fname}</p>
+                                <p>${response.result.Booking[0].customer_fname}</p>
                             </li>
                             <li>
                                 <p><b>Booking No</b></p>
@@ -58,7 +58,31 @@ function displayCustomerList(response) {
                             
                         </ul>`;
     $(".customer-info").html(customerDom);
+
+    var ledgerDetails = '';
+    let lTotal = 0;
+    response.result.Booking.forEach(element => {
+        let lDate = new Date(element.created_at).toString().split("GMT");
+
+        ledgerDetails += `<tr>
+                            <td class="text-center border-right-0 border-bottom-0">${element.customer_ledger_id}</td>
+                            <td class="text-center border-right-0 border-bottom-0">${lDate[0]}</td>
+                            <td class="text-center border-right-0 border-bottom-0">${element.room_no}</td>
+                            <td class="text-right border-right-0 border-bottom-0">${numberWithCommas(element.amount)}</td>
+                        </tr>`;
+        lTotal += Number(element.amount);
+
+    });
+
+    ledgerDetails += `<tr class="bg">
+                        <td class="text-right border-right-0 border-bottom-0 font-size-20" colspan='3'>Total</td>
+                        <td class="text-right border-right-0 border-bottom-0 font-size-20" >${numberWithCommas(lTotal)}</td>
+                    </tr>`;
+
+    $(".leadger-details").html(ledgerDetails);
+
     var roomDetails = '';
+    let rTotal = 0;
     response.result.booking_details.forEach(element => {
 
         roomDetails += `<tr>
@@ -69,38 +93,70 @@ function displayCustomerList(response) {
                             <td class="text-center border-right-0 border-bottom-0">${element.hotel_no_of_adults} / ${element.hotel_no_of_childs}</td>
                             <td class="text-right border-right-0 border-bottom-0 ">${element.hotel_price}</td>
                             <td class="text-right border-right-0 border-bottom-0">${element.hotel_discount}%</td>
-                            <td class="text-right border-bottom-0 item-total">${element.room_total}</td>
-                        </tr>`
+                            <td class="text-right border-bottom-0 item-total">${numberWithCommas(element.room_total)}</td>
+                        </tr>`;
+        rTotal += Number(element.room_total);
     });
+
+    roomDetails += `<tr class="bg">
+                        <td class="text-right border-right-0 border-bottom-0 font-size-20" colspan='7'>Total</td>
+                        <td class="text-right border-right-0 border-bottom-0 font-size-20" >${numberWithCommas(rTotal)}</td>
+                    </tr>`;
 
     $(".room-details").html(roomDetails);
 
     var advanceDetails = '';
+    let aTotal = 0;
     response.result.Advance.forEach(element => {
         var advanceDate = new Date(element.created_at).toString().split("GMT");
         advanceDetails += `<tr>
                             <td class="text-center border-right-0 border-bottom-0">${advanceDate[0]}</td>
                             <td class="text-right border-right-0 border-bottom-0">${element.customer_ledger_id}</td>
                             <td class="text-center border-right-0 border-bottom-0">${element.description} </td>
-                            <td class="text-right border-right-0 border-bottom-0">${element.amount}</td>
-                        </tr>`
+                            <td class="text-right border-right-0 border-bottom-0">${numberWithCommas(element.amount)}</td>
+                        </tr>`;
+        aTotal += Number(element.amount);
     });
-
+    advanceDetails += `<tr class="bg">
+                            <td class="text-right border-right-0 border-bottom-0 font-size-20" colspan='3'>Total</td>
+                            <td class="text-right border-right-0 border-bottom-0 font-size-20" >${numberWithCommas(aTotal)}</td>
+                        </tr>`;
     $(".advance-details").html(advanceDetails);
 
     var HotelDetails = '';
+    let hTotal = 0;
     response.result.Hotel.forEach(element => {
         var advanceDate = new Date(element.created_at).toString().split("GMT");
         HotelDetails += `<tr>
                             <td class="text-center border-right-0 border-bottom-0">${advanceDate[0]}</td>
                             <td class="text-right border-right-0 border-bottom-0">${element.customer_ledger_id}</td>
                             <td class="text-center border-right-0 border-bottom-0">${element.description} </td>
-                            <td class="text-right border-right-0 border-bottom-0">${element.amount} </td>
-                        </tr>`
+                            <td class="text-right border-right-0 border-bottom-0">${numberWithCommas(element.amount)} </td>
+                        </tr>`;
+        hTotal += Number(element.amount);
     });
-
+    HotelDetails += `<tr class="bg">
+    <td class="text-right border-right-0 border-bottom-0 font-size-20" colspan='3'>Total</td>
+    <td class="text-right border-right-0 border-bottom-0 font-size-20" >${numberWithCommas(hTotal)}</td>
+</tr>`;
     $(".hotel-details").html(HotelDetails);
+
+    /**
+     * Summary
+     */
+
+    let summary = ` <div class="card-header"> <h3 class="p-2 p-l-0 m-0">Summary</h3> </div> 
+                    <div class="card-body p-0"> 
+                        <div class="list" data-id="v-pills-leadger-tab"> <p> Room Rent </p> <p>${ numberWithCommas(lTotal)} </p></div>
+                        <div class="list" data-id="v-pills-leadger-tab"> <p> Advance  </p> <p>${ numberWithCommas(aTotal)} </p></div>
+                        <div class="list" data-id="v-pills-leadger-tab"> <p> Hotel Bill </p> <p>${ numberWithCommas(hTotal)} </p></div>
+                        <div class="list font-size-20" data-id="v-pills-leadger-tab"> <p> Total </p> <p>${ numberWithCommas(lTotal+aTotal+hTotal)} </p></div>
+                    </div>`;
+
+    $(".summary").html(summary);
 }
+
+
 
 
 /**
