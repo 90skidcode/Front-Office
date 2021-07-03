@@ -10143,8 +10143,8 @@ a.text-dark:focus {
 
 .el-table .thead-light th,
 .table .thead-light th {
-    background-color: #f6f9fc !important;
-    color: #8898aa !important;
+    background-color: #2196f347 !important;
+    color: #5a5a5a !important;
     padding-left: 1.5rem;
     padding-right: 1.5rem;
     padding-top: .75rem;
@@ -12674,10 +12674,14 @@ body {
 body {
     font-family: "Poppins", -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Helvetica Neue", Helvetica, Arial, sans-serif;
     font-size: 14px;
-    background-color: #e2edfe;
+    background-color: #d0e7fd;
     color: #53535f;
     line-height: 1.5;
-    overflow-x: hidden
+    overflow-x: hidden;
+}
+
+icon {
+    float: right;
 }
 
 h1,
@@ -28990,4 +28994,11 @@ div.dataTables_info {
     -ms-flex-positive: 1;
     flex-grow: 1;
     text-align: center;
+}
+
+.customer-info {
+    float: left;
+    width: 100%;
+    box-shadow: 7px 3px 10px 8px rgb(0 0 0 / 5%);
+    padding: 15px 20px;
 }

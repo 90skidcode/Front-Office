@@ -61,13 +61,21 @@ else {
                     </ul>
                 </li>
                 <li class="nav-item dropdown">
-                    <a href="customer-ledger.html" data-href="customer-ledger.html">
+                    <a href="customer-ledger.html" data-href="customer-ledger.html" data-href="customer-ledger-details.html">
                         <span class="icon-holder">
                             <i class="anticon anticon-audit"></i>
                         </span>
                         <span class="title">Customer Ledger</span>           
                     </a>        
                 </li>
+                <li class="nav-item dropdown">
+                <a href="night-audit.html" data-href="night-audit.html">
+                    <span class="icon-holder">
+                        <i class="anticon anticon-file-protect"></i>
+                    </span>
+                    <span class="title">Night Audit</span>
+                </a>
+            </li>
                 <li class="nav-item dropdown">
                     <a href="customer-list.html" data-href="customer-add.html">
                         <span class="icon-holder">
@@ -902,166 +910,3 @@ $('input').on("wheel mousewheel ", function(e) {
         return;
     }
 });
-
-
-/**
- * Advance
- */
-
-
-let advanceHtml = `
-<!-- Modal Floor -->
-<div class="modal fade" id="advance-modal">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Add Advance</h5>
-                <button type="button" class="close" data-dismiss="modal">
-                <i class="anticon anticon-close"></i>
-            </button>
-            </div>
-            <div class="modal-body">
-                <form id="advance-payment-add">
-                    <div class="form-row">
-                        <div class="form-group col-md-3">
-                            <label id="total_amount"></label>
-                        </div>
-                        <div class="form-group col-md-5">
-                            <label id="total_advance"></label>
-                        </div>
-                        <div class="form-group col-md-4">
-                            <label id="total_balance"></label>
-                        </div>
-                        <div class="form-group col-md-6">
-                            <label for="payment_mode">Payment Mode</label>
-                            <select class="select2" class="payment_mode" id="payment_mode" name="payment_mode">
-                                                                                               
-                            </select>
-                        </div>
-
-                        <div class="form-group col-md-6">
-                            <label for="advance">Advance</label>
-                            <input type="number" name="advance" required class="advance font-weight-bolder form-control text-right">
-                            <input type="hidden" name="customer_id" class="form-control customer-id">
-                        </div>
-                    </div>
-                </form>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary save-advance" data-print="false">Save</button>
-            </div>
-        </div>
-    </div>
-</div>
-
-<!-- Modal Floor -->
-<div class="modal fade" id="advance-list-modal">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Advance List</h5>
-                <button type="button" class="close" data-dismiss="modal">
-                    <i class="anticon anticon-close"></i>
-                </button>
-            </div>
-            <div class="modal-body">
-                <div class="form-row table-advance-list">
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
-            </div>
-        </div>
-    </div>
-</div>`;
-
-$("body").append(advanceHtml);
-
-$(document).on('click', ".btn-advance", function() {
-    $("#advance-payment-add")[0].reset();
-    $("#advance-payment-add #total_amount").html("Total  : Rs." + $(this).attr('data-total'));
-    $("#advance-payment-add #total_advance").html("Advance Total : Rs." + $(this).attr('data-advance'));
-    let balance = Number($(this).attr('data-total')) - Number($(this).attr('data-advance'));
-    $("#advance-payment-add #total_balance").html("Balance : Rs." + balance);
-    $('.customer-id').val($(this).attr('data-customerid'));
-    let type = $(this).attr('data-type') + "_no";
-    $(".save-advance").attr('data-type', type);
-    $(".save-advance").attr('data-id', $(this).attr("data-" + $(this).attr('data-type')));
-    $('#advance-list-modal').modal('hide');
-})
-
-$(document).on('click', ".btn-advance-list", function() {
-    let html = `
-    <div class="form-group col-md-3">
-        <label id="total_amount"></label>
-    </div>
-    <div class="form-group col-md-5">
-        <label id="total_advance"></label>
-    </div>
-    <div class="form-group col-md-4">
-        <label id="total_balance"></label>
-    </div>
-   
-    <table width="100%" id="table-advance-list" class="table table-striped responsive-table">
-                    <thead>
-                        <tr>
-                            <th>Date</th>
-                            <th>Payment Mode</th>
-                            <th>Advance Amount</th>
-                            <th>Action</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td class="text-center" colspan="4">No Record Found!!!</td>
-                        </tr>
-                    </tbody>
-                </table>`;
-    $(".table-advance-list").html(html);
-    $(".table-advance-list #total_amount").html("Total  : <b>Rs." + $(this).attr('data-total') + "</b>");
-    $(".table-advance-list #total_advance").html("Advance Total :<b> Rs." + $(this).attr('data-advance') + "</b>");
-    let balance = Number($(this).attr('data-total')) - Number($(this).attr('data-advance'));
-    $(".table-advance-list #total_balance").html("Balance : <b>Rs." + balance + "</b>");
-    let type = "data-" + $(this).attr('data-type');
-    let data = { "list_key": "get_advance_detail", "advance_no": $(this).attr(type) }
-    commonAjax('services.php', 'POST', data, '', '', '', { "functionName": "displayAdvanceList", "param1": "#table-advance-list tbody" });
-})
-
-function displayAdvanceList(response, dataTableId) {
-    let html = ``;
-    $.each(response.result, function(i, v) {
-        html += `  <tr>
-                        <td>${v.created_at}</td>
-                        <td>${v.payment_mode}</td>
-                        <td>${v.advance_amount}</td>
-                        <td>                                   
-                        <a href="advance-print.html?id=${v.advance_master_id}" class="btn btn-icon btn-hover btn-sm btn-rounded pull-right">
-                            <i class="anticon anticon-printer text-primary"></i>
-                        </a>
-                        </td>
-                    </tr>`;
-    });
-
-    if (html.trim())
-        $(dataTableId).html(html);
-}
-
-$(document).on('click', ".save-advance", function() {
-    if (checkRequired('#advance-payment-add')) {
-        let data = { "list_key": "advance_insert" };
-        let type = $(this).attr('data-type');
-        data[type] = $(this).attr('data-id');
-        data['payment_mode'] = $("#payment_mode").val();
-        data['customer_id'] = $(".customer-id").val();
-        data['advance'] = $(".advance").val();
-        let printFlag = false;
-        if ($(this).attr('data-print') == 'true')
-            printFlag = true;
-        commonAjax('', 'POST', data, '', "Advance Added Succesfully", "Advance Added Failed!!! Please try Again.", { "functionName": "succesAdvanceUpdate", "param1": printFlag });
-    }
-})
-
-function succesAdvanceUpdate(res, printFlag) {
-    $("#advance-modal").modal('hide');
-}
