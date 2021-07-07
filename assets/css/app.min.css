@@ -29054,15 +29054,20 @@ div.dataTables_info {
 .swap-bill {
     width: auto;
     display: inline-flex;
-    border: 1px solid #ccc;
+    border: 1px solid #7c7c7c;
     padding: 5px 10px;
     cursor: pointer;
     transition: 1.3s;
 }
 
 .swap-bill:hover {
-    background: #4caf50;
+    background: #3f87f5;
     transition: 1s;
     color: #fff;
     border-radius: 5px;
+    border: 1px solid #3f87f5;
+}
+
+.modal-body.room-avaliblity.text-center {
+    background: #d0e7fd;
 }

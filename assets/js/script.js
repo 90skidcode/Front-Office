@@ -945,6 +945,9 @@ function roomStatus(statusCode) {
         case "D":
             return { "status": "Dirty", "html": "<span class='status dirty'>Dirty</span>" };
             break;
+        case "O":
+            return { "status": "Checkout", "html": "<span class='status dirty'>Checkout</span>" };
+            break;
         default:
             return '';
     }

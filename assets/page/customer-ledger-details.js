@@ -276,6 +276,4 @@ $(document).on('click', '.swap-bill', function() {
     commonAjax('services.php', 'POST', data, '', '', '', {
         "functionName": "locationReload"
     });
-
-
 });
