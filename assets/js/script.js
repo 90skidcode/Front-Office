@@ -314,8 +314,6 @@ $.fn.serializeObject = function() {
 };
 
 
-
-
 /**
  * 
  * @param {JSON} data  Full data for Table list
@@ -431,7 +429,6 @@ $("body").append(`
             <button type="button" class="btn btn-danger btn-delete">Delete</button>
         </div>
     </div>
-    
 </div>
 </div>
 `)
@@ -918,4 +915,37 @@ $('input').on("wheel mousewheel ", function(e) {
  */
 function numberWithCommas(x) {
     return "Rs." + x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+}
+
+/**
+ * Room Status
+ * @param { String } statusCode eg: A
+ * @returns room status
+ */
+function roomStatus(statusCode) {
+    switch (statusCode) {
+        case "A":
+            return { "status": "Available", "html": "<span class='status available'>Available</span>" };
+            break;
+        case "IH":
+            return { "status": "In House", "html": "<span class='status inhouse'>In House</span>" };
+            break;
+        case "I":
+            return { "status": "In House", "html": "<span class='status inhouse'>In House</span>" };
+            break;
+        case "OFS":
+            return { "status": "Out Of Service", "html": "<span class='status outofservice'>Out Of Service</span>" };
+            break;
+        case "OFO":
+            return { "status": "Out Of Order", "html": "<span class='status outoforder'>Out Of Order</span>" };
+            break;
+        case "R":
+            return { "status": "Reserved", "html": "<span class='status reserved'>Reserved</span>" };
+            break;
+        case "D":
+            return { "status": "Dirty", "html": "<span class='status dirty'>Dirty</span>" };
+            break;
+        default:
+            return '';
+    }
 }

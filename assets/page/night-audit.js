@@ -1,38 +1,35 @@
-displayNightAuditInit()
+displayNightAuditInit();
 
 
 function displayNightAuditInit() {
-    let data = { "list_key": "Nightaudit", "audit_date": "2021-06-24" }
-    commonAjax('', 'POST', data, '', '', '', { "functionName": "nightAuditDom" })
+    let data = { "list_key": "Nightaudit" }
+    commonAjax('', 'POST', data, '', '', '', { "functionName": "nightAuditDom" });
 }
 
 function nightAuditDom(responce) {
-
     let nightAuditHtml = '';
-
-
     var booking = responce.result.booking;
     var bookingED = 'data-toggle="collapse"';
     var bookingIcon = 'bg-danger-light';
     if (!booking.length) {
         bookingED = '';
-        bookingIcon = 'bg-success-light opacity-08 ';
+        bookingIcon = 'bg-success-light opacity-08';
     }
     let bookingHtml = `<table class="table table-bordered">
-    <thead class="thead-light">
-        <tr>
-            <th class="text-left border-right-0 border-bottom-0">Room Type</th>
-            <th class="text-left border-right-0 border-bottom-0">No of Night</th>
-            <th class="text-left border-right-0 border-bottom-0">From Date/To Date</th>
-            <th class="text-center border-right-0 border-bottom-0">Rooms Number</th>
-            <th class="text-center border-right-0 border-bottom-0">No of Guest (Adult/Child)</th>
-            <th class="text-right border-right-0 border-bottom-0 ">Price</th>
-            <th class="text-right border-right-0 border-bottom-0">Discount%</th>
-            <th class="text-right border-bottom-0 item-total">Total</th>
-            <th class="text-right border-bottom-0">Action</th>
-        </tr>
-    </thead>
-    <tbody class="room-details">`;
+                            <thead class="thead-light">
+                                <tr>
+                                    <th class="text-left border-right-0 border-bottom-0">Room Type</th>
+                                    <th class="text-left border-right-0 border-bottom-0">No of Night</th>
+                                    <th class="text-left border-right-0 border-bottom-0">From Date/To Date</th>
+                                    <th class="text-center border-right-0 border-bottom-0">Rooms Number</th>
+                                    <th class="text-center border-right-0 border-bottom-0">No of Guest (Adult/Child)</th>
+                                    <th class="text-right border-right-0 border-bottom-0 ">Price</th>
+                                    <th class="text-right border-right-0 border-bottom-0">Discount%</th>
+                                    <th class="text-right border-bottom-0 item-total">Total</th>
+                                    <th class="text-right border-bottom-0">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody class="room-details">`;
     booking.forEach(element => {
         bookingHtml += `<tr>
                             <td class="text-center border-right-0 border-bottom-0">${element.room_category}</td>
@@ -85,7 +82,7 @@ function nightAuditDom(responce) {
                             <td class="text-center border-right-0 border-bottom-0">${element.room_category}</td>
                             <td class="text-right border-right-0 border-bottom-0">${element.hotel_no_of_night}</td>
                             <td class="text-center border-right-0 border-bottom-0">${element.hotel_from_date} / ${element.hotel_to_date}</td>
-                            <td class="text-center border-right-0 border-bottom-0">${element.room_no}</td>
+                            <td class="text-center border-right-0 border-bottom-0">${element.room_no} </td>
                             <td class="text-center border-right-0 border-bottom-0">${element.hotel_no_of_adults} / ${element.hotel_no_of_childs}</td>
                             <td class="text-right border-right-0 border-bottom-0 ">${element.hotel_price}</td>
                             <td class="text-right border-right-0 border-bottom-0">${element.hotel_discount}%</td>
@@ -105,9 +102,6 @@ function nightAuditDom(responce) {
     <div id="reservationDetails" class="card-body collapse" aria-labelledby="reservation" data-parent="#night-audit">  ${ reservationHtml }  </div>
     </div>`;
 
-
-
-
     var expenses = responce.result.expenses;
     var expensesED = 'data-toggle="collapse"';
     var expensesIcon = 'bg-danger-light';
@@ -121,9 +115,11 @@ function nightAuditDom(responce) {
     </div>
     <div id="expensesDetails" class="card-body collapse" aria-labelledby="expenses" data-parent="#night-audit"></div>
     </div>`;
-
-
-
-
     $("#night-audit").html(nightAuditHtml);
+}
+
+
+function nightAudit() {
+    let data = { "list_key": "CloseNightaudit", "created_by": JSON.parse(userData)[0].employee_id }
+    commonAjax('', 'POST', data, '', '', '');
 }

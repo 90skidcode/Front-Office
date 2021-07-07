@@ -12684,12 +12684,6 @@ icon {
     float: right;
 }
 
-icon.p-r-5 {
-    padding: 0px 5px;
-    background: #fff;
-    border-radius: 15px;
-}
-
 h1,
 h2,
 h3,
@@ -28664,6 +28658,13 @@ div.is-invalid {
     background: #F2BAC9;
 }
 
+span.status {
+    padding: 5px;
+    margin-top: 6px;
+    border-radius: 5px;
+    display: block;
+}
+
 
 /* Loader */
 
@@ -29038,4 +29039,30 @@ div.dataTables_info {
 
 .summary .card-header {
     box-shadow: 7px 3px 10px 8px rgb(0 0 0 / 5%);
+}
+
+.room-full-details td {
+    font-size: 12px;
+}
+
+.room-full-details th {
+    font-size: 11px !important;
+    padding: 5px 3px !important;
+    text-align: center !important;
+}
+
+.swap-bill {
+    width: auto;
+    display: inline-flex;
+    border: 1px solid #ccc;
+    padding: 5px 10px;
+    cursor: pointer;
+    transition: 1.3s;
+}
+
+.swap-bill:hover {
+    background: #4caf50;
+    transition: 1s;
+    color: #fff;
+    border-radius: 5px;
 }

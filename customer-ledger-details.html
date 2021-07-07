@@ -62,7 +62,7 @@
                             </div>
                             <div class="m-t-10 float-left w-100">
                                 <div class="row">
-                                    <div class="col-md-3 col-sm-3">
+                                    <div class="col-md-3 col-sm-3 p-r-0">
                                         <div class="card summary p-0">
 
                                         </div>
@@ -94,17 +94,18 @@
                                                     </table>
                                                 </div>
                                                 <div class="tab-pane fade show" id="v-pills-room" role="tabpanel" aria-labelledby="v-pills-room-tab">
-                                                    <table class="table table-bordered">
+                                                    <table class="table table-bordered room-full-details">
                                                         <thead class="thead-light">
                                                             <tr>
-                                                                <th class="text-left border-right-0 border-bottom-0">Room Type</th>
-                                                                <th class="text-left border-right-0 border-bottom-0">No of Night</th>
-                                                                <th class="text-left border-right-0 border-bottom-0">From Date/To Date</th>
-                                                                <th class="text-center border-right-0 border-bottom-0">Rooms Number</th>
-                                                                <th class="text-center border-right-0 border-bottom-0">No of Guest (Adult/Child)</th>
-                                                                <th class="text-right border-right-0 border-bottom-0 ">Price</th>
-                                                                <th class="text-right border-right-0 border-bottom-0">Discount%</th>
-                                                                <th class="text-right border-bottom-0 item-total">Total</th>
+                                                                <th class=" border-right-0 border-bottom-0">Room Type</th>
+                                                                <th class=" border-right-0 border-bottom-0">No of Night</th>
+                                                                <th class=" border-right-0 border-bottom-0">From Date / To Date</th>
+                                                                <th class=" border-right-0 border-bottom-0">Rooms Number</th>
+                                                                <th class=" border-right-0 border-bottom-0">No of Guest (Adult / Child)</th>
+                                                                <th class=" border-right-0 border-bottom-0 ">Price</th>
+                                                                <th class=" border-right-0 border-bottom-0">Discount%</th>
+                                                                <th class=" border-bottom-0 item-total">Total</th>
+                                                                <th class=" border-bottom-0">Action</th>
                                                             </tr>
                                                         </thead>
                                                         <tbody class="room-details">
@@ -144,7 +145,6 @@
                                                         </tbody>
                                                     </table>
                                                 </div>
-
                                             </div>
                                         </div>
                                     </div>
@@ -159,6 +159,21 @@
         </div>
         <!-- Page Container END -->
     </div>
+    </div>
+    <div class="modal fade" id="room-avaliblity">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="delete">Room Details</h5>
+                    <button type="button" class="close" data-dismiss="modal">
+                        <i class="anticon anticon-close"></i>
+                    </button>
+                </div>
+                <div class="modal-body room-avaliblity text-center">
+
+                </div>
+            </div>
+        </div>
     </div>
     <script src="assets/js/jquery.js"></script>
     <script src="assets/js/vendors.min.js"></script>

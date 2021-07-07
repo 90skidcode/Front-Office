@@ -84,23 +84,25 @@ function displayCustomerList(response) {
     var roomDetails = '';
     let rTotal = 0;
     response.result.booking_details.forEach(element => {
-
-        roomDetails += `<tr>
+        var action = (roomStatus(element.room_status).status == 'In House') ? `<button type="button"  class="btn btn-icon btn-hover btn-sm btn-rounded swap-bill-room-select" data-room= "${element.room_no}"><i class="anticon anticon-retweet font-size-20 text-primary"></i> </button><button type="button"  class="btn btn-icon btn-hover btn-sm btn-rounded "> <i class="anticon anticon-logout text-danger  font-size-20"></i> </button>` : "";
+        roomDetails += `<tr ststus="${element.room_status}">
                             <td class="text-center border-right-0 border-bottom-0">${element.room_category}</td>
-                            <td class="text-right border-right-0 border-bottom-0">${element.hotel_no_of_night}</td>
-                            <td class="text-center border-right-0 border-bottom-0">${element.hotel_from_date} / ${element.hotel_to_date}</td>
-                            <td class="text-center border-right-0 border-bottom-0">${element.room_no}</td>
+                            <td class="text-center border-right-0 border-bottom-0">${element.hotel_no_of_night}</td>
+                            <td class="text-center border-right-0 border-bottom-0">${element.hotel_from_date} <br>/<br> ${element.hotel_to_date}</td>
+                            <td class="text-center border-right-0 border-bottom-0">${element.room_no} <br> ${roomStatus(element.room_status).html}</td>
                             <td class="text-center border-right-0 border-bottom-0">${element.hotel_no_of_adults} / ${element.hotel_no_of_childs}</td>
-                            <td class="text-right border-right-0 border-bottom-0 ">${element.hotel_price}</td>
-                            <td class="text-right border-right-0 border-bottom-0">${element.hotel_discount}%</td>
+                            <td class="text-right border-right-0 border-bottom-0 ">${numberWithCommas(element.hotel_price)}</td>
+                            <td class="text-center border-right-0 border-bottom-0">${element.hotel_discount}%</td>
                             <td class="text-right border-bottom-0 item-total">${numberWithCommas(element.room_total)}</td>
+                            <td class="text-center border-bottom-0 ">${action}</td>
                         </tr>`;
         rTotal += Number(element.room_total);
     });
 
     roomDetails += `<tr class="bg">
-                        <td class="text-right border-right-0 border-bottom-0 font-size-20" colspan='7'>Total</td>
-                        <td class="text-right border-right-0 border-bottom-0 font-size-20" >${numberWithCommas(rTotal)}</td>
+                        <td class="text-right border-right-0 border-bottom-0 font-size-14 font-weight-bold" colspan='7'>Total</td>
+                        <td class="text-right border-right-0 border-bottom-0 font-size-14 font-weight-bold" >${numberWithCommas(rTotal)}</td>
+                        <td class="text-right border-right-0 border-bottom-0 font-size-20" ></td>
                     </tr>`;
 
     $(".room-details").html(roomDetails);
@@ -150,7 +152,7 @@ function displayCustomerList(response) {
                         <div class="list" data-id="v-pills-leadger-tab"> <p> Room Rent </p> <p>${ numberWithCommas(lTotal)} </p></div>
                         <div class="list" data-id="v-pills-leadger-tab"> <p> Advance  </p> <p>${ numberWithCommas(aTotal)} </p></div>
                         <div class="list" data-id="v-pills-leadger-tab"> <p> Hotel Bill </p> <p>${ numberWithCommas(hTotal)} </p></div>
-                        <div class="list font-size-20" data-id="v-pills-leadger-tab"> <p> Total </p> <p>${ numberWithCommas(lTotal+aTotal+hTotal)} </p></div>
+                        <div class="list font-size-16 font-weight-bold" data-id="v-pills-leadger-tab"> <p> Total </p> <p>${ numberWithCommas(lTotal+aTotal+hTotal)} </p></div>
                     </div>`;
 
     $(".summary").html(summary);
@@ -180,7 +182,7 @@ let advanceHtml = `
                      <div class="form-row">
                      <div class="form-group col-md-12 hide" id="bill_no">
                              <label for="payment_mode">Bill No</label>
-                             <input type="number" name="bill_no" required class="bill_no font-weight-bolder form-control text-right ">
+                             <input type="text" name="bill_no" required class="bill_no font-weight-bolder form-control text-right ">
                          </div>
                          <div class="form-group col-md-6">
                              <label for="payment_mode">Payment Mode</label>
@@ -241,3 +243,39 @@ function succesAdvanceUpdate(res, printFlag) {
     $("#advance-modal").modal('hide');
     displayCustomerListInit();
 }
+
+$(document).on('click', '.swap-bill-room-select', function() {
+    var url = new URL(window.location.href);
+    var selectedRoom = $(this).attr('data-room');
+    var booking_no = url.searchParams.get("booking_no");
+    var data = { "list_key": "get_ledger", "booking_no": booking_no }
+    commonAjax('services.php', 'POST', data, '', '', '', {
+        "functionName": "getroomnumbers",
+        'param1': selectedRoom,
+        'param2': booking_no
+    });
+});
+
+function getroomnumbers(responce, selectedRoom, booking_no) {
+    var roomNumber = [] = responce.result.booking_details.map((ele) => (ele.room_status == 'I' && ele.room_no == selectedRoom) ? ele.room_no : '');
+    roomNumber = roomNumber.filter(function(entry) { return entry.trim() != ''; });
+    if (roomNumber.length) {
+        var roomNumberHtml = '';
+        roomNumber.forEach(function(element) {
+            roomNumberHtml += `<div class="swap-bill" data-refer-room='${selectedRoom}' data-booking-no='${booking_no}' data-room-no='${element}'>${element}</div>`;
+        });
+        $(".room-avaliblity").html(roomNumberHtml);
+        $("#room-avaliblity").modal('show');
+    } else {
+        showToast('No rooms avaliable to swap the bill', 'error');
+    }
+}
+
+$(document).on('click', '.swap-bill', function() {
+    var data = { "list_key": "Shiftbill", "room_no": $(this).attr('data-room-no'), "refer_room": $(this).attr('data-refer-room'), "data-booking-no": $(this).attr('data-room-no') };
+    commonAjax('services.php', 'POST', data, '', '', '', {
+        "functionName": "locationReload"
+    });
+
+
+});
