@@ -257,7 +257,7 @@ $(document).on('click', '.swap-bill-room-select', function() {
 });
 
 function getroomnumbers(responce, selectedRoom, booking_no) {
-    var roomNumber = [] = responce.result.booking_details.map((ele) => (ele.room_status == 'I' && ele.room_no == selectedRoom) ? ele.room_no : '');
+    var roomNumber = [] = responce.result.booking_details.map((ele) => (ele.room_status == 'I' && ele.room_no != selectedRoom) ? ele.room_no : '');
     roomNumber = roomNumber.filter(function(entry) { return entry.trim() != ''; });
     if (roomNumber.length) {
         var roomNumberHtml = '';
