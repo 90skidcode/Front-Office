@@ -272,7 +272,7 @@ function getroomnumbers(responce, selectedRoom, booking_no) {
 }
 
 $(document).on('click', '.swap-bill', function() {
-    var data = { "list_key": "Shiftbill", "room_no": $(this).attr('data-room-no'), "refer_room": $(this).attr('data-refer-room'), "booking_no": $(this).attr('data-room-no') };
+    var data = { "list_key": "Shiftbill", "room_no": $(this).attr('data-room-no'), "refer_room": $(this).attr('data-refer-room'), "booking_no": $(this).attr('data-booking-no') };
     commonAjax('services.php', 'POST', data, '', '', '', {
         "functionName": "locationReload"
     });
