@@ -164,7 +164,7 @@
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="delete">Room Details</h5>
+                    <h5 class="modal-title" id="delete">Bill Swap to Room No</h5>
                     <button type="button" class="close" data-dismiss="modal">
                         <i class="anticon anticon-close"></i>
                     </button>
@@ -175,10 +175,95 @@
             </div>
         </div>
     </div>
+
+    <div class="modal fade" id="room-swap">
+        <div class="modal-dialog modal-dialog-centered modal-xl">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="delete">Room Swap</h5>
+                    <button type="button" class="close" data-dismiss="modal">
+                        <i class="anticon anticon-close"></i>
+                    </button>
+                </div>
+                <div class="modal-body text-center">
+                    <form id="room-swap-add">
+                        <div class="table-responsive">
+                            <table class="table table-bordered ">
+                                <thead class="thead-light">
+                                    <tr>
+                                        <th class="text-left border-right-0 border-bottom-0 w-15">Room Type</th>
+                                        <th class="text-left border-right-0 border-bottom-0" hidden>No of Night</th>
+                                        <th class="text-left border-right-0 border-bottom-0  w-20">From Date/To Date</th>
+                                        <th class="text-center border-right-0 border-bottom-0">No of Rooms</th>
+                                        <th class="text-center border-right-0 border-bottom-0 ">No of Guest (Adult/Child)</th>
+                                        <!-- <th class="text-center border-right-0 border-bottom-0">Charges for Extra Bed</th> -->
+                                        <th class="text-right border-right-0 border-bottom-0 ">Price per Night</th>
+                                        <th class="text-right border-right-0 border-bottom-0">Discount%</th>
+                                        <th class="text-right border-right-0 border-bottom-0 ">CGST % / SGST %</th>
+                                        <th class="text-right border-bottom-0 item-total">Total</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+
+                                        <td>
+                                            <select class="select2 room_category" id="room_category" name="room_category" required>
+                                            <option  value="">Select a Room Type</option>
+                                        </select>
+                                        </td>
+                                        <td class="hide" hidden>
+                                            <input type="number" name="hotel_no_of_night" class="no_of_night form-control text-right" readonly>
+                                            <input type="text" name="swap_room_no" class="swap_room_no" readonly>
+                                        </td>
+                                        <td>
+                                            <input type="datetime-local" name="hotel_from_date" autocomplete="off" required="required" data-item="from_date" class="from_date current_date form-control text-right">
+                                            <input type="datetime-local" name="hotel_to_date" autocomplete="off" required="required" data-item="to_date" class="to_date set_date form-control text-right">
+                                        </td>
+                                        <td class="room_no_row">
+                                            <select class="room_no form-control" id="room_no" name="room_no" required>
+                                            <option value="">Select a Room No</option>
+                                            </select>
+                                        </td>
+                                        <td>
+                                            <input type="number" name="hotel_no_of_adults" autocomplete="off" required="required" data-item="no_of_adults" class="no_of_adults form-control text-right">
+                                            <input type="number" name="hotel_no_of_childs" autocomplete="off" required="required" data-item="no_of_childs" class="no_of_childs form-control text-right">
+                                        </td>
+                                        <td hidden>
+                                            <input type="text" name="hotel_no_of_extra_bed" required="required" value="0" class="form-control text-right">
+                                        </td>
+                                        <td>
+                                            <input type="number" name="hotel_price" autocomplete="off" required="required" data-item="price" class="price form-control text-right">
+                                        </td>
+                                        <td>
+                                            <input type="number" name="hotel_discount" autocomplete="off" value="0" required="required" data-item="discount" class="discount form-control text-right">
+                                            <input type="text" name="discount_amount" tabindex="-1" name autocomplete="off" value="0" readonly data-item="discount-amount" class="discount-amount form-control text-right">
+                                        </td>
+                                        <td>
+                                            <input type="text" name="hotel_cgst" autocomplete="off" required="required" data-item="cgst" class="cgst form-control text-right">
+                                            <input type="text" name="hotel_sgst" autocomplete="off" required="required" data-item="sgst" class="sgst form-control text-right">
+                                        </td>
+
+                                        <td>
+                                            <input type="text" readonly name="room_total" class="total form-control text-right border-0">
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <button type="button" class="btn btn-primary room-swap float-left">Save</button>
+                    </form>
+
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+
+
+
     <script src="assets/js/jquery.js"></script>
     <script src="assets/js/vendors.min.js"></script>
     <script src="assets/js/app.min.js"></script>
-
     <script src="assets/vendors/select2/select2.min.js"></script>
     <script src="assets/js/script.js"></script>
     <script src="assets/page/customer-ledger-details.js"></script>

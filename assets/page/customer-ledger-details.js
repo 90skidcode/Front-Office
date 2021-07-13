@@ -1,6 +1,6 @@
-displayCustomerListInit()
-listPaymentType()
-
+displayCustomerListInit();
+listPaymentType();
+listRoomType('room_category');
 /**
  * List Payment Type in select 2
  */
@@ -20,6 +20,26 @@ function listPaymentType() {
     }
     commonAjax('database.php', 'POST', data, '', '', '', { "functionName": "listSelect2", "param1": "#payment_mode", "param2": "payment_mode", "param3": "payment_master_id" })
 }
+
+/**
+ * List Room Type in select 2
+ */
+
+function listRoomType(id) {
+    let data = {
+        "query": 'fetch',
+        "databasename": 'room_category',
+        "column": {
+            "room_category": "room_category"
+        },
+        "condition": {
+            "status": 'A'
+        },
+        "like": ""
+    }
+    commonAjax('database.php', 'POST', data, '', '', '', { "functionName": "listSelect2", "param1": "#" + id, "param2": "room_category" })
+}
+
 
 function displayCustomerListInit() {
     var url = new URL(window.location.href);
@@ -84,7 +104,7 @@ function displayCustomerList(response) {
     var roomDetails = '';
     let rTotal = 0;
     response.result.booking_details.forEach(element => {
-        var action = (roomStatus(element.room_status).status == 'In House') ? `<button type="button"  class="btn btn-icon btn-hover btn-sm btn-rounded swap-bill-room-select" data-room= "${element.room_no}"><i class="anticon anticon-retweet font-size-20 text-primary"></i> </button><button type="button"  class="btn btn-icon btn-hover btn-sm btn-rounded "> <i class="anticon anticon-logout text-danger  font-size-20"></i> </button>` : "";
+        var action = (roomStatus(element.room_status).status == 'In House') ? `<button type="button"  class="btn btn-icon btn-hover btn-sm btn-rounded swap-bill-room-select" data-room= "${element.room_no}"><i class="anticon anticon-retweet font-size-20 text-primary" title="Bill Swap"></i> </button><button type="button"  class="btn btn-icon btn-hover btn-sm btn-rounded btn-room-swap" data-room= "${element.room_no}"> <i class="anticon anticon-warning font-size-20 text-warning" title="Room Swap"></i> </button><button type="button"  class="btn btn-icon btn-hover btn-sm btn-rounded "> <i class="anticon anticon-logout text-danger  font-size-20" title="Checkout"></i> </button>` : "";
         roomDetails += `<tr ststus="${element.room_status}">
                             <td class="text-center border-right-0 border-bottom-0">${element.room_category}</td>
                             <td class="text-center border-right-0 border-bottom-0">${element.hotel_no_of_night}</td>
@@ -271,9 +291,130 @@ function getroomnumbers(responce, selectedRoom, booking_no) {
     }
 }
 
+/**
+ * Swap Bill o another room 
+ */
 $(document).on('click', '.swap-bill', function() {
     var data = { "list_key": "Shiftbill", "room_no": $(this).attr('data-room-no'), "refer_room": $(this).attr('data-refer-room'), "booking_no": $(this).attr('data-booking-no') };
     commonAjax('services.php', 'POST', data, '', '', '', {
+        "functionName": "locationReload"
+    });
+});
+
+/**
+ * Swap Room to another room
+ */
+$(document).on('click', '.btn-room-swap', function() {
+    $("#room-swap").modal('show');
+    $(".swap_room_no").val($(this).attr('data-room'));
+});
+
+/*  Room Number */
+
+$(document).on('change blur', '.room_category,.to_date,.from_date', function() {
+    if ($(this).closest('tr').find('.room_category').val()) {
+        let data = {
+            "list_key": "check_room_booking_available",
+            "hotel_from_date": $(this).closest('tr').find('.from_date').val(),
+            "hotel_to_date": $(this).closest('tr').find('.to_date').val(),
+            "room_category": $(this).closest('tr').find('.room_category').val()
+        }
+        commonAjax('services.php', 'POST', data, '', '', '', { 'functionName': 'showRoomNumber', "param1": $(this).closest('tr').find('.room_no').attr('id') });
+
+    }
+});
+
+
+function showRoomNumber(res, selector) {
+    var selected = [];
+    $(".room_no").each(function() {
+        selected.push($(this).val());
+    });
+
+    var li = "<option value='' >Select a Room Number</option>";
+    $.each(res.result, function(i, v) {
+        li += `<option>${v}</option>`;
+    });
+
+    $("select#" + selector).html(li);
+}
+
+
+$(document).on('change', '.room_no', function() {
+    var selected = [];
+    $(".room_no").each(function() {
+        selected.push($(this).val());
+    });
+
+    var count = 0;
+    for (var i = 0; i < selected.length; ++i) {
+        if (selected[i] == $(this).val())
+            count++;
+    }
+
+    if (count > 1) {
+        showToast('Room Number already selected', 'error');
+        $(this).val("");
+    }
+
+});
+
+/**
+ * Price Clear for room category change
+ */
+$(document).on('change', '.room_category', function() {
+    $(".price").val(' ');
+});
+
+/**
+ * Date Calculation using from date and to date
+ */
+function dateClaculation(fromDate, todate) {
+    var fromDate = new Date(fromDate);
+    var todate = new Date(todate);
+    var diffTime = Math.abs(todate - fromDate);
+    var diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+    return emptySetToZero(diffDays);
+}
+
+/**
+ * Discount Amount Calculation
+ * @param {*} price Room Price
+ * @param {*} discountPercentage 
+ */
+
+function discountAmountCalculation(price, discountPercentage, totalNoOfDays) {
+    return emptySetToZero(((price / 100) * discountPercentage) * totalNoOfDays);
+}
+
+/**
+ * Total Calculation
+ */
+$(document).on('change blur', '.room_category,.to_date,.from_date,.price,.cgst,.sgst,.discount', function() {
+    var t = $(this).closest('tr');
+    var fromDate = t.find('.from_date').val();
+    var toDate = t.find('.to_date').val();
+    var totalNoOfDays = dateClaculation(fromDate, toDate);
+    t.find('.no_of_night').val(totalNoOfDays);
+    var price = emptySetToZero(t.find('.price').val());
+    var discount = emptySetToZero(t.find('.discount').val());
+    var discountAmount = discountAmountCalculation(price, discount, totalNoOfDays);
+    t.find('.discount-amount').val(discountAmount);
+    var cgst = emptySetToZero(t.find('.cgst').val());
+    var sgst = emptySetToZero(t.find('.sgst').val());
+    var gst = cgst + sgst;
+    var discountPrice = ((price * totalNoOfDays) - discountAmount);
+    var total = emptySetToZero(discountPrice + (discountPrice / 100) * gst);
+    t.find('.total').val(total);
+});
+
+$(document).on('click', '.room-swap', function() {
+    let object = $("#room-swap-add").serializeObject();
+    object['list_key'] = 'SwapRoom';
+    object['booking_no'] = $(".booking-id").text();
+    object['room_status'] = "1";
+    console.log(object);
+    commonAjax('services.php', 'POST', object, '', '', '', {
         "functionName": "locationReload"
     });
 });

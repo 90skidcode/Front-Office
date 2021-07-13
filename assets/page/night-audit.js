@@ -1,5 +1,6 @@
 displayNightAuditInit();
 
+var auditDate = '';
 
 function displayNightAuditInit() {
     let data = { "list_key": "Nightaudit" }
@@ -9,6 +10,8 @@ function displayNightAuditInit() {
 function nightAuditDom(responce) {
     let nightAuditHtml = '';
     var booking = responce.result.booking;
+    auditDate = responce.result.audit_date;
+    $('h4').html('Night Audit - ' + auditDate);
     var bookingED = 'data-toggle="collapse"';
     var bookingIcon = 'bg-danger-light';
     if (!booking.length) {
@@ -130,13 +133,30 @@ function nightAuditDom(responce) {
     <div id="collectionDetails" class="card-body collapse" aria-labelledby="collection" data-parent="#night-audit"></div>
     </div>`;
 
+    var income = responce.result.income;
+    var incomeED = 'data-toggle="collapse"';
+    var incomeIcon = 'bg-danger-light';
+    if (!income.length) {
+        incomeED = '';
+        incomeIcon = 'bg-success-light opacity-08 ';
+    }
+    nightAuditHtml += `<div class="card m-b-10">
+    <div class="card-header ${incomeIcon}" id="income">
+        <h5 class="p-10 m-0"><a href="#!" ${ incomeED } style="color: black;"  data-target="#incomeDetails" aria-expanded="true" aria-controls="income">Income</a><icon class="p-r-5">${(income.length) ? income.length : ''}</icon></h5>
+    </div>
+    <div id="incomeDetails" class="card-body collapse" aria-labelledby="income" data-parent="#night-audit"></div>
+    </div>`;
 
     $("#night-audit").html(nightAuditHtml);
 }
 
 function nightAudit() {
-    let data = { "list_key": "CloseNightaudit", "created_by": JSON.parse(userData)[0].employee_id }
-    commonAjax('', 'POST', data, '', '', '');
+    let data = { "list_key": "CloseNightaudit", "created_by": JSON.parse(userData)[0].employee_id, "audit_date": auditDate }
+    commonAjax('', 'POST', data, 'afterNightAudit', '', '');
+}
+
+function afterNightAudit(responce) {
+    (responce.status_code == '200') ? locationReload(): showToast(responce.message, 'error')
 }
 
 $(document).on('click', '.plus-one-day', function() {

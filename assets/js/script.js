@@ -5,6 +5,14 @@ let userData = sessionStorage.getItem("user");
 if (!userData && location.pathname != '/' && location.pathname != '/index.html')
     window.location.href = 'index.html';
 else {
+    /**
+     * Add Status & creted by for all form
+     */
+
+    $('form').append(`<input type="hidden" class="form-control" name="status" value="1">
+                      <input type="hidden" class="form-control" name="created_by" value="${JSON.parse(userData)[0].employee_type_id}">`);
+
+
     let menuHtml = ``;
     switch (JSON.parse(userData)[0].employee_type_id) {
         case '1':
@@ -627,13 +635,6 @@ function listSelect2(data, selector, jsonLabel, jsonValue) {
     })
 }
 
-/**
- * Add Status & creted by for all form
- */
-
-$('form').append(`<input type="hidden" class="form-control" name="status" value="1">
- <input type="hidden" class="form-control" name="created_by" value="1000488">`);
-
 
 /**
  * Location Reload
@@ -750,7 +751,7 @@ function removeJsonToRow(responce, that) {
 
 function emptySetToZero(value) {
     if (typeof(value) != 'undefined' && value && typeof(value) != 'NaN')
-        return value
+        return Number(value);
     else
         return 0;
 }
@@ -947,6 +948,9 @@ function roomStatus(statusCode) {
             break;
         case "O":
             return { "status": "Checkout", "html": "<span class='status dirty'>Checkout</span>" };
+            break;
+        case "S":
+            return { "status": "Swap", "html": "<span class='status dirty'>Room Swap</span>" };
             break;
         default:
             return '';

@@ -28799,8 +28799,7 @@ span.status {
     }
 }
 
-input.discount-amount.form-control.text-right,
-input.to_date {
+input.discount-amount.form-control.text-right {
     border: 0px;
     background: #fff;
     font-size: 14px;

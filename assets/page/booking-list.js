@@ -47,21 +47,9 @@ function displayBookingList(response, dataTableId) {
         "data": "booking_no",
         mRender: function(data, type, row) {
             return `<td class="text-right">
-                    <a href="booking-add.html?id=${row.booking_no}" title='Edit' class="btn btn-icon btn-hover btn-sm btn-rounded pull-right">
+                    <a href="customer-ledger-details.html?booking_no=${row.booking_no}" title='Edit' class="btn btn-icon btn-hover btn-sm btn-rounded pull-right">
                         <i class="anticon anticon-edit text-primary"></i>
                     </a>
-                    <button class="btn btn-icon btn-hover btn-sm btn-rounded btn-advance" title='Add Advance'  data-type="booking"  data-customerid="${row.customer_id}" data-total="${row.total_amount}" data-advance="${row.advance}" data-booking="${row.booking_no}" data-toggle="modal" data-target="#advance-modal">
-                        <i class="anticon anticon-dollar text-primary"></i>
-                    </button>
-                    <button class="btn btn-icon btn-hover btn-sm btn-rounded btn-advance-list" title='Advance List' data-type="booking"  data-total="${row.total_amount}" data-advance="${row.advance}" data-booking="${row.booking_no}" data-toggle="modal" data-target="#advance-list-modal">
-                        <i class="anticon anticon-solution text-primary"></i>
-                    </button>     
-                    <a href="booking-print.html?id=${row.booking_no}" title='Print Booking' class="btn btn-icon btn-hover btn-sm btn-rounded pull-right">
-                        <i class="anticon anticon-printer text-primary"></i>
-                    </a>  
-                    <a href="booking-add.html?id=${row.booking_no}&type=checkout" title='Checkout Booking' class="btn btn-icon btn-hover btn-sm btn-rounded pull-right">
-                        <i class="anticon anticon-logout text-danger"></i>
-                    </a>  
                 </td>`;
         }
     }];
