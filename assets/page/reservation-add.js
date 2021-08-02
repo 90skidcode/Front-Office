@@ -253,7 +253,7 @@ $(document).on('click', '#button-add-item', function() {
                                 </button>
                             </td>
                             <td>
-                            <select class="select2 room_category" id="room_category" name="room_category" required>
+                            <select class="select2 room_category" id="room_${c}_category" name="room_category" required>
                                         <option  value="">Select a Room Type</option>
                                     </select>
 
@@ -285,6 +285,7 @@ $(document).on('click', '#button-add-item', function() {
                             <input type="number" name="hotel_sgst" tabindex="-1" name autocomplete="off" value="0" data-item="hotel_sgst" class="hotel_sgst  form-control text-right">
                         </td>
                         <td>
+                            <div class="gst_details" data-gst="0"></div>
                             <input type="text" readonly name="room_total" class="total form-control text-right border-0">
                         </td>
                         </tr>`);
@@ -339,7 +340,7 @@ $(document).on('change', '.select2.room_category', function() {
  * Room details Calculation
  */
 
-$(document).on('keyup blur change', '.from_date,.to_date,.no_of_rooms,.no_of_adults,.no_of_childs,.hotel_cgst,.hotel_sgst', function() {
+$(document).on('keyup blur change', '.from_date,.to_date,.no_of_rooms,.no_of_adults,.no_of_childs,.hotel_cgst,.hotel_sgst,.discount', function() {
     try {
         let ele = $(this).closest('tr');
         let adultsCount = emptySetToZero(ele.find('.no_of_adults').val());
@@ -348,6 +349,8 @@ $(document).on('keyup blur change', '.from_date,.to_date,.no_of_rooms,.no_of_adu
         let noofnights = emptySetToZero(ele.find('.no_of_night').val());
         let hotelCgst = emptySetToZero(ele.find('.hotel_cgst').val());
         let hotelSgst = emptySetToZero(ele.find('.hotel_sgst').val());
+        let hotelCgstAmount = 0;
+        let hotelSgstAmount = 0;
         if (!noofnights)
             noofnights = 1;
         let json = ele.attr('data-json');
@@ -377,11 +380,15 @@ $(document).on('keyup blur change', '.from_date,.to_date,.no_of_rooms,.no_of_adu
 
             ele.find('.price').val(roomPrice);
             let discountPercentage = emptySetToZero(ele.find('.discount').val());
-            if (adultsCount && infantsCount && noofrooms && noofnights && hotelCgst && hotelSgst) {
-                (discountPercentage) ? ele.find('.discount-amount').val(((ele.find('.price').val() / 100) * discountPercentage).toFixed(2)): ele.find('.discount-amount').val((ele.find('.price').val()).toFixed(2));
-                ele.find('.total').val((ele.find('.price').val() - ele.find('.discount-amount').val()).toFixed(2));
-                taxAmountCalculation();
-            }
+            (discountPercentage) ? ele.find('.discount-amount').val(((ele.find('.price').val() / 100) * discountPercentage).toFixed(2)): ele.find('.discount-amount').val(0);
+            let amountAfterDiscount = (roomPrice - ele.find('.discount-amount').val()).toFixed(2);
+            (hotelCgst) ? hotelCgstAmount = ((amountAfterDiscount / 100) * hotelCgst).toFixed(2): 0.00;
+            (hotelSgst) ? hotelSgstAmount = ((amountAfterDiscount / 100) * hotelSgst).toFixed(2): 0.00;
+            ele.find('.gst_details').html(`CGST  : Rs.${hotelCgstAmount} <br> SGST : Rs.${hotelSgstAmount}`).attr(
+                'data-gst', (Number(hotelCgstAmount) + Number(hotelSgstAmount))
+            );
+            ele.find('.total').val((Number(amountAfterDiscount) + Number(hotelCgstAmount) + Number(hotelSgstAmount)).toFixed(2));
+            taxAmountCalculation();
         }
     } catch (e) {
         console.log(e);
@@ -410,14 +417,6 @@ $(document).on('keyup blur', '.price', function() {
     taxAmountCalculation();
 });
 */
-
-$(document).on('keyup blur', '.discount', function() {
-    let ele = $(this).closest('tr');
-    let discountPercentage = emptySetToZero(ele.find('.discount').val());
-    (discountPercentage) ? ele.find('.discount-amount').val(((ele.find('.price').val() / 100) * discountPercentage).toFixed(2)): ele.find('.discount-amount').val((ele.find('.price').val()).toFixed(2));
-    ele.find('.total').val((ele.find('.price').val() - ele.find('.discount-amount').val()).toFixed(2));
-    taxAmountCalculation();
-});
 
 /*
 $(document).on('click', '.charges_for_extra_bed', function() {
@@ -465,8 +464,13 @@ $(document).on('keyup blur', '.hotel_cgst,.hotel_sgst', function() {
 
 function taxAmountCalculation() {
     let totalAmountBeforeTax = 0;
-    $(".total").each(function(i, v) {
-        totalAmountBeforeTax = totalAmountBeforeTax + Number($(this).val());
+    $(".price").each(function(i, v) {
+        totalAmountBeforeTax = totalAmountBeforeTax + (Number($(this).val()) - Number($(this).closest('tr').find('.discount-amount').val()));
+    });
+    let gst = 0;
+
+    $(".gst_details").each(function(i, v) {
+        gst = gst + (Number($(this).attr('data-gst')));
     })
     let totaldiscount = 0;
     $(".discount-amount").each(function(i, v) {
@@ -474,7 +478,7 @@ function taxAmountCalculation() {
     })
     $(".totaldiscount").val(totaldiscount.toFixed(2));
     $(".beforetaxtotal").val(totalAmountBeforeTax.toFixed(2));
-
+    $('.gst').val(gst.toFixed(2));
     /*if (totalAmountBeforeTax < 1000) {
         $(".hotel_cgst_percentage").val(0)
         $(".hotel_sgst_percentage").val(0)
@@ -486,13 +490,6 @@ function taxAmountCalculation() {
         $(".hotel_sgst_percentage").val(9)
     }*/
 
-    let cgst = emptySetToZero($(".hotel_cgst_percentage").val());
-    let cgstTotal = ((totalAmountBeforeTax / 100) * cgst).toFixed(2);
-    $(".cgst").val(cgstTotal);
-    let sgst = emptySetToZero($(".hotel_sgst_percentage").val());
-    let sgstTotal = ((totalAmountBeforeTax / 100) * sgst).toFixed(2);
-    $(".sgst").val(sgstTotal);
-    $(".gst").val((Number(cgstTotal) + Number(sgstTotal)).toFixed(2));
     let total = (emptySetToZero(Math.round(Number(totalAmountBeforeTax) + Number($(".gst").val()) + Number($(".meal_total").val()))));
     $(".aftertaxamount").val(total.toFixed(2));
     if (total) {

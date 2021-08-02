@@ -61,18 +61,12 @@ function setReservationValue(responce) {
                 <th>Total Amount Before Tax :</th>
                 <td>Rs.${master.total_beforetax}</td>
             </tr>
+           
             <tr>
-                <th>CGST (${master.tax_cgst_percentage}%) :</th>
-                <td>Rs.${master.cgst}</td>
+                <th>GST :</th>
+                <td>Rs.${master.gst}</td>
             </tr>
-            <tr>
-                <th>SGST (${master.tax_sgst_percentage}%) :</th>
-                <td>Rs.${master.sgst}</td>
-            </tr>
-            <tr>
-                <th>Total Tax (${Number(master.tax_cgst_percentage) + Number(master.tax_sgst_percentage)}%):</th>
-                <td>Rs.${master.total_taxamount}</td>
-            </tr>           
+                 
             <tr>
                 <th>Total Advance :</th>
                 <td>Rs.${master.advance}</td>

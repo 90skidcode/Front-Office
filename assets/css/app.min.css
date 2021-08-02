@@ -28916,7 +28916,8 @@ input.discount-amount.form-control.text-right:before {
 }
 
 .avaliable-count,
-.extra-preson-count {
+.extra-preson-count,
+.gst_details {
     font-size: 8px;
     color: green;
     text-align: center;
