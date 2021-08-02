@@ -189,13 +189,13 @@
                                                 <tr>
                                                     <th class="text-center border-right-0 border-bottom-0 w-5"></th>
                                                     <th class="text-left border-right-0 border-bottom-0 w-15">Room Type</th>
-                                                    <th class="text-left border-right-0 border-bottom-0">No of Night</th>
                                                     <th class="text-left border-right-0 border-bottom-0  w-20">From Date/To Date</th>
                                                     <th class="text-center border-right-0 border-bottom-0">No of Rooms</th>
                                                     <th class="text-center border-right-0 border-bottom-0 ">No of Guest (Adult/Child)</th>
                                                     <!-- <th class="text-center border-right-0 border-bottom-0">Charges for Extra Bed</th> -->
                                                     <th class="text-right border-right-0 border-bottom-0 ">Price</th>
                                                     <th class="text-right border-right-0 border-bottom-0">Discount%</th>
+                                                    <th class="text-left border-right-0 border-bottom-0">CGST / SGST</th>
                                                     <th class="text-right border-bottom-0 item-total">Total</th>
                                                 </tr>
                                             </thead>
@@ -213,11 +213,9 @@
 
                                                     </td>
                                                     <td>
-                                                        <input type="number" name="hotel_no_of_night" data-getdate="current_date" data-setdate="set_date" autocomplete="off" required="required" data-item="no_of_night" class="no_of_night form-control text-right">
-                                                    </td>
-                                                    <td>
                                                         <input type="datetime-local" name="hotel_from_date" autocomplete="off" required="required" data-item="from_date" class="from_date current_date form-control text-right">
-                                                        <input type="datetime-local" tabindex="-1" name="hotel_to_date" autocomplete="off" required="required" data-item="to_date" class="to_date set_date form-control text-right" readonly>
+                                                        <input type="datetime-local" tabindex="-1" name="hotel_to_date" autocomplete="off" required="required" data-item="to_date" class="to_date set_date form-control text-right">
+                                                        <input type="hidden" name="hotel_no_of_night" data-getdate="current_date" data-setdate="set_date" autocomplete="off" data-item="no_of_night" class="no_of_night form-control text-right">
                                                     </td>
                                                     <td>
                                                         <input type="number" name="hotel_no_of_rooms" autocomplete="off" required="required" data-item="no_of_rooms" class="no_of_rooms form-control text-right">
@@ -237,6 +235,12 @@
                                                         <input type="text" name="discount_amount" tabindex="-1" name autocomplete="off" value="0" readonly data-item="discount-amount" class="discount-amount form-control text-right">
                                                     </td>
                                                     <td>
+                                                        <input type="number" name="hotel_cgst" autocomplete="off" value="0" required="required" data-item="hotel_cgst" class="hotel_cgst form-control text-right">
+                                                        <input type="number" name="hotel_sgst" tabindex="-1" name autocomplete="off" value="0" data-item="hotel_sgst" class="hotel_sgst  form-control text-right">
+                                                    </td>
+                                                    <td>
+                                                        <input type="text" readonly name="hotel_cgst_amount" class="hotel_cgst_amount no-border form-control text-right border-0">
+                                                        <input type="text" readonly name="hotel_sgst_amount" class="hotel_sgst_amount no-border form-control text-right border-0">
                                                         <input type="text" readonly name="room_total" class="total form-control text-right border-0">
                                                     </td>
                                                 </tr>
@@ -259,34 +263,6 @@
                                                     <td colspan="2" class="text-right"> <label for="items" class="form-control-label"><b>Total Amount Before Tax</b></label></td>
                                                     <td colspan="1" class="text-right"></td>
                                                     <td colspan="2" class="text-right"> <input type="text" readonly name="total_beforetax" class="beforetaxtotal form-control text-right border-0"></td>
-                                                </tr>
-
-                                                <tr id="cgst" class="padding-5">
-                                                    <td colspan="4" class="text-right"></td>
-                                                    <td colspan="2" class="text-right"> <label for="items" class="form-control-label"><b>ADD CGST</b></label></td>
-                                                    <td colspan="1" class="text-right">
-                                                        <div class="input-group">
-                                                            <input type="text" required class="form-control hotel_cgst_percentage" name="tax_cgst_percentage">
-                                                            <div class="input-group-append">
-                                                                <span class="input-group-text" id="basic-addon2">%</span>
-                                                            </div>
-                                                        </div>
-                                                    </td>
-                                                    <td colspan="2" class="text-right"> <input type="text" readonly name="cgst" class="cgst form-control text-right border-0"></td>
-                                                </tr>
-
-                                                <tr id="sgst" class="padding-5">
-                                                    <td colspan="4" class="text-right"></td>
-                                                    <td colspan="2" class="text-right"> <label for="items" class="form-control-label"><b>ADD SGST</b></label></td>
-                                                    <td colspan="1" class="text-right">
-                                                        <div class="input-group">
-                                                            <input type="text" required class="form-control hotel_sgst_percentage" name="tax_sgst_percentage">
-                                                            <div class="input-group-append">
-                                                                <span class="input-group-text" id="basic-addon2">%</span>
-                                                            </div>
-                                                        </div>
-                                                    </td>
-                                                    <td colspan="2" class="text-right"> <input type="text" readonly name="sgst" class="sgst form-control text-right border-0"></td>
                                                 </tr>
                                                 <tr id="gst" class="padding-5">
                                                     <td colspan="4" class="text-left words"></td>

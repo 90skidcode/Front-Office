@@ -1,6 +1,11 @@
+var url = new URL(window.location.href);
+var booking_no = url.searchParams.get("booking_no");
+var room_no = url.searchParams.get("room_no");
 displayCustomerListInit();
 listPaymentType();
 listRoomType('room_category');
+var triggeredBY = 'onload';
+
 /**
  * List Payment Type in select 2
  */
@@ -18,7 +23,7 @@ function listPaymentType() {
         },
         "like": ""
     }
-    commonAjax('database.php', 'POST', data, '', '', '', { "functionName": "listSelect2", "param1": "#payment_mode", "param2": "payment_mode", "param3": "payment_master_id" })
+    commonAjax('database.php', 'POST', data, '', '', '', { "functionName": "listSelect2", "param1": "#payment_mode", "param2": "payment_mode", "param3": "payment_master_id" });
 }
 
 /**
@@ -40,7 +45,6 @@ function listRoomType(id) {
     commonAjax('database.php', 'POST', data, '', '', '', { "functionName": "listSelect2", "param1": "#" + id, "param2": "room_category" })
 }
 
-
 function displayCustomerListInit() {
     var url = new URL(window.location.href);
     var booking_no = url.searchParams.get("booking_no");
@@ -48,7 +52,7 @@ function displayCustomerListInit() {
     if (typeof(room_no) != 'undefined' && room_no) {
         var data = { "list_key": "get_ledger", "booking_no": booking_no, "room_no": room_no };
     } else {
-        var data = { "list_key": "get_ledger", "booking_no": booking_no }
+        var data = { "list_key": "get_ledger", "booking_no": booking_no };
     };
     commonAjax('services.php', 'POST', data, '', '', '', { "functionName": "displayCustomerList", "param1": "table-customer-ledger" });
 }
@@ -103,8 +107,19 @@ function displayCustomerList(response) {
 
     var roomDetails = '';
     let rTotal = 0;
+    var roomInHouseCount = 0;
     response.result.booking_details.forEach(element => {
-        var action = (roomStatus(element.room_status).status == 'In House') ? `<button type="button"  class="btn btn-icon btn-hover btn-sm btn-rounded swap-bill-room-select" data-room= "${element.room_no}"><i class="anticon anticon-retweet font-size-20 text-primary" title="Bill Swap"></i> </button><button type="button"  class="btn btn-icon btn-hover btn-sm btn-rounded btn-room-swap" data-room= "${element.room_no}"> <i class="anticon anticon-warning font-size-20 text-warning" title="Room Swap"></i> </button><button type="button"  class="btn btn-icon btn-hover btn-sm btn-rounded "> <i class="anticon anticon-logout text-danger  font-size-20" title="Checkout"></i> </button>` : "";
+        (roomStatus(element.room_status).status == 'In House') ? roomInHouseCount++ : '';
+    })
+    response.result.booking_details.forEach(element => {
+        var action = '';
+
+        if (roomStatus(element.room_status).status == 'In House') {
+            if (!room_no && roomInHouseCount != 1)
+                action = `<button type="button"  class="btn btn-icon btn-hover btn-sm btn-rounded swap-bill-room-select" data-room="${element.room_no}"><i class="anticon anticon-retweet font-size-20 text-primary" title="Bill Swap"></i> </button><button type="button"  class="btn btn-icon btn-hover btn-sm btn-rounded btn-room-swap" data-room="${element.room_no}"> <i class="anticon anticon-warning font-size-20 text-warning" title="Room Swap"></i> </button><a href="customer-ledger-details.html?booking_no=${booking_no}&room_no=${element.room_no}" class="btn btn-icon btn-hover btn-sm btn-rounded" > <i class="anticon anticon-disconnect text-danger font-size-20" title="Split Bill"></i> </a>`;
+            else
+                action = `<button type="button"  class="btn btn-icon btn-hover btn-sm btn-rounded swap-bill-room-select" data-room="${element.room_no}"><i class="anticon anticon-retweet font-size-20 text-primary" title="Bill Swap"></i> </button><button type="button"  class="btn btn-icon btn-hover btn-sm btn-rounded btn-room-swap" data-room="${element.room_no}"> <i class="anticon anticon-warning font-size-20 text-warning" title="Room Swap"></i> </button><button type="button" class="btn btn-icon btn-hover btn-sm btn-rounded btn-split-bill" data-room="${element.room_no}"> <i class="anticon anticon-logout text-danger font-size-20" title="Split Bill"></i> </button>`;
+        }
         roomDetails += `<tr ststus="${element.room_status}">
                             <td class="text-center border-right-0 border-bottom-0">${element.room_category}</td>
                             <td class="text-center border-right-0 border-bottom-0">${element.hotel_no_of_night}</td>
@@ -169,22 +184,18 @@ function displayCustomerList(response) {
 
     let summary = ` <div class="card-header"> <h3 class="p-2 p-l-0 m-0">Summary</h3> </div> 
                     <div class="card-body p-0"> 
-                        <div class="list" data-id="v-pills-leadger-tab"> <p> Room Rent </p> <p>${ numberWithCommas(lTotal)} </p></div>
-                        <div class="list" data-id="v-pills-leadger-tab"> <p> Advance  </p> <p>${ numberWithCommas(aTotal)} </p></div>
+                        <div class="list" data-id="v-pills-leadger-tab"> <p> Room Rent </p> <p>${ numberWithCommas(lTotal)} </p></div>                        
                         <div class="list" data-id="v-pills-leadger-tab"> <p> Hotel Bill </p> <p>${ numberWithCommas(hTotal)} </p></div>
-                        <div class="list font-size-16 font-weight-bold" data-id="v-pills-leadger-tab"> <p> Total </p> <p>${ numberWithCommas(lTotal+aTotal+hTotal)} </p></div>
+                        <div class="list" data-id="v-pills-leadger-tab"> <p> Advance  </p> <p>${ numberWithCommas(aTotal)} </p></div>
+                        <div class="list font-size-16 font-weight-bold" data-id="v-pills-leadger-tab"> <p> Total </p> <p>${ numberWithCommas(lTotal-aTotal+hTotal)} </p></div>
                     </div>`;
 
     $(".summary").html(summary);
 }
 
-
-
-
 /**
  * Advance
  */
-
 
 let advanceHtml = `
  <!-- Modal Floor -->
@@ -366,16 +377,7 @@ $(document).on('change', '.room_category', function() {
     $(".price").val(' ');
 });
 
-/**
- * Date Calculation using from date and to date
- */
-function dateClaculation(fromDate, todate) {
-    var fromDate = new Date(fromDate);
-    var todate = new Date(todate);
-    var diffTime = Math.abs(todate - fromDate);
-    var diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-    return emptySetToZero(diffDays);
-}
+
 
 /**
  * Discount Amount Calculation
@@ -418,3 +420,26 @@ $(document).on('click', '.room-swap', function() {
         "functionName": "locationReload"
     });
 });
+
+/**
+ * Room Split Bill
+ */
+
+$(document).on('click', '.btn-split-bill', function() {
+    var data = { "list_key": "get_ledger", "booking_no": booking_no };
+    (room_no) ? data["room_no"] = room_no: '';
+    commonAjax('services.php', 'POST', data, '', '', '', { "functionName": "checkNoofRooms" });
+});
+
+function checkNoofRooms(res) {
+    console.log(res);
+    var roomInHouseCount = 0;
+    res.result.booking_details.forEach(element => {
+        (roomStatus(element.room_status).status == 'In House') ? roomInHouseCount++ : '';
+    });
+
+    $("#split-bill-modal").modal('show');
+    var data = '';
+    // (roomInHouseCount == '1') ? 
+
+}

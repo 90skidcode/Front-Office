@@ -29070,3 +29070,9 @@ div.dataTables_info {
 .modal-body.room-avaliblity.text-center {
     background: #d0e7fd;
 }
+
+input.no-border {
+    background: #fff !important;
+    padding: 2px;
+    color: #000;
+}

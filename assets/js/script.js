@@ -956,3 +956,14 @@ function roomStatus(statusCode) {
             return '';
     }
 }
+
+/**
+ * Date Calculation using from date and to date
+ */
+function dateClaculation(fromDate, todate) {
+    var fromDate = new Date(fromDate);
+    var todate = new Date(todate);
+    var diffTime = Math.abs(todate - fromDate);
+    var diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+    return emptySetToZero(diffDays);
+}
