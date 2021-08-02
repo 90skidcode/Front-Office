@@ -357,13 +357,13 @@ $(document).on('click', '#button-add-item', function() {
                                     <option  value="">Select a Room Type</option>
                                 </select>
                             </td>
-                            <td>
-                                <input type="number" name="hotel_no_of_night" data-getdate="current_date${c}" data-setdate="set_date${c}" autocomplete="off" required="required" data-item="no_of_night" class="no_of_night form-control text-right">
+                            <td  class="hide" hidden>
+                                <input type="number" name="hotel_no_of_night" data-getdate="current_date${c}" data-setdate="set_date${c}" autocomplete="off" data-item="no_of_night" class="no_of_night form-control text-right">
                                 <input type="hidden" name="room_status" data-getdate="current_date" data-setdate="set_date" autocomplete="off" value="I" data-item="room_status" class="room_status form-control text-right">               
                             </td>
                             <td>
                                 <input type="datetime-local" name="hotel_from_date" autocomplete="off" required="required" data-item="from_date" class="from_date current_date${c} form-control text-right">
-                                <input type="datetime-local" name="hotel_to_date" tabindex="-1" autocomplete="off" readonly required="required" data-item="to_date" class="to_date set_date${c} form-control text-right">
+                                <input type="datetime-local" name="hotel_to_date" autocomplete="off" required="required" data-item="to_date" class="to_date set_date form-control text-right">
                             </td>
                             <td class="room_no_row">
                                 <select class="room_no form-control" id="room_no_${c}" name="room_no" required>
@@ -371,25 +371,30 @@ $(document).on('click', '#button-add-item', function() {
                                 </select>
                             </td>
                             <td>
-                                <input type="number" name="hotel_no_of_adults" autocomplete="off" required="required" data-item="no_of_adults" class="no_of_adults form-control text-right  float-left">
-                                <input type="number" name="hotel_no_of_childs" autocomplete="off" required="required" data-item="no_of_childs" class="no_of_childs form-control text-right  float-left">
-                            </td>;
-                            <td>
-                                <input type="number" name="hotel_no_of_extra_bed" value="off" required="required" data-item="charges_for_extra_bed" class="charges_for_extra_bed form-control text-right">
-                            </td> 
-                            <td>
-                                <input type="number" name="hotel_price" autocomplete="off" required="required" data-item="price" class="price form-control text-right">
-                            </td>
-                            <td>
-                                <input type="number" name="hotel_discount" autocomplete="off" value="0" required="required" data-item="discount" class="discount form-control text-right">
-                                <input type="text" name="discount_amount" autocomplete="off" value="0" readonly data-item="discount-amount" class="discount-amount form-control text-right">
-                            </td>
-                            <td>
-                                <input type="text" readonly name="room_total" class="total form-control text-right border-0">
-                            </td>
+                            <input type="number" name="hotel_no_of_adults" autocomplete="off" required="required" data-item="no_of_adults" class="no_of_adults form-control text-right">
+                            <input type="number" name="hotel_no_of_childs" autocomplete="off" required="required" data-item="no_of_childs" class="no_of_childs form-control text-right">
+                        </td>
+                        <td hidden>
+                            <input type="text" name="hotel_no_of_extra_bed" required="required" value="0" class="form-control text-right">
+                        </td>
+                        <td>
+                            <input type="number" name="hotel_price" autocomplete="off" required="required" data-item="price" class="price form-control text-right">
+                        </td>
+                        <td>
+                            <input type="number" name="hotel_discount" autocomplete="off" value="0" required="required" data-item="discount" class="discount form-control text-right">
+                            <input type="text" name="discount_amount" tabindex="-1" name autocomplete="off" value="0" readonly data-item="discount-amount" class="discount-amount form-control text-right">
+                        </td>
+                        <td>
+                            <input type="text" name="room_cgst" autocomplete="off" required="required" data-item="cgst" class="cgst form-control text-right">
+                            <input type="text" name="room_sgst" autocomplete="off" required="required" data-item="sgst" class="sgst form-control text-right">
+                        </td>
+
+                        <td>
+                            <div class="gst_details" data-gst="0"></div>
+                            <input type="text" readonly name="room_total" class="total form-control text-right border-0">
+                        </td>
                         </tr>`);
     listRoomType('room_' + c + '_category');
-    setCurrentDate('current_date' + c)
 })
 
 /**
@@ -404,13 +409,17 @@ $(document).on('click', '.btn-outline-danger', function() {
     }
 })
 
+
 /**
- * Set to date
+ * Set no no nights
  */
 
-$(document).on('keyup blur', '.no_of_night,.from_date', function() {
-    let element = $(this).closest('tr').find('.no_of_night');
-    addDays(new Date($("." + element.attr("data-getdate")).val()), element.val(), element.attr("data-setdate"))
+$(document).on('keyup blur', '.to_date,.from_date', function() {
+    var t = $(this).closest('tr');
+    var fromDate = t.find('.from_date').val();
+    var toDate = t.find('.to_date').val();
+    var totalNoOfDays = dateClaculation(fromDate, toDate);
+    t.find('.no_of_night').val(totalNoOfDays);
 })
 
 /**
@@ -430,41 +439,53 @@ $(document).on('change', '.select2.room_category', function() {
         "like": ""
     }
     commonAjax('database.php', 'POST', data, '', '', '', { "functionName": "setJsonToRow", "param1": $(this) }, { "functionName": "removeJsonToRow", "param1": $(this) })
+    $('.room_sgst').trigger('blur');
 })
 
 /**
  * Room details Calculation
  */
 
-$(document).on('keyup blur', '.no_of_night,.no_of_rooms,.no_of_adults,.no_of_childs', function() {
-    let ele = $(this).closest('tr');
-    let adultsCount = emptySetToZero(ele.find('.no_of_adults').val());
-    let infantsCount = emptySetToZero(ele.find('.no_of_childs').val());
-    let noofrooms = emptySetToZero(1);
-    let noofnights = emptySetToZero(ele.find('.no_of_night').val());
-    if (!noofnights)
-        noofnights = 1;
-    let json = ele.attr('data-json');
-    if (json) {
-        json = JSON.parse(json);
-        let adult = emptySetToZero(json[0].room_capacity_adults);
-        let infant = emptySetToZero(json[0].room_capacity_infant);
-        let price = emptySetToZero(json[0].room_price);
-        let extra = emptySetToZero(json[0].room_extra_bed_price);
-        let extraadult = (noofrooms * adult) - adultsCount;
-        let extrainfant = (noofrooms * infant) - infantsCount;
-        let roomPrice = noofnights * (noofrooms * price);
-        let extraadultCount = (Number(adultsCount) + Number(infantsCount)) - (Number(adult) + Number(infant));
-        ele.find('.extra-preson-count').remove();
-        if (extraadultCount > 0)
-            ele.find('.charges_for_extra_bed').after(`<div class="extra-preson-count">No Of Extra Person : ${extraadultCount}</div>`)
-        ele.find('.price').val(roomPrice);
-        let discountPercentage = emptySetToZero(ele.find('.discount').val());
-        (discountPercentage) ? ele.find('.discount-amount').val(((ele.find('.price').val() / 100) * discountPercentage).toFixed(2)): ele.find('.discount-amount').val((ele.find('.price').val()).toFixed(2));
-        ele.find('.total').val((ele.find('.price').val() - ele.find('.discount-amount').val()).toFixed(2));
-        taxAmountCalculation();
+$(document).on('keyup blur change', '.from_date,.to_date,.no_of_rooms,.no_of_adults,.no_of_childs,.room_cgst,.room_sgst,.discount', function() {
+    try {
+        let ele = $(this).closest('tr');
+        let adultsCount = emptySetToZero(ele.find('.no_of_adults').val());
+        let infantsCount = emptySetToZero(ele.find('.no_of_childs').val());
+        let noofrooms = emptySetToZero(ele.find('.no_of_rooms').val());
+        let noofnights = emptySetToZero(ele.find('.no_of_night').val());
+        let hotelCgst = emptySetToZero(ele.find('.room_cgst').val());
+        let hotelSgst = emptySetToZero(ele.find('.room_sgst').val());
+        let hotelCgstAmount = 0;
+        let hotelSgstAmount = 0;
+        if (!noofnights)
+            noofnights = 1;
+        let json = ele.attr('data-json');
+        if (json) {
+            json = JSON.parse(json);
+            let adult = emptySetToZero(json[0].room_capacity_adults);
+            let infant = emptySetToZero(json[0].room_capacity_infant);
+            let price = emptySetToZero(json[0].room_price);
+            let extra = emptySetToZero(json[0].room_extra_bed_price);
+            let extraadult = (noofrooms * adult) - adultsCount;
+            let extrainfant = (noofrooms * infant) - infantsCount;
+            let roomPrice = noofnights * (noofrooms * price);
+            ele.find('.price').val(roomPrice);
+            let discountPercentage = emptySetToZero(ele.find('.discount').val());
+            (discountPercentage) ? ele.find('.discount-amount').val(((ele.find('.price').val() / 100) * discountPercentage).toFixed(2)): ele.find('.discount-amount').val(0);
+            let amountAfterDiscount = (roomPrice - ele.find('.discount-amount').val()).toFixed(2);
+            (hotelCgst) ? hotelCgstAmount = ((amountAfterDiscount / 100) * hotelCgst).toFixed(2): 0.00;
+            (hotelSgst) ? hotelSgstAmount = ((amountAfterDiscount / 100) * hotelSgst).toFixed(2): 0.00;
+            ele.find('.gst_details').html(`CGST  : Rs.${hotelCgstAmount} <br> SGST : Rs.${hotelSgstAmount}`).attr(
+                'data-gst', (Number(hotelCgstAmount) + Number(hotelSgstAmount))
+            );
+            ele.find('.total').val((Number(amountAfterDiscount) + Number(hotelCgstAmount) + Number(hotelSgstAmount)).toFixed(2));
+            taxAmountCalculation();
+        }
+    } catch (e) {
+        console.log(e);
     }
 })
+
 
 /*  Room Number */
 
@@ -472,7 +493,6 @@ $(document).on('change blur', '.room_category,.no_of_night,.from_date', function
     if ($(this).closest('tr').find('.room_category').val()) {
         let data = { "list_key": "check_room_booking_available", "hotel_from_date": $(this).closest('tr').find('.from_date').val(), "hotel_to_date": $(this).closest('tr').find('.to_date').val(), "room_category": $(this).closest('tr').find('.room_category').val() }
         commonAjax('services.php', 'POST', data, '', '', '', { 'functionName': 'showRoomNumber', "param1": $(this).closest('tr').find('.room_no').attr('id') });
-
     }
 });
 
@@ -511,80 +531,23 @@ $(document).on('change', '.room_no', function() {
 
 });
 
-/*
-$(document).on('keyup blur', '.price', function() {
-    let ele = $(this).closest('tr');
-    let discountPercentage = emptySetToZero(ele.find('.discount').val());
-    (discountPercentage) ? ele.find('.discount-amount').val(((ele.find('.price').val() / 100) * discountPercentage).toFixed(2)): ele.find('.discount-amount').val((ele.find('.price').val()).toFixed(2));
-    ele.find('.total').val((ele.find('.price').val() - ele.find('.discount-amount').val()).toFixed(2));
-    taxAmountCalculation();
-});
-*/
-
-$(document).on('keyup blur', '.discount,.price', function() {
-    let ele = $(this).closest('tr');
-    let discountPercentage = emptySetToZero(ele.find('.discount').val());
-    (discountPercentage) ? ele.find('.discount-amount').val(((ele.find('.price').val() / 100) * discountPercentage).toFixed(2)): ele.find('.discount-amount').val((ele.find('.price').val()).toFixed(2));
-    ele.find('.total').val((ele.find('.price').val() - ele.find('.discount-amount').val()).toFixed(2));
-    taxAmountCalculation();
-});
-
-
-$(document).on('blur', '.charges_for_extra_bed', function() {
-    let ele = $(this).closest('tr');
-    let noofextrabed = emptySetToZero(ele.find('.charges_for_extra_bed').val());
-    let noofnights = emptySetToZero(ele.find('.no_of_night').val());
-    if (!noofnights)
-        noofnights = 1;
-    let json = ele.attr('data-json');
-    if (json) {
-        json = JSON.parse(json);
-        let price = emptySetToZero(json[0].room_price);
-        let extra = emptySetToZero(json[0].room_extra_bed_price);
-        let extraBedPrice = (noofnights * noofextrabed) * extra;
-        let roomPrice = noofnights * price;
-        (noofextrabed) ? ele.find('.price').val(roomPrice + extraBedPrice): ele.find('.price').val(roomPrice);
-        let discountPercentage = emptySetToZero(ele.find('.discount').val());
-        (discountPercentage) ? ele.find('.discount-amount').val(((ele.find('.price').val() / 100) * discountPercentage).toFixed(2)): ele.find('.discount-amount').val((ele.find('.price').val()).toFixed(2));
-        ele.find('.total').val((ele.find('.price').val() - ele.find('.discount-amount').val()).toFixed(2));
-        taxAmountCalculation();
-    }
-});
-
-$(document).on('keyup blur', '.hotel_cgst_percentage,.hotel_sgst_percentage', function() {
-    taxAmountCalculation();
-})
 
 function taxAmountCalculation() {
     let totalAmountBeforeTax = 0;
-    $(".total").each(function(i, v) {
-        totalAmountBeforeTax = totalAmountBeforeTax + Number($(this).val());
-    })
+    $(".price").each(function(i, v) {
+        totalAmountBeforeTax = totalAmountBeforeTax + (Number($(this).val()) - Number($(this).closest('tr').find('.discount-amount').val()));
+    });
+    let gst = 0;
+    $(".gst_details").each(function(i, v) {
+        gst = gst + (Number($(this).attr('data-gst')));
+    });
     let totaldiscount = 0;
     $(".discount-amount").each(function(i, v) {
         totaldiscount = totaldiscount + Number($(this).val());
-    })
+    });
     $(".totaldiscount").val(totaldiscount.toFixed(2));
     $(".beforetaxtotal").val(totalAmountBeforeTax.toFixed(2));
-
-    /*if (totalAmountBeforeTax < 1000) {
-        $(".hotel_cgst_percentage").val(0)
-        $(".hotel_sgst_percentage").val(0)
-    } else if (totalAmountBeforeTax < 7500) {
-        $(".hotel_cgst_percentage").val(6)
-        $(".hotel_sgst_percentage").val(6)
-    } else {
-        $(".hotel_cgst_percentage").val(9)
-        $(".hotel_sgst_percentage").val(9)
-    }*/
-
-    let cgst = emptySetToZero($(".hotel_cgst_percentage").val());
-    let cgstTotal = ((totalAmountBeforeTax / 100) * cgst).toFixed(2);
-    $(".cgst").val(cgstTotal);
-    let sgst = emptySetToZero($(".hotel_sgst_percentage").val());
-    let sgstTotal = ((totalAmountBeforeTax / 100) * sgst).toFixed(2);
-    $(".sgst").val(sgstTotal);
-    $(".gst").val((Number(cgstTotal) + Number(sgstTotal)).toFixed(2));
+    $('.gst').val(gst.toFixed(2));
     let total = (emptySetToZero(Math.round(Number(totalAmountBeforeTax) + Number($(".gst").val()) + Number($(".meal_total").val()))));
     $(".aftertaxamount").val(total.toFixed(2));
     if (total) {

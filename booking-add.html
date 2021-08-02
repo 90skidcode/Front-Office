@@ -187,13 +187,14 @@
                                                 <tr>
                                                     <th class="text-center border-right-0 border-bottom-0 w-5"></th>
                                                     <th class="text-left border-right-0 border-bottom-0 w-15">Room Type</th>
-                                                    <th class="text-left border-right-0 border-bottom-0">No of Night</th>
+                                                    <th class="text-left border-right-0 border-bottom-0" hidden>No of Night</th>
                                                     <th class="text-left border-right-0 border-bottom-0  w-20">From Date/To Date</th>
-                                                    <th class="text-center border-right-0 border-bottom-0">Rooms Number</th>
+                                                    <th class="text-center border-right-0 border-bottom-0">No of Rooms</th>
                                                     <th class="text-center border-right-0 border-bottom-0 ">No of Guest (Adult/Child)</th>
-                                                    <th class="text-center border-right-0 border-bottom-0">Charges for Extra Bed</th>
-                                                    <th class="text-right border-right-0 border-bottom-0 ">Price</th>
+                                                    <!-- <th class="text-center border-right-0 border-bottom-0">Charges for Extra Bed</th> -->
+                                                    <th class="text-right border-right-0 border-bottom-0 ">Price per Night</th>
                                                     <th class="text-right border-right-0 border-bottom-0">Discount%</th>
+                                                    <th class="text-right border-right-0 border-bottom-0 ">CGST % / SGST %</th>
                                                     <th class="text-right border-bottom-0 item-total">Total</th>
                                                 </tr>
                                             </thead>
@@ -206,28 +207,28 @@
                                                     </td>
                                                     <td>
                                                         <select class="select2 room_category" id="room_category" name="room_category" required>
-                                                            <option  value="">Select a Room Type</option>
-                                                        </select>
+                                                        <option  value="">Select a Room Type</option>
+                                                    </select>
                                                     </td>
-                                                    <td>
-                                                        <input type="number" name="hotel_no_of_night" data-getdate="current_date" data-setdate="set_date" autocomplete="off" required="required" data-item="no_of_night" class="no_of_night form-control text-right">
-                                                        <input type="hidden" name="room_status" data-getdate="current_date" data-setdate="set_date" autocomplete="off" value="I" data-item="room_status" class="room_status form-control text-right">
+                                                    <td class="hide" hidden>
+                                                        <input type="number" name="hotel_no_of_night" class="no_of_night form-control text-right" readonly>
+                                                        <input type="text" name="swap_room_no" class="swap_room_no" readonly>
                                                     </td>
                                                     <td>
                                                         <input type="datetime-local" name="hotel_from_date" autocomplete="off" required="required" data-item="from_date" class="from_date current_date form-control text-right">
-                                                        <input type="datetime-local" tabindex="-1" name="hotel_to_date" autocomplete="off" required="required" data-item="to_date" class="to_date set_date form-control text-right" readonly>
+                                                        <input type="datetime-local" name="hotel_to_date" autocomplete="off" required="required" data-item="to_date" class="to_date set_date form-control text-right">
                                                     </td>
                                                     <td class="room_no_row">
                                                         <select class="room_no form-control" id="room_no" name="room_no" required>
-                                                            <option value="">Select a Room No</option>
-                                                            </select>
+                                                        <option value="">Select a Room No</option>
+                                                        </select>
                                                     </td>
                                                     <td>
                                                         <input type="number" name="hotel_no_of_adults" autocomplete="off" required="required" data-item="no_of_adults" class="no_of_adults form-control text-right">
                                                         <input type="number" name="hotel_no_of_childs" autocomplete="off" required="required" data-item="no_of_childs" class="no_of_childs form-control text-right">
                                                     </td>
-                                                    <td>
-                                                        <input type="number" name="hotel_no_of_extra_bed" required="required" value="0" data-item="charges_for_extra_bed" class="charges_for_extra_bed form-control text-right">
+                                                    <td hidden>
+                                                        <input type="text" name="hotel_no_of_extra_bed" required="required" value="0" class="form-control text-right">
                                                     </td>
                                                     <td>
                                                         <input type="number" name="hotel_price" autocomplete="off" required="required" data-item="price" class="price form-control text-right">
@@ -237,6 +238,12 @@
                                                         <input type="text" name="discount_amount" tabindex="-1" name autocomplete="off" value="0" readonly data-item="discount-amount" class="discount-amount form-control text-right">
                                                     </td>
                                                     <td>
+                                                        <input type="text" name="room_cgst" autocomplete="off" required="required" data-item="cgst" class="cgst form-control text-right">
+                                                        <input type="text" name="room_sgst" autocomplete="off" required="required" data-item="sgst" class="sgst form-control text-right">
+                                                    </td>
+
+                                                    <td>
+                                                        <div class="gst_details" data-gst="0"></div>
                                                         <input type="text" readonly name="room_total" class="total form-control text-right border-0">
                                                     </td>
                                                 </tr>
@@ -246,62 +253,35 @@
                                                             <i class="fa fa-plus"></i>
                                                         </button>
                                                     </td>
-                                                    <td colspan="9" class="text-right"></td>
+                                                    <td colspan="8" class="text-right"></td>
                                                 </tr>
                                                 <tr id="totaldiscount" class="padding-5">
-                                                    <td colspan="5" class="text-right"></td>
+                                                    <td colspan="4" class="text-right"></td>
                                                     <td colspan="2" class="text-right"> <label for="items" class="form-control-label"><b>Total Discount Amount</b></label></td>
                                                     <td colspan="1" class="text-right"></td>
                                                     <td colspan="2" class="text-right"> <input type="text" readonly name="total_discount" class="totaldiscount form-control text-right border-0"></td>
                                                 </tr>
                                                 <tr id="beforetaxtotal" class="padding-5">
-                                                    <td colspan="5" class="text-right"></td>
+                                                    <td colspan="4" class="text-right"></td>
                                                     <td colspan="2" class="text-right"> <label for="items" class="form-control-label"><b>Total Amount Before Tax</b></label></td>
                                                     <td colspan="1" class="text-right"></td>
                                                     <td colspan="2" class="text-right"> <input type="text" readonly name="total_beforetax" class="beforetaxtotal form-control text-right border-0"></td>
                                                 </tr>
 
-                                                <tr id="cgst" class="padding-5">
-                                                    <td colspan="5" class="text-right"></td>
-                                                    <td colspan="2" class="text-right"> <label for="items" class="form-control-label"><b>ADD CGST</b></label></td>
-                                                    <td colspan="1" class="text-right">
-                                                        <div class="input-group">
-                                                            <input type="text" required class="form-control hotel_cgst_percentage" name="tax_cgst_percentage">
-                                                            <div class="input-group-append">
-                                                                <span class="input-group-text" id="basic-addon2">%</span>
-                                                            </div>
-                                                        </div>
-                                                    </td>
-                                                    <td colspan="2" class="text-right"> <input type="text" readonly name="cgst" class="cgst form-control text-right border-0"></td>
-                                                </tr>
-
-                                                <tr id="sgst" class="padding-5">
-                                                    <td colspan="5" class="text-right"></td>
-                                                    <td colspan="2" class="text-right"> <label for="items" class="form-control-label"><b>ADD SGST</b></label></td>
-                                                    <td colspan="1" class="text-right">
-                                                        <div class="input-group">
-                                                            <input type="text" required class="form-control hotel_sgst_percentage" name="tax_sgst_percentage">
-                                                            <div class="input-group-append">
-                                                                <span class="input-group-text" id="basic-addon2">%</span>
-                                                            </div>
-                                                        </div>
-                                                    </td>
-                                                    <td colspan="2" class="text-right"> <input type="text" readonly name="sgst" class="sgst form-control text-right border-0"></td>
-                                                </tr>
                                                 <tr id="gst" class="padding-5">
-                                                    <td colspan="5" class="text-left words"></td>
+                                                    <td colspan="4" class="text-left words"></td>
                                                     <td colspan="2" class="text-right"> <label for="items" class="form-control-label"><b>Tax Amount GST</b></label></td>
                                                     <td colspan="1" class="text-right"></td>
                                                     <td colspan="2" class="text-right"> <input type="text" readonly name="total_taxamount" class="gst form-control text-right border-0"></td>
                                                 </tr>
                                                 <tr id="aftertaxamount" class="padding-5">
-                                                    <td colspan="5" class="text-left text-capitalize font-weight-bold amountinwords"></td>
+                                                    <td colspan="4" class="text-left text-capitalize font-weight-bold amountinwords"></td>
                                                     <td colspan="2" class="text-right"> <label for="items" class="form-control-label"><b>Total Amount after Tax</b></label></td>
                                                     <td colspan="1" class="text-right"></td>
                                                     <td colspan="2" class="text-right"> <input type="text" name="total_amount" readonly class="aftertaxamount font-weight-bolder form-control text-right border-0"></td>
                                                 </tr>
                                                 <tr id="afteradvance" class="padding-5">
-                                                    <td colspan="5" class="text-left"></td>
+                                                    <td colspan="4" class="text-left"></td>
                                                     <td colspan="2" class="text-right"> <label for="items" name="advance" class="form-control-label"><b>Total Advance</b></label></td>
                                                     <td colspan="1" class="paymentmode">
                                                         <select class="select2" id="payment_mode" name="payment_mode">
@@ -311,7 +291,7 @@
                                                     <td colspan="2" class="text-right"> <input type="text" name="advance" class="advance font-weight-bolder form-control text-right"></td>
                                                 </tr>
                                                 <tr id="aftertaxamount" class="padding-5">
-                                                    <td colspan="3" class="text-right"> <label for="items" name="remarks" class="form-control-label"><b>Remarks</b></label></td>
+                                                    <td colspan="2" class="text-right"> <label for="items" name="remarks" class="form-control-label"><b>Remarks</b></label></td>
                                                     <td colspan="7" class="text-right"> <textarea required name="remarks" class="remarks font-weight-bolder form-control"></textarea></td>
                                                 </tr>
                                             </tbody>

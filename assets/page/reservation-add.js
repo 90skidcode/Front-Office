@@ -57,8 +57,10 @@ function setReservationValue(responce) {
                 if (i == 'hotel_from_date' || i == 'hotel_to_date')
                     v = v.replace(" ", "T").replace(":00", "");
                 $('tbody tr:nth-child(' + (index + 1) + ') [name="' + i + '"]').val(v);
-                if ($('tbody tr:nth-child(' + (index + 1) + ') [name="' + i + '"]').hasClass('select2'))
-                    $('tbody tr:nth-child(' + (index + 1) + ') [name="' + i + '"]').trigger('change');
+                if ($('tbody tr:nth-child(' + (index + 1) + ') [name="' + i + '"]').hasClass('select2')) {
+                    $('tbody tr:nth-child(' + (index + 1) + ') [name="' + i + '"]').addClass('no-trigger').trigger('change');
+                }
+
             })
         }, 2000);
     });
@@ -333,13 +335,14 @@ $(document).on('change', '.select2.room_category', function() {
         "like": ""
     }
     commonAjax('database.php', 'POST', data, '', '', '', { "functionName": "setJsonToRow", "param1": $(this) }, { "functionName": "removeJsonToRow", "param1": $(this) })
-})
+    $('.room_sgst').trigger('blur');
+});
 
 /**
  * Room details Calculation
  */
 
-$(document).on('keyup blur change', '.from_date,.to_date,.no_of_rooms,.no_of_adults,.no_of_childs,.room_cgst,.room_sgst,.discount', function() {
+$(document).on('keyup blur change', '.price,.from_date,.to_date,.no_of_rooms,.no_of_adults,.no_of_childs,.room_cgst,.room_sgst,.discount', function() {
     try {
         let ele = $(this).closest('tr');
         let adultsCount = emptySetToZero(ele.find('.no_of_adults').val());
@@ -357,27 +360,11 @@ $(document).on('keyup blur change', '.from_date,.to_date,.no_of_rooms,.no_of_adu
             json = JSON.parse(json);
             let adult = emptySetToZero(json[0].room_capacity_adults);
             let infant = emptySetToZero(json[0].room_capacity_infant);
-            let price = emptySetToZero(json[0].room_price);
+            let price = emptySetToZero(ele.find('.price').val());
             let extra = emptySetToZero(json[0].room_extra_bed_price);
             let extraadult = (noofrooms * adult) - adultsCount;
             let extrainfant = (noofrooms * infant) - infantsCount;
             let roomPrice = noofnights * (noofrooms * price);
-
-            /*if (extraadult < 0 || extrainfant < 0) {
-                ele.find('.charges_for_extra_bed').prop('checked', true);
-                let adultPrice = 0;
-                if (extraadult < 0)
-                    adultPrice = Math.abs(extraadult) * extra;
-                let infantPrice = 0;
-                if (extrainfant < 0)
-                    infantPrice = Math.abs(extrainfant) * extra;
-                ele.find('.price').val(roomPrice + adultPrice + infantPrice)
-            } else {
-                ele.find('.charges_for_extra_bed').prop('checked', false);
-                ele.find('.price').val(roomPrice);
-            }*/
-
-            ele.find('.price').val(roomPrice);
             let discountPercentage = emptySetToZero(ele.find('.discount').val());
             (discountPercentage) ? ele.find('.discount-amount').val(((ele.find('.price').val() / 100) * discountPercentage).toFixed(2)): ele.find('.discount-amount').val(0);
             let amountAfterDiscount = (roomPrice - ele.find('.discount-amount').val()).toFixed(2);
@@ -402,9 +389,8 @@ $(document).on('change', '.room_category', function() {
 });
 
 function showRoomAvableCount(res, that) {
-    console.log(res.result.total_no_rooms, res.result.max_occupaid, res.result.min_occupaid);
     that.closest('tr').find('.avaliable-count').remove();
-    that.closest('tr').find('.no_of_rooms').after(`<div class="avaliable-count">No of Days :${that.closest('tr').find('.no_of_night').val()} <br> No of Rooms : ${res.result.total_no_rooms} <br> Max Occupied : ${res.result.max_occupaid} <br> Min Occupied : ${res.result.min_occupaid}</div>`);
+    that.closest('tr').find('.no_of_rooms').after(`<div class="avaliable-count"> No of Rooms : ${res.result.total_no_rooms} <br> Max Occupied : ${res.result.max_occupaid} <br> Min Occupied : ${res.result.min_occupaid}</div>`);
     $('.room_sgst').trigger('blur');
 }
 
@@ -468,28 +454,16 @@ function taxAmountCalculation() {
         totalAmountBeforeTax = totalAmountBeforeTax + (Number($(this).val()) - Number($(this).closest('tr').find('.discount-amount').val()));
     });
     let gst = 0;
-
     $(".gst_details").each(function(i, v) {
         gst = gst + (Number($(this).attr('data-gst')));
-    })
+    });
     let totaldiscount = 0;
     $(".discount-amount").each(function(i, v) {
         totaldiscount = totaldiscount + Number($(this).val());
-    })
+    });
     $(".totaldiscount").val(totaldiscount.toFixed(2));
     $(".beforetaxtotal").val(totalAmountBeforeTax.toFixed(2));
     $('.gst').val(gst.toFixed(2));
-    /*if (totalAmountBeforeTax < 1000) {
-        $(".room_cgst_percentage").val(0)
-        $(".room_sgst_percentage").val(0)
-    } else if (totalAmountBeforeTax < 7500) {
-        $(".room_cgst_percentage").val(6)
-        $(".room_sgst_percentage").val(6)
-    } else {
-        $(".room_cgst_percentage").val(9)
-        $(".room_sgst_percentage").val(9)
-    }*/
-
     let total = (emptySetToZero(Math.round(Number(totalAmountBeforeTax) + Number($(".gst").val()) + Number($(".meal_total").val()))));
     $(".aftertaxamount").val(total.toFixed(2));
     if (total) {

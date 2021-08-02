@@ -731,6 +731,7 @@ function addDays(theDate, days, ele) {
 
 function setJsonToRow(responce, that) {
     that.closest('tr').attr('data-json', JSON.stringify(responce));
+    (!that.hasClass('no-trigger')) ? that.closest('tr').find('.price').val(responce[0].room_price): that.removeClass('no-trigger');
 }
 
 /**
@@ -968,4 +969,16 @@ function dateClaculation(fromDate, todate) {
     var diffTime = Math.abs(todate - fromDate);
     var diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
     return emptySetToZero(diffDays);
+}
+
+/**
+ * Set Min date to Datetime-local
+ * @param {*} date 
+ * @param {*} ele eg $('.acd')
+ */
+
+function disableDateinDatePicker(date, ele) {
+    var today = new Date(date).toISOString();
+    var minDate = today.substring(0, today.length - 1);
+    ele.attr('min', minDate);
 }

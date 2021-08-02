@@ -1,9 +1,7 @@
 $(document).ready(function() {
     displayReservationListInit();
-    listPaymentType()
-})
-
-
+    listPaymentType();
+});
 
 /**
  * List Payment Type in select 2
@@ -60,7 +58,10 @@ function displayReservationList(response, dataTableId) {
                     </button>       
                     <a href="reservation-print.html?id=${row.reservation_no}" class="btn btn-icon btn-hover btn-sm btn-rounded pull-right">
                         <i class="anticon anticon-printer text-primary"></i>
-                    </a>                   
+                    </a>   
+                    <a title="Convert To Booking" href="booking-add.html?type=reservation&id=${row.reservation_no}" class="btn btn-icon btn-hover btn-sm btn-rounded pull-right">
+                        <i class="anticon anticon-plus text-primary"></i>
+                    </a>                 
                     <button class="btn btn-icon btn-hover btn-sm btn-rounded btn-delete-table" data-delete="${row.reservation_no}" data-toggle="modal" data-target="#delete">
                         <i class="anticon anticon-delete text-danger"></i>
                     </button>

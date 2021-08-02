@@ -1,7 +1,7 @@
 $(document).ready(function() {
     displayReservationListInit();
-    listPaymentType()
-})
+    listPaymentType();
+});
 
 /**
  * List Payment Type in select 2
