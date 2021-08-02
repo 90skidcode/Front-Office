@@ -911,11 +911,13 @@ $('input').on("wheel mousewheel ", function(e) {
 
 /**
  * 
- * @param {Numbers} x eg : 1234567
+ * @param {Numbers} value eg : 1234567
  * @returns Rs.12,34,567.00
  */
-function numberWithCommas(x) {
-    return "Rs." + x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+function numberWithCommas(value) {
+    let x = 0;
+    (typeof(value) != 'undefined') ? x = value: x = 0;
+    return "Rs." + (x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","));
 }
 
 /**

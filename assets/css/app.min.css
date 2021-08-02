@@ -6677,6 +6677,11 @@ button.bg-dark:focus {
     border-left: 0 !important
 }
 
+.border-1 td,
+.border-1 th {
+    border: 1px solid #e6e6e6;
+}
+
 .border-primary {
     border-color: #007bff !important
 }

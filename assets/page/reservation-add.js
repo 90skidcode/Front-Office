@@ -405,7 +405,6 @@ function showRoomAvableCount(res, that) {
     console.log(res.result.total_no_rooms, res.result.max_occupaid, res.result.min_occupaid);
     that.closest('tr').find('.avaliable-count').remove();
     that.closest('tr').find('.no_of_rooms').after(`<div class="avaliable-count">No of Days :${that.closest('tr').find('.no_of_night').val()} <br> No of Rooms : ${res.result.total_no_rooms} <br> Max Occupied : ${res.result.max_occupaid} <br> Min Occupied : ${res.result.min_occupaid}</div>`);
-
     $('.room_sgst').trigger('blur');
 }
 

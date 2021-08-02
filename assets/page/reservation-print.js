@@ -45,9 +45,9 @@ function setReservationValue(responce) {
     $('.meal-details').html(`
                             <tr>
                                 <td>${master.meal_plan_id}</td>
-                                <td>${master.meal_price}</td>
+                                <td>${numberWithCommas(master.meal_price)}</td>
                                 <td>${master.meal_count}</td>
-                                <td>${master.meal_total}</td>
+                                <td>${numberWithCommas(master.meal_total)}</td>
                             </tr>
                         `);
 
@@ -55,21 +55,21 @@ function setReservationValue(responce) {
             <tbody>
             <tr>
                 <th>Total Discount Amount :</th>
-                <td>Rs.${master.total_discount}</td>
+                <td>Rs.${numberWithCommas(master.total_discount)}</td>
             </tr>
             <tr>
                 <th>Total Amount Before Tax :</th>
-                <td>Rs.${master.total_beforetax}</td>
+                <td>${numberWithCommas(master.total_beforetax)}</td>
             </tr>
            
             <tr>
                 <th>GST :</th>
-                <td>Rs.${master.gst}</td>
+                <td>${numberWithCommas(master.total_taxamount)}</td>
             </tr>
                  
             <tr>
                 <th>Total Advance :</th>
-                <td>Rs.${master.advance}</td>
+                <td>${numberWithCommas(master.advance)}</td>
             </tr>
             <tr class="text-info">
                 <td>
@@ -78,7 +78,7 @@ function setReservationValue(responce) {
                 </td>
                 <td>
                     <hr>
-                    <h5 class="text-primary">Rs.${master.total_amount}</h5>
+                    <h5 class="text-primary">${numberWithCommas(master.total_amount)}</h5>
                 </td>
             </tr>
             </tbody>
@@ -94,10 +94,11 @@ function setReservationValue(responce) {
                         <td class="text-left">${value.hotel_from_date} / ${value.hotel_to_date}</td>
                         <td class="text-center">${value.hotel_no_of_night}</td>
                         <td class="text-center">${value.hotel_no_of_adults} / ${value.hotel_no_of_childs}</td>
-                        <td class="text-right">RS.${value.hotel_price}</td>
+                        <td class="text-right">${numberWithCommas(value.hotel_price)}</td>
                         <td class="text-right">${value.hotel_discount} %</td>
-                        <td class="text-right">RS.${value.discount_amount}</td>
-                        <td class="text-right  font-weight-bolder">RS.${value.room_total}</td>
+                        <td class="text-right">${numberWithCommas(value.discount_amount)}</td>
+                        <td class="text-right"> ${value.room_cgst} / ${value.room_sgst} </td>
+                        <td class="text-right  font-weight-bolder">${numberWithCommas(value.room_total)}</td>
                     </tr>
             `;
 
