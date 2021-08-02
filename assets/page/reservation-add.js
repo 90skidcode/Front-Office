@@ -54,7 +54,7 @@ function setReservationValue(responce) {
         setTimeout(function() {
             $.each(value, function(i, v) {
                 var v = v;
-                if (i == 'hotel_from_date')
+                if (i == 'hotel_from_date' || i == 'hotel_to_date')
                     v = v.replace(" ", "T").replace(":00", "");
                 $('tbody tr:nth-child(' + (index + 1) + ') [name="' + i + '"]').val(v);
                 if ($('tbody tr:nth-child(' + (index + 1) + ') [name="' + i + '"]').hasClass('select2'))
@@ -67,7 +67,6 @@ function setReservationValue(responce) {
 
     $('[name="advance"]').prop('readonly', true);
     $('.paymentmode').html(' ');
-
 }
 
 /**
@@ -281,8 +280,8 @@ $(document).on('click', '#button-add-item', function() {
                             <input type="text" name="discount_amount" tabindex="-1" name autocomplete="off" value="0" readonly data-item="discount-amount" class="discount-amount form-control text-right">
                         </td>
                         <td>
-                            <input type="number" name="hotel_cgst" autocomplete="off" value="0" required="required" data-item="hotel_cgst" class="hotel_cgst form-control text-right">
-                            <input type="number" name="hotel_sgst" tabindex="-1" name autocomplete="off" value="0" data-item="hotel_sgst" class="hotel_sgst  form-control text-right">
+                            <input type="number" name="room_cgst" autocomplete="off" value="0" required="required" data-item="room_cgst" class="room_cgst form-control text-right">
+                            <input type="number" name="room_sgst" tabindex="-1" name autocomplete="off" value="0" data-item="room_sgst" class="room_sgst  form-control text-right">
                         </td>
                         <td>
                             <div class="gst_details" data-gst="0"></div>
@@ -340,15 +339,15 @@ $(document).on('change', '.select2.room_category', function() {
  * Room details Calculation
  */
 
-$(document).on('keyup blur change', '.from_date,.to_date,.no_of_rooms,.no_of_adults,.no_of_childs,.hotel_cgst,.hotel_sgst,.discount', function() {
+$(document).on('keyup blur change', '.from_date,.to_date,.no_of_rooms,.no_of_adults,.no_of_childs,.room_cgst,.room_sgst,.discount', function() {
     try {
         let ele = $(this).closest('tr');
         let adultsCount = emptySetToZero(ele.find('.no_of_adults').val());
         let infantsCount = emptySetToZero(ele.find('.no_of_childs').val());
         let noofrooms = emptySetToZero(ele.find('.no_of_rooms').val());
         let noofnights = emptySetToZero(ele.find('.no_of_night').val());
-        let hotelCgst = emptySetToZero(ele.find('.hotel_cgst').val());
-        let hotelSgst = emptySetToZero(ele.find('.hotel_sgst').val());
+        let hotelCgst = emptySetToZero(ele.find('.room_cgst').val());
+        let hotelSgst = emptySetToZero(ele.find('.room_sgst').val());
         let hotelCgstAmount = 0;
         let hotelSgstAmount = 0;
         if (!noofnights)
@@ -397,7 +396,7 @@ $(document).on('keyup blur change', '.from_date,.to_date,.no_of_rooms,.no_of_adu
 
 /* Avaliable Room Count */
 
-$(document).on('change', '.room_category,.from_date ,.to_date', function() {
+$(document).on('change', '.room_category', function() {
     let data = { "list_key": "room_availabilty_datewise", "hotel_from_date": $(this).closest('tr').find('.from_date').val(), "hotel_to_date": $(this).closest('tr').find('.to_date').val(), "room_category": $(this).closest('tr').find('.room_category').val() }
     commonAjax('services.php', 'POST', data, '', '', '', { 'functionName': 'showRoomAvableCount', "param1": $(this) });
 });
@@ -405,7 +404,9 @@ $(document).on('change', '.room_category,.from_date ,.to_date', function() {
 function showRoomAvableCount(res, that) {
     console.log(res.result.total_no_rooms, res.result.max_occupaid, res.result.min_occupaid);
     that.closest('tr').find('.avaliable-count').remove();
-    that.closest('tr').find('.no_of_rooms').after(`<div class="avaliable-count">No of Days :${that.closest('tr').find('.no_of_night').val()} <br> No of Rooms : ${res.result.total_no_rooms} <br> Max Occupied : ${res.result.max_occupaid} <br> Min Occupied : ${res.result.min_occupaid}</div>`)
+    that.closest('tr').find('.no_of_rooms').after(`<div class="avaliable-count">No of Days :${that.closest('tr').find('.no_of_night').val()} <br> No of Rooms : ${res.result.total_no_rooms} <br> Max Occupied : ${res.result.max_occupaid} <br> Min Occupied : ${res.result.min_occupaid}</div>`);
+
+    $('.room_sgst').trigger('blur');
 }
 
 /*
@@ -458,7 +459,7 @@ $(document).on('click', '.charges_for_extra_bed', function() {
 });
 */
 
-$(document).on('keyup blur', '.hotel_cgst,.hotel_sgst', function() {
+$(document).on('keyup blur', '.room_cgst,.room_sgst', function() {
     taxAmountCalculation();
 })
 
@@ -480,14 +481,14 @@ function taxAmountCalculation() {
     $(".beforetaxtotal").val(totalAmountBeforeTax.toFixed(2));
     $('.gst').val(gst.toFixed(2));
     /*if (totalAmountBeforeTax < 1000) {
-        $(".hotel_cgst_percentage").val(0)
-        $(".hotel_sgst_percentage").val(0)
+        $(".room_cgst_percentage").val(0)
+        $(".room_sgst_percentage").val(0)
     } else if (totalAmountBeforeTax < 7500) {
-        $(".hotel_cgst_percentage").val(6)
-        $(".hotel_sgst_percentage").val(6)
+        $(".room_cgst_percentage").val(6)
+        $(".room_sgst_percentage").val(6)
     } else {
-        $(".hotel_cgst_percentage").val(9)
-        $(".hotel_sgst_percentage").val(9)
+        $(".room_cgst_percentage").val(9)
+        $(".room_sgst_percentage").val(9)
     }*/
 
     let total = (emptySetToZero(Math.round(Number(totalAmountBeforeTax) + Number($(".gst").val()) + Number($(".meal_total").val()))));
