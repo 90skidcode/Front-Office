@@ -73,11 +73,9 @@ function setReservationValue(responce) {
             </tr>
             <tr class="text-info">
                 <td>
-                    <hr>
                     <h5 class="text-primary m-r-10">Total :</h5>
                 </td>
                 <td>
-                    <hr>
                     <h5 class="text-primary">${numberWithCommas(master.total_amount)}</h5>
                 </td>
             </tr>
