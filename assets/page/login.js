@@ -11,7 +11,7 @@ $(document).ready(function() {
 
 function login(responce) {
     if (responce.status_code == 200) {
-        sessionStorage.setItem("user", JSON.stringify(responce.result));
+        localStorage.setItem("user", JSON.stringify(responce.result));
         location.href = "dashboard.html";
     } else {
         loader(true);
@@ -62,7 +62,7 @@ function showToast(msg, type) {
 
 
 localStorage.clear();
-sessionStorage.clear();
+localStorage.clear();
 
 
 /**

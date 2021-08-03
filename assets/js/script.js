@@ -1,6 +1,6 @@
 /* Menu */
 
-let userData = sessionStorage.getItem("user");
+let userData = localStorage.getItem("user");
 
 if (!userData && location.pathname != '/' && location.pathname != '/index.html')
     window.location.href = 'index.html';
