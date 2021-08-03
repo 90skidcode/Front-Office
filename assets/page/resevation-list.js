@@ -62,9 +62,9 @@ function displayReservationList(response, dataTableId) {
                     <a title="Convert To Booking" href="booking-add.html?type=reservation&id=${row.reservation_no}" class="btn btn-icon btn-hover btn-sm btn-rounded pull-right">
                         <i class="anticon anticon-plus text-primary"></i>
                     </a>                   
-                    <a href="reservation-add.html?id=${row.reservation_no}&type=checkout" title='Checkout' class="btn btn-icon btn-hover btn-sm btn-rounded pull-right"  data-checkout="${row.reservation_no}" >
-                        <i class="anticon anticon-logout text-danger"></i>
-                    </a>
+                    <button  title='Checkout' class="btn btn-icon btn-hover btn-sm btn-rounded pull-right"  data-checkout="${row.reservation_no}" >
+                        <i class="anticon anticon-trash-o text-danger"></i>
+                    </button>
                 </td>`;
         }
     }];
