@@ -104,7 +104,6 @@ $(document).on('click', ".btn-advance-list", function() {
 })
 
 function displayAdvanceList(response, dataTableId) {
-    console.log(response.result);
     let html = ``;
     $.each(response.result, function(i, v) {
         html += `  <tr>

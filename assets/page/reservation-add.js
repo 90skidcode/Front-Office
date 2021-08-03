@@ -366,7 +366,7 @@ $(document).on('keyup blur change', '.price,.from_date,.to_date,.no_of_rooms,.no
             let extrainfant = (noofrooms * infant) - infantsCount;
             let roomPrice = noofnights * (noofrooms * price);
             let discountPercentage = emptySetToZero(ele.find('.discount').val());
-            (discountPercentage) ? ele.find('.discount-amount').val(((ele.find('.price').val() / 100) * discountPercentage).toFixed(2)): ele.find('.discount-amount').val(0);
+            (discountPercentage) ? ele.find('.discount-amount').val(((roomPrice / 100) * discountPercentage).toFixed(2)): ele.find('.discount-amount').val(0);
             let amountAfterDiscount = (roomPrice - ele.find('.discount-amount').val()).toFixed(2);
             (hotelCgst) ? hotelCgstAmount = ((amountAfterDiscount / 100) * hotelCgst).toFixed(2): 0.00;
             (hotelSgst) ? hotelSgstAmount = ((amountAfterDiscount / 100) * hotelSgst).toFixed(2): 0.00;
@@ -394,60 +394,18 @@ function showRoomAvableCount(res, that) {
     $('.room_sgst').trigger('blur');
 }
 
-/*
-$(document).on('keyup blur', '.price', function() {
-    let ele = $(this).closest('tr');
-    let discountPercentage = emptySetToZero(ele.find('.discount').val());
-    (discountPercentage) ? ele.find('.discount-amount').val(((ele.find('.price').val() / 100) * discountPercentage).toFixed(2)): ele.find('.discount-amount').val((ele.find('.price').val()).toFixed(2));
-    ele.find('.total').val((ele.find('.price').val() - ele.find('.discount-amount').val()).toFixed(2));
-    taxAmountCalculation();
-});
-*/
 
-/*
-$(document).on('click', '.charges_for_extra_bed', function() {
-    let ele = $(this).closest('tr');
-    let adultsCount = emptySetToZero(ele.find('.no_of_adults').val());
-    let infantsCount = emptySetToZero(ele.find('.no_of_childs').val());
-    let noofrooms = emptySetToZero(ele.find('.no_of_rooms').val());
-    let noofnights = emptySetToZero(ele.find('.no_of_night').val());
-    var extrabedflag = emptySetToZero(ele.find('.charges_for_extra_bed').is(":checked"));
-    if (!noofnights)
-        noofnights = 1;
-    let json = ele.attr('data-json');
-    if (json) {
-        json = JSON.parse(json);
-        let adult = emptySetToZero(json[0].room_capacity_adults);
-        let infant = emptySetToZero(json[0].room_capacity_infant);
-        let price = emptySetToZero(json[0].room_price);
-        let extra = emptySetToZero(json[0].room_extra_bed_price);
-        let extraadult = (noofrooms * adult) - adultsCount;
-        let extrainfant = (noofrooms * infant) - infantsCount;
-        let roomPrice = noofnights * (noofrooms * price);
-        if (extraadult < 0 || extrainfant < 0) {
-            let adultPrice = 0;
-            if (extraadult < 0)
-                adultPrice = Math.abs(extraadult) * extra;
-            let infantPrice = 0;
-            if (extrainfant < 0)
-                infantPrice = Math.abs(extrainfant) * extra;
-
-            (extrabedflag) ? ele.find('.price').val(roomPrice + adultPrice + infantPrice): ele.find('.price').val(roomPrice);
-        } else {
-            ele.find('.price').val(roomPrice);
-        }
-        let discountPercentage = emptySetToZero(ele.find('.discount').val());
-        (discountPercentage) ? ele.find('.discount-amount').val(((ele.find('.price').val() / 100) * discountPercentage).toFixed(2)): ele.find('.discount-amount').val((ele.find('.price').val()).toFixed(2));
-        ele.find('.total').val((ele.find('.price').val() - ele.find('.discount-amount').val()).toFixed(2));
-        taxAmountCalculation();
-    }
-});
-*/
 
 function taxAmountCalculation() {
     let totalAmountBeforeTax = 0;
     $(".price").each(function(i, v) {
-        totalAmountBeforeTax = totalAmountBeforeTax + (Number($(this).val()) - Number($(this).closest('tr').find('.discount-amount').val()));
+        let ele = $(this).closest('tr');
+        let noofrooms = emptySetToZero(ele.find('.no_of_rooms').val());
+        let noofnights = emptySetToZero(ele.find('.no_of_night').val());
+        let price = emptySetToZero(ele.find('.price').val());
+        let roomPrice = noofnights * (noofrooms * price);
+        let amountAfterDiscount = (roomPrice - ele.find('.discount-amount').val()).toFixed(2);
+        totalAmountBeforeTax += Number(amountAfterDiscount);
     });
     let gst = 0;
     $(".gst_details").each(function(i, v) {

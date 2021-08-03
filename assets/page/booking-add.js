@@ -392,6 +392,7 @@ $(document).on('click', '#button-add-item', function() {
                         <td>
                             <div class="gst_details" data-gst="0"></div>
                             <input type="text" readonly name="room_total" class="total form-control text-right border-0">
+                            <input type="hidden" name="room_status" value="I">
                         </td>
                         </tr>`);
     listRoomType('room_' + c + '_category');
@@ -489,8 +490,20 @@ $(document).on('keyup blur change', '.price,.from_date,.to_date,.no_of_rooms,.no
 
 $(document).on('change blur', '.room_category,.no_of_night,.from_date', function() {
     if ($(this).closest('tr').find('.room_category').val()) {
-        let data = { "list_key": "check_room_booking_available", "hotel_from_date": $(this).closest('tr').find('.from_date').val(), "hotel_to_date": $(this).closest('tr').find('.to_date').val(), "room_category": $(this).closest('tr').find('.room_category').val() }
-        commonAjax('services.php', 'POST', data, '', '', '', { 'functionName': 'showRoomNumber', "param1": $(this).closest('tr').find('.room_no').attr('id') });
+        //let data = { "list_key": "check_room_booking_available", "hotel_from_date": $(this).closest('tr').find('.from_date').val(), "hotel_to_date": $(this).closest('tr').find('.to_date').val(), "room_category": $(this).closest('tr').find('.room_category').val() }
+        let data = {
+            "query": 'fetch',
+            "databasename": 'room_master',
+            "column": {
+                "*": "*"
+            },
+            "condition": {
+                "room_category_id": $(this).closest('tr').find('.room_category').val(),
+                "current_status": 'A'
+            },
+            "like": ""
+        }
+        commonAjax('database.php', 'POST', data, '', '', '', { 'functionName': 'showRoomNumber', "param1": $(this).closest('tr').find('.room_no').attr('id') });
     }
 });
 
@@ -502,8 +515,8 @@ function showRoomNumber(res, selector) {
     });
 
     var li = "<option value='' >Select a Room Number</option>";
-    $.each(res.result, function(i, v) {
-        li += `<option>${v}</option>`;
+    $.each(res, function(i, v) {
+        li += `<option>${v.room_no}</option>`;
     });
 
     $("select#" + selector).html(li);
@@ -530,7 +543,13 @@ $(document).on('change', '.room_no', function() {
 function taxAmountCalculation() {
     let totalAmountBeforeTax = 0;
     $(".price").each(function(i, v) {
-        totalAmountBeforeTax = totalAmountBeforeTax + (Number($(this).val()) - Number($(this).closest('tr').find('.discount-amount').val()));
+        let ele = $(this).closest('tr');
+        let noofrooms = 1;
+        let noofnights = emptySetToZero(ele.find('.no_of_night').val());
+        let price = emptySetToZero(ele.find('.price').val());
+        let roomPrice = noofnights * (noofrooms * price);
+        let amountAfterDiscount = (roomPrice - ele.find('.discount-amount').val()).toFixed(2);
+        totalAmountBeforeTax += Number(amountAfterDiscount);
     });
     let gst = 0;
     $(".gst_details").each(function(i, v) {
@@ -553,7 +572,6 @@ function taxAmountCalculation() {
         $(".amountinwords").html(' ');
     }
 }
-
 /**
  * Add Customer
  */
