@@ -150,6 +150,4 @@ $(document).on('click', ".save-advance", function() {
 
 function succesAdvanceUpdate(res, printFlag) {
     $("#advance-modal").modal('hide');
-
-
 }

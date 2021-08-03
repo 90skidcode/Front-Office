@@ -439,7 +439,25 @@ $("body").append(`
     </div>
 </div>
 </div>
-`)
+
+<div class="modal fade" id="advance-list-modal">
+<div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h5 class="modal-title">Advance</h5>
+            <button type="button" class="close" data-dismiss="modal">
+                <i class="anticon anticon-close"></i>
+            </button>
+        </div>
+        <div class="modal-body">
+           <div class="table-advance-list"></div>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+        </div>
+    </div>
+</div>
+</div>`);
 
 
 

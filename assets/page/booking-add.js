@@ -439,7 +439,7 @@ $(document).on('change', '.select2.room_category', function() {
         "like": ""
     }
     commonAjax('database.php', 'POST', data, '', '', '', { "functionName": "setJsonToRow", "param1": $(this) }, { "functionName": "removeJsonToRow", "param1": $(this) })
-})
+});
 
 /**
  * Room details Calculation
@@ -482,7 +482,7 @@ $(document).on('keyup blur change', '.price,.from_date,.to_date,.no_of_rooms,.no
     } catch (e) {
         console.log(e);
     }
-})
+});
 
 
 /*  Room Number */
@@ -515,18 +515,15 @@ $(document).on('change', '.room_no', function() {
     $(".room_no").each(function() {
         selected.push($(this).val());
     });
-
     var count = 0;
     for (var i = 0; i < selected.length; ++i) {
         if (selected[i] == $(this).val())
             count++;
     }
-
     if (count > 1) {
         showToast('Room Number already selected', 'error');
         $(this).val("");
     }
-
 });
 
 
