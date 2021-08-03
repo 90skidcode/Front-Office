@@ -444,10 +444,6 @@ $(document).on('click', '.charges_for_extra_bed', function() {
 });
 */
 
-$(document).on('keyup blur', '.room_cgst,.room_sgst', function() {
-    taxAmountCalculation();
-})
-
 function taxAmountCalculation() {
     let totalAmountBeforeTax = 0;
     $(".price").each(function(i, v) {

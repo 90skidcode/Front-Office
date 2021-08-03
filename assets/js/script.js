@@ -732,6 +732,7 @@ function addDays(theDate, days, ele) {
 function setJsonToRow(responce, that) {
     that.closest('tr').attr('data-json', JSON.stringify(responce));
     (!that.hasClass('no-trigger')) ? that.closest('tr').find('.price').val(responce[0].room_price): that.removeClass('no-trigger');
+    $('.room_sgst').trigger('blur');
 }
 
 /**

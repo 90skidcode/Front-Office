@@ -144,7 +144,7 @@ function setCheckinValueByReservation(responce) {
                         v = v.replace(" ", "T").replace(":00", "");
                     $('tbody tr:nth-child(' + (addCount) + ') [name="' + i + '"]').val(v);
                     if ($('tbody tr:nth-child(' + (addCount) + ') [name="' + i + '"]').hasClass('select2'))
-                        $('tbody tr:nth-child(' + (addCount) + ') [name="' + i + '"]').trigger('change');
+                        $('tbody tr:nth-child(' + (addCount) + ') [name="' + i + '"]').addClass('no-trigger').trigger('change');
                     if (i == 'room_status' && v == "S") {
                         $('tbody tr:nth-child(' + (addCount) + ') .action-btn').html(' ');
                         $('tbody tr:nth-child(' + (addCount) + ')').find('input').prop('readonly', true);
@@ -154,20 +154,20 @@ function setCheckinValueByReservation(responce) {
                 addCount++;
                 setTimeout(function() {
                     $('.no_of_night').trigger('blur');
+                    $('.room_sgst').trigger('blur');
                 }, 200);
 
             }
             $('[name="meal_count"]').trigger('blur');
             $('.no_of_adults').val('');
-
-            $('.no_of_childs').val('')
+            $('.no_of_childs').val('');
         }, 2000);
     })
     docShow(true);
     $('[name="advance"]').prop('readonly', true);
     $('.paymentmode').html(' ');
     $('.remarks').val('');
-
+    $('.room_sgst').trigger('blur');
 }
 
 /**
@@ -385,8 +385,8 @@ $(document).on('click', '#button-add-item', function() {
                             <input type="text" name="discount_amount" tabindex="-1" name autocomplete="off" value="0" readonly data-item="discount-amount" class="discount-amount form-control text-right">
                         </td>
                         <td>
-                            <input type="text" name="room_cgst" autocomplete="off" required="required" data-item="cgst" class="cgst form-control text-right">
-                            <input type="text" name="room_sgst" autocomplete="off" required="required" data-item="sgst" class="sgst form-control text-right">
+                            <input type="text" name="room_cgst" autocomplete="off" required="required" data-item="cgst" class="room_cgst form-control text-right">
+                            <input type="text" name="room_sgst" autocomplete="off" required="required" data-item="sgst" class="room_sgst form-control text-right">
                         </td>
 
                         <td>
@@ -439,14 +439,13 @@ $(document).on('change', '.select2.room_category', function() {
         "like": ""
     }
     commonAjax('database.php', 'POST', data, '', '', '', { "functionName": "setJsonToRow", "param1": $(this) }, { "functionName": "removeJsonToRow", "param1": $(this) })
-    $('.room_sgst').trigger('blur');
 })
 
 /**
  * Room details Calculation
  */
 
-$(document).on('keyup blur change', '.from_date,.to_date,.no_of_rooms,.no_of_adults,.no_of_childs,.room_cgst,.room_sgst,.discount', function() {
+$(document).on('keyup blur change', '.price,.from_date,.to_date,.no_of_rooms,.no_of_adults,.no_of_childs,.room_cgst,.room_sgst,.discount', function() {
     try {
         let ele = $(this).closest('tr');
         let adultsCount = emptySetToZero(ele.find('.no_of_adults').val());
@@ -464,12 +463,11 @@ $(document).on('keyup blur change', '.from_date,.to_date,.no_of_rooms,.no_of_adu
             json = JSON.parse(json);
             let adult = emptySetToZero(json[0].room_capacity_adults);
             let infant = emptySetToZero(json[0].room_capacity_infant);
-            let price = emptySetToZero(json[0].room_price);
+            let price = emptySetToZero(ele.find('.price').val());
             let extra = emptySetToZero(json[0].room_extra_bed_price);
             let extraadult = (noofrooms * adult) - adultsCount;
             let extrainfant = (noofrooms * infant) - infantsCount;
-            let roomPrice = noofnights * (noofrooms * price);
-            ele.find('.price').val(roomPrice);
+            let roomPrice = noofnights * price;
             let discountPercentage = emptySetToZero(ele.find('.discount').val());
             (discountPercentage) ? ele.find('.discount-amount').val(((ele.find('.price').val() / 100) * discountPercentage).toFixed(2)): ele.find('.discount-amount').val(0);
             let amountAfterDiscount = (roomPrice - ele.find('.discount-amount').val()).toFixed(2);
