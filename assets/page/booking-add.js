@@ -513,12 +513,10 @@ function showRoomNumber(res, selector) {
     $(".room_no").each(function() {
         selected.push($(this).val());
     });
-
     var li = "<option value='' >Select a Room Number</option>";
     $.each(res, function(i, v) {
         li += `<option>${v.room_no}</option>`;
     });
-
     $("select#" + selector).html(li);
 }
 

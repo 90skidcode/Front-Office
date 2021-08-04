@@ -4,6 +4,21 @@ var room_no = url.searchParams.get("room_no");
 displayCustomerListInit();
 listPaymentType();
 listRoomType('room_category');
+let hTotal = 0;
+let rTotal = 0;
+$(document).ready(function() {
+    listCountry();
+    listState($('#country').val());
+    $('#country').select2().on('change', function() {
+        listState($(this).val());
+    })
+    $('#state').select2().on('change', function() {
+        listCity($(this).val());
+    });
+    if (room_no) {
+        $('.btn-checkout').hide();
+    }
+});
 var triggeredBY = 'onload';
 
 /**
@@ -65,7 +80,8 @@ function displayCustomerList(response) {
     let customerDom = ` <ul>
                             <li>
                                 <p><b>Customer Name</b></p>
-                                <p>${response.result.Booking[0].customer_fname}</p>
+                                <p >${response.result.Booking[0].customer_fname}</p>
+                                <p class="d-none customer-id">${response.result.Booking[0].customer_id}</p>
                             </li>
                             <li>
                                 <p><b>Booking No</b></p>
@@ -84,10 +100,9 @@ function displayCustomerList(response) {
     $(".customer-info").html(customerDom);
 
     var ledgerDetails = '';
-    let lTotal = 0;
+    lTotal = 0;
     response.result.Booking.forEach(element => {
         let lDate = new Date(element.created_at).toString().split("GMT");
-
         ledgerDetails += `<tr>
                             <td class="text-center border-right-0 border-bottom-0">${element.customer_ledger_id}</td>
                             <td class="text-center border-right-0 border-bottom-0">${lDate[0]}</td>
@@ -95,25 +110,22 @@ function displayCustomerList(response) {
                             <td class="text-right border-right-0 border-bottom-0">${numberWithCommas(element.amount)}</td>
                         </tr>`;
         lTotal += Number(element.amount);
-
     });
 
     ledgerDetails += `<tr class="bg">
                         <td class="text-right border-right-0 border-bottom-0 font-size-20" colspan='3'>Total</td>
                         <td class="text-right border-right-0 border-bottom-0 font-size-20" >${numberWithCommas(lTotal)}</td>
                     </tr>`;
-
     $(".leadger-details").html(ledgerDetails);
 
     var roomDetails = '';
-    let rTotal = 0;
+    rTotal = 0;
     var roomInHouseCount = 0;
     response.result.booking_details.forEach(element => {
         (roomStatus(element.room_status).status == 'In House') ? roomInHouseCount++ : '';
     })
     response.result.booking_details.forEach(element => {
         var action = '';
-
         if (roomStatus(element.room_status).status == 'In House') {
             if (!room_no && roomInHouseCount != 1)
                 action = `<button type="button"  class="btn btn-icon btn-hover btn-sm btn-rounded swap-bill-room-select" data-room="${element.room_no}"><i class="anticon anticon-retweet font-size-20 text-primary" title="Bill Swap"></i> </button><button type="button"  class="btn btn-icon btn-hover btn-sm btn-rounded btn-room-swap" data-room="${element.room_no}"> <i class="anticon anticon-warning font-size-20 text-warning" title="Room Swap"></i> </button><a href="customer-ledger-details.html?booking_no=${booking_no}&room_no=${element.room_no}" class="btn btn-icon btn-hover btn-sm btn-rounded" > <i class="anticon anticon-disconnect text-danger font-size-20" title="Split Bill"></i> </a>`;
@@ -247,7 +259,7 @@ $(document).on('click', ".btn-advance", function() {
     $('#advance-modal').modal('show');
     ($(this).attr('data-type') == 'Hotel') ? $("#bill_no").show(): $("#bill_no").hide();
     $(".save-advance").attr('data-type', $(this).attr('data-type'));
-})
+});
 
 $(document).on('click', ".save-advance", function() {
     if (checkRequired('#advance-payment-add')) {
@@ -268,7 +280,7 @@ $(document).on('click', ".save-advance", function() {
             printFlag = true;
         commonAjax('', 'POST', data, '', "Advance Added Succesfully", "Advance Added Failed!!! Please try Again.", { "functionName": "succesAdvanceUpdate", "param1": printFlag });
     }
-})
+});
 
 function succesAdvanceUpdate(res, printFlag) {
     $("#advance-modal").modal('hide');
@@ -279,7 +291,7 @@ $(document).on('click', '.swap-bill-room-select', function() {
     var url = new URL(window.location.href);
     var selectedRoom = $(this).attr('data-room');
     var booking_no = url.searchParams.get("booking_no");
-    var data = { "list_key": "get_ledger", "booking_no": booking_no }
+    var data = { "list_key": "get_ledger", "booking_no": booking_no };
     commonAjax('services.php', 'POST', data, '', '', '', {
         "functionName": "getroomnumbers",
         'param1': selectedRoom,
@@ -322,52 +334,51 @@ $(document).on('click', '.btn-room-swap', function() {
 
 /*  Room Number */
 
-$(document).on('change blur', '.room_category,.to_date,.from_date', function() {
+$(document).on('change blur', '.room_category,.no_of_night,.from_date', function() {
     if ($(this).closest('tr').find('.room_category').val()) {
+        //let data = { "list_key": "check_room_booking_available", "hotel_from_date": $(this).closest('tr').find('.from_date').val(), "hotel_to_date": $(this).closest('tr').find('.to_date').val(), "room_category": $(this).closest('tr').find('.room_category').val() }
         let data = {
-            "list_key": "check_room_booking_available",
-            "hotel_from_date": $(this).closest('tr').find('.from_date').val(),
-            "hotel_to_date": $(this).closest('tr').find('.to_date').val(),
-            "room_category": $(this).closest('tr').find('.room_category').val()
+            "query": 'fetch',
+            "databasename": 'room_master',
+            "column": {
+                "*": "*"
+            },
+            "condition": {
+                "room_category_id": $(this).closest('tr').find('.room_category').val(),
+                "current_status": 'A'
+            },
+            "like": ""
         }
-        commonAjax('services.php', 'POST', data, '', '', '', { 'functionName': 'showRoomNumber', "param1": $(this).closest('tr').find('.room_no').attr('id') });
-
+        commonAjax('database.php', 'POST', data, '', '', '', { 'functionName': 'showRoomNumber', "param1": $(this).closest('tr').find('.room_no').attr('id') });
     }
 });
-
 
 function showRoomNumber(res, selector) {
     var selected = [];
     $(".room_no").each(function() {
         selected.push($(this).val());
     });
-
     var li = "<option value='' >Select a Room Number</option>";
-    $.each(res.result, function(i, v) {
-        li += `<option>${v}</option>`;
+    $.each(res, function(i, v) {
+        li += `<option>${v.room_no}</option>`;
     });
-
     $("select#" + selector).html(li);
 }
-
 
 $(document).on('change', '.room_no', function() {
     var selected = [];
     $(".room_no").each(function() {
         selected.push($(this).val());
     });
-
     var count = 0;
     for (var i = 0; i < selected.length; ++i) {
         if (selected[i] == $(this).val())
             count++;
     }
-
     if (count > 1) {
         showToast('Room Number already selected', 'error');
         $(this).val("");
     }
-
 });
 
 /**
@@ -376,8 +387,6 @@ $(document).on('change', '.room_no', function() {
 $(document).on('change', '.room_category', function() {
     $(".price").val(' ');
 });
-
-
 
 /**
  * Discount Amount Calculation
@@ -437,9 +446,31 @@ function checkNoofRooms(res) {
     res.result.booking_details.forEach(element => {
         (roomStatus(element.room_status).status == 'In House') ? roomInHouseCount++ : '';
     });
-
     $("#split-bill-modal").modal('show');
     var data = '';
-    // (roomInHouseCount == '1') ? 
+}
 
+
+/**
+ * Full Checkout 
+ */
+
+$(document).on('click', '.btn-full-checkout', function() {
+    if (checkRequired('#checkout-full')) {
+        let data = {
+            "list_key": "FinalCheckout",
+            "customer_id": $('.customer-id').html(),
+            "total_received": $("#checkout .advance").val(),
+            "total_amount": lTotal + hTotal,
+            "payment_type": $("#checkout #payment_mode").val(),
+            "booking_no": $('.booking-id').html()
+        }
+        console.log(data);
+        commonAjax('', 'POST', data, '', 'Checkout Successfully', '', { 'functionName': 'redirectToPrint' });
+    }
+});
+
+
+function redirectToPrint(res) {
+    console.log(res);
 }
