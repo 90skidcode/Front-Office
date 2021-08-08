@@ -684,16 +684,9 @@ function redirectToListing() {
     var type = url.searchParams.get("type");
     if (!isEmptyValue(id) && !type) {
         window.location = 'booking-amend-list.html';
-    } else if (!isEmptyValue(id) && type == 'reservation') {
+    } else {
         window.location = 'booking-list.html';
     }
-
-    /*$("#booking-add")[0].reset();
-    $("#customer-add")[0].reset();
-    $(".words").html(' ');
-    $(".amountinwords").html(' ');
-    let data = { "list_key": "list_general_tables", "table_name": "booking_master", "column": "count(1)", "condition": { "status": "R" }, "like": "", "limit": "1" }
-    commonAjax('services.php', 'POST', data, '', '', '', { "functionName": "setCheckinNo" });*/
 }
 
 
