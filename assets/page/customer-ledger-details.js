@@ -38,7 +38,34 @@ function listPaymentType() {
         },
         "like": ""
     }
-    commonAjax('database.php', 'POST', data, '', '', '', { "functionName": "listSelect2", "param1": "#payment_mode", "param2": "payment_mode", "param3": "payment_master_id" });
+    commonAjax('database.php', 'POST', data, '', '', '', { "functionName": "listSelect2Multiple", "param1": ".payment_mode", "param2": "payment_mode", "param3": "payment_master_id" });
+}
+
+
+/**
+ * To List in Select2
+ * @param {JSON} data 
+ * @param {string} selector ID/Class name of the node
+ * @param {String} Label for Select 2
+ * @param {String} Value for Select 2
+ */
+
+function listSelect2Multiple(data, selector, jsonLabel, jsonValue) {
+    let select2Data = [];
+    let i = 1;
+    data.forEach(element => {
+        if (jsonValue)
+            i = eval('element.' + jsonValue);
+        select2Data.push({ 'id': i, 'text': eval('element.' + jsonLabel) })
+        if (!jsonValue || typeof(jsonjsonValueKey) == 'undefined')
+            i++;
+    });
+    $(selector).each(function(i) {
+        $(this).select2({
+            data: select2Data
+        })
+    })
+
 }
 
 /**
@@ -128,9 +155,9 @@ function displayCustomerList(response) {
         var action = '';
         if (roomStatus(element.room_status).status == 'In House') {
             if (!room_no && roomInHouseCount != 1)
-                action = `<button type="button"  class="btn btn-icon btn-hover btn-sm btn-rounded swap-bill-room-select" data-room="${element.room_no}"><i class="anticon anticon-retweet font-size-20 text-primary" title="Bill Swap"></i> </button><button type="button"  class="btn btn-icon btn-hover btn-sm btn-rounded btn-room-swap" data-room="${element.room_no}"> <i class="anticon anticon-warning font-size-20 text-warning" title="Room Swap"></i> </button><a href="customer-ledger-details.html?booking_no=${booking_no}&room_no=${element.room_no}" class="btn btn-icon btn-hover btn-sm btn-rounded" > <i class="anticon anticon-disconnect text-danger font-size-20" title="Split Bill"></i> </a>`;
+                action = `<button type="button"  class="btn btn-icon btn-hover btn-sm btn-rounded swap-bill-room-select" data-room="${element.room_no}" data-type="swap"> <i class="anticon anticon-retweet font-size-20 text-primary" title="Bill Swap"></i> </button><button type="button"  class="btn btn-icon btn-hover btn-sm btn-rounded btn-room-swap" data-room="${element.room_no}"> <i class="anticon anticon-warning font-size-20 text-warning" title="Room Swap"></i> </button><a href="customer-ledger-details.html?booking_no=${booking_no}&room_no=${element.room_no}" class="btn btn-icon btn-hover btn-sm btn-rounded" > <i class="anticon anticon-disconnect text-danger font-size-20" title="Split Bill"></i> </a>`;
             else
-                action = `<button type="button"  class="btn btn-icon btn-hover btn-sm btn-rounded swap-bill-room-select" data-room="${element.room_no}"><i class="anticon anticon-retweet font-size-20 text-primary" title="Bill Swap"></i> </button><button type="button"  class="btn btn-icon btn-hover btn-sm btn-rounded btn-room-swap" data-room="${element.room_no}"> <i class="anticon anticon-warning font-size-20 text-warning" title="Room Swap"></i> </button><button type="button" class="btn btn-icon btn-hover btn-sm btn-rounded btn-split-bill" data-room="${element.room_no}"> <i class="anticon anticon-logout text-danger font-size-20" title="Split Bill"></i> </button>`;
+                action = `<button type="button"  class="btn btn-icon btn-hover btn-sm btn-rounded swap-bill-room-select" data-room="${element.room_no}" data-type="swap"><i class="anticon anticon-retweet font-size-20 text-primary" title="Bill Swap"></i> </button><button type="button"  class="btn btn-icon btn-hover btn-sm btn-rounded btn-room-swap" data-room="${element.room_no}"> <i class="anticon anticon-warning font-size-20 text-warning" title="Room Swap"></i> </button><button type="button" class="btn btn-icon btn-hover btn-sm btn-rounded btn-split-bill" data-room="${element.room_no}" data-type="split"> <i class="anticon anticon-logout text-danger font-size-20" title="Split Bill"></i> </button>`;
         }
         roomDetails += `<tr ststus="${element.room_status}">
                             <td class="text-center border-right-0 border-bottom-0">${element.room_category}</td>
@@ -287,30 +314,37 @@ function succesAdvanceUpdate(res, printFlag) {
     displayCustomerListInit();
 }
 
-$(document).on('click', '.swap-bill-room-select', function() {
+$(document).on('click', '.swap-bill-room-select,.btn-split-bill', function() {
     var url = new URL(window.location.href);
     var selectedRoom = $(this).attr('data-room');
     var booking_no = url.searchParams.get("booking_no");
+    var roomSwapOrSplitBill = $(this).attr('data-type');
     var data = { "list_key": "get_ledger", "booking_no": booking_no };
     commonAjax('services.php', 'POST', data, '', '', '', {
         "functionName": "getroomnumbers",
         'param1': selectedRoom,
-        'param2': booking_no
+        'param2': booking_no,
+        'param3': roomSwapOrSplitBill
     });
 });
 
-function getroomnumbers(responce, selectedRoom, booking_no) {
+function getroomnumbers(responce, selectedRoom, booking_no, type) {
     var roomNumber = [] = responce.result.booking_details.map((ele) => (ele.room_status == 'I' && ele.room_no != selectedRoom) ? ele.room_no : '');
     roomNumber = roomNumber.filter(function(entry) { return entry.trim() != ''; });
     if (roomNumber.length) {
-        var roomNumberHtml = '';
-        roomNumber.forEach(function(element) {
-            roomNumberHtml += `<div class="swap-bill" data-refer-room='${selectedRoom}' data-booking-no='${booking_no}' data-room-no='${element}'>${element}</div>`;
-        });
-        $(".room-avaliblity").html(roomNumberHtml);
-        $("#room-avaliblity").modal('show');
+        if (type == 'swap') {
+            var roomNumberHtml = '';
+            roomNumber.forEach(function(element) {
+                roomNumberHtml += `<div class="swap-bill" data-refer-room='${selectedRoom}' data-booking-no='${booking_no}' data-room-no='${element}'>${element}</div>`;
+            });
+            $(".room-avaliblity").html(roomNumberHtml);
+            $("#room-avaliblity").modal('show');
+        } else if (type == 'split') {
+            $("#split-bill-modal").modal('show');
+        }
+
     } else {
-        showToast('No rooms avaliable to swap the bill', 'error');
+        (type == 'swap') ? showToast('No rooms avaliable to swap the bill', 'error'): showToast('Only one room avalible so cant able to split the bill', 'error');
     }
 }
 
@@ -430,26 +464,6 @@ $(document).on('click', '.room-swap', function() {
     });
 });
 
-/**
- * Room Split Bill
- */
-
-$(document).on('click', '.btn-split-bill', function() {
-    var data = { "list_key": "get_ledger", "booking_no": booking_no };
-    (room_no) ? data["room_no"] = room_no: '';
-    commonAjax('services.php', 'POST', data, '', '', '', { "functionName": "checkNoofRooms" });
-});
-
-function checkNoofRooms(res) {
-    console.log(res);
-    var roomInHouseCount = 0;
-    res.result.booking_details.forEach(element => {
-        (roomStatus(element.room_status).status == 'In House') ? roomInHouseCount++ : '';
-    });
-    $("#split-bill-modal").modal('show');
-    var data = '';
-}
-
 
 /**
  * Full Checkout 
@@ -465,12 +479,124 @@ $(document).on('click', '.btn-full-checkout', function() {
             "payment_type": $("#checkout #payment_mode").val(),
             "booking_no": $('.booking-id').html()
         }
-        console.log(data);
         commonAjax('', 'POST', data, '', 'Checkout Successfully', '', { 'functionName': 'redirectToPrint' });
     }
 });
 
-
 function redirectToPrint(res) {
     console.log(res);
 }
+
+/**
+ * Set value to Customer field
+ */
+function addCustomer() {
+    // Add New
+    var data = {
+        "query": 'add',
+        "databasename": 'customer_master',
+        "values": $("#customer-add").serializeObject()
+    }
+    commonAjax('', 'POST', data, '#customer-add', 'Customer added successfully');
+}
+
+/**
+ * Add Customer
+ */
+
+$('.btn-save').click(function() {
+    if (checkRequired('#customer-add')) {
+        let object = $("#customer-add").serializeObject();
+        var id = object['customer_id'];
+        delete object['customer_id'];
+        if (isEmptyValue(id)) {
+            // Add New
+            var data = {
+                "query": 'add',
+                "databasename": 'customer_master',
+                "values": object
+            }
+            commonAjax('database.php', 'POST', data, '', 'Customer added successfully', '', { 'functionName': 'customerUpdateRequest', 'param1': true });
+        } else {
+            // Edit
+            var data = {
+                "query": 'update',
+                "databasename": 'customer_master',
+                "values": object,
+                "condition": {
+                    "customer_id": id
+                }
+            }
+            commonAjax('database.php', 'POST', data, '', 'Customer updated successfully', '', { 'functionName': 'checkout' });
+        }
+    }
+});
+
+function customerUpdateRequest(responce, customerFlag) {
+    if (customerFlag) {
+        let data = {
+            "query": 'fetch',
+            "databasename": 'customer_master',
+            "column": {
+                "customer_id": "customer_id"
+            },
+            "condition": {
+                "status": '1',
+                "customer_phone": $('[name = "customer_phone"]').val()
+            },
+            "like": ""
+        }
+        commonAjax('database.php', 'POST', data, '', '', '', { "functionName": "setValueToCustomerField" });
+    } else {
+        checkout();
+    }
+}
+
+function setValueToCustomerField(responce) {
+    $.each(responce[0], function(i, v) {
+        setValue(i, v);
+    });
+    checkout();
+}
+
+function checkout() {
+    if (checkRequired('#checkout-full-split')) {
+        let data = {
+            "list_key": "FinalCheckout",
+            "customer_id": $('.customer-id').html(),
+            "total_received": $("#checkout .advance").val(),
+            "total_amount": lTotal + hTotal,
+            "payment_type": $("#checkout #payment_mode").val(),
+            "booking_no": $('.booking-id').html(),
+            "room_no": $('room-no').html()
+        }
+        commonAjax('', 'POST', data, '', 'Checkout Successfully', '', { 'functionName': 'redirectToPrint' });
+    }
+}
+
+/**
+ * Get Customer Details
+ */
+
+$(document).on('blur', '[name = "customer_phone"]', function() {
+    $(".image-prev-area").html(' ');
+    $('[name=customer_doc]').val(null)
+    if ($(this).val().length == 10) {
+        let data = {
+            "query": 'fetch',
+            "databasename": 'customer_master',
+            "column": {
+                "*": "*"
+            },
+            "condition": {
+                "status": '1',
+                "customer_phone": $(this).val()
+            },
+            "like": ""
+        }
+        commonAjax('database.php', 'POST', data, '', 'Customer Updated', '', { "functionName": "multipleSetValue", "param1": true })
+    } else {
+        $(this).addClass('is-invalid');
+        showToast("Enter Valid Phone No", "error");
+    }
+})
