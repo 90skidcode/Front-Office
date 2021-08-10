@@ -77,6 +77,14 @@ else {
                     </a>        
                 </li>
                 <li class="nav-item dropdown">
+                    <a href="room-status-update.html" data-href="room-status-update.html">
+                        <span class="icon-holder">
+                            <i class="gg-brush"></i>
+                        </span>
+                        <span class="title">Room Cleaner</span>           
+                    </a>        
+                </li>
+                <li class="nav-item dropdown">
                 <a href="night-audit.html" data-href="night-audit.html">
                     <span class="icon-holder">
                         <i class="anticon anticon-file-protect"></i>
@@ -983,8 +991,10 @@ function roomStatus(statusCode) {
  * Date Calculation using from date and to date
  */
 function dateClaculation(fromDate, todate) {
-    var fromDate = new Date(fromDate);
-    var todate = new Date(todate);
+    var f = fromDate.split('T');
+    var t = todate.split('T');
+    var fromDate = new Date(f[0]);
+    var todate = new Date(t[0]);
     var diffTime = Math.abs(todate - fromDate);
     var diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
     return emptySetToZero(diffDays);

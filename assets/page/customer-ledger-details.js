@@ -256,7 +256,7 @@ let advanceHtml = `
                          </div>
                          <div class="form-group col-md-6">
                              <label for="payment_mode">Payment Mode</label>
-                             <select class="select2" class="payment_mode" id="payment_mode" name="payment_mode" required>                                                                                               
+                             <select class="select2 payment_mode"  id="payment_mode" name="payment_mode" required>                                                                                               
                              </select>
                          </div>
                          <div class="form-group col-md-6">
@@ -564,7 +564,7 @@ function checkout() {
         let data = {
             "list_key": "FinalCheckout",
             "customer_id": $('.customer-id').html(),
-            "total_received": $("#checkout .advance").val(),
+            "total_received": $("#checkout-full-split .advance").val(),
             "total_amount": lTotal + hTotal,
             "payment_type": $("#checkout #payment_mode").val(),
             "booking_no": $('.booking-id').html(),
