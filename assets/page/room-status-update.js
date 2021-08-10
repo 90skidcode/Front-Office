@@ -1,8 +1,7 @@
-displayRoomListInit()
+displayRoomListInit();
 
 function displayRoomListInit() {
     let data = { "query": "fetch", "list_key": "list_room_master", "column": { "*": "*" }, "condition": { "room_master.current_status": "D" } }
-
     commonAjax('', 'POST', data, '', '', '', { "functionName": "displayRoomList", "param1": "table-room-list" });
 }
 

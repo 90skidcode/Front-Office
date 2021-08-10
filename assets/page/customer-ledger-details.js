@@ -568,7 +568,7 @@ function checkout() {
             "total_amount": lTotal + hTotal,
             "payment_type": $("#checkout #payment_mode").val(),
             "booking_no": $('.booking-id').html(),
-            "room_no": $('room-no').html()
+            "room_no": $('.room-no').html()
         }
         commonAjax('', 'POST', data, '', 'Checkout Successfully', '', { 'functionName': 'redirectToPrint' });
     }
