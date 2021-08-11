@@ -89,8 +89,9 @@ function setBookingValue(responce) {
         html += `
                     <tr class="thead-default">
                         <td class="text-left">${value.room_category}</td>
-                        <td class="text-left">${value.hotel_no_of_night}</td>
+                        
                         <td class="text-left">${value.hotel_from_date} / ${value.hotel_to_date}</td>
+                        <td class="text-center">${value.hotel_no_of_night}</td>
                         <td class="text-center">${value.hotel_no_of_night}</td>
                         <td class="text-center">${value.hotel_no_of_adults} / ${value.hotel_no_of_childs}</td>
                         <td class="text-right">RS.${value.hotel_price}</td>

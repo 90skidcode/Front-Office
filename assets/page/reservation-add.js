@@ -367,7 +367,7 @@ $(document).on('keyup blur change', '.price,.from_date,.to_date,.no_of_rooms,.no
             let roomPrice = noofnights * (noofrooms * price);
             let discountPercentage = emptySetToZero(ele.find('.discount').val());
             (discountPercentage) ? ele.find('.discount-amount').val(((roomPrice / 100) * discountPercentage).toFixed(2)): ele.find('.discount-amount').val(0);
-            let amountAfterDiscount = (roomPrice - ele.find('.discount-amount').val()).toFixed(2);
+            let amountAfterDiscount = (roomPrice - (ele.find('.discount-amount').val() * noofnights)).toFixed(2);
             (hotelCgst) ? hotelCgstAmount = ((amountAfterDiscount / 100) * hotelCgst).toFixed(2): 0.00;
             (hotelSgst) ? hotelSgstAmount = ((amountAfterDiscount / 100) * hotelSgst).toFixed(2): 0.00;
             ele.find('.gst_details').html(`CGST  : Rs.${hotelCgstAmount} <br> SGST : Rs.${hotelSgstAmount}`).attr(
@@ -404,7 +404,7 @@ function taxAmountCalculation() {
         let noofnights = emptySetToZero(ele.find('.no_of_night').val());
         let price = emptySetToZero(ele.find('.price').val());
         let roomPrice = noofnights * (noofrooms * price);
-        let amountAfterDiscount = (roomPrice - ele.find('.discount-amount').val()).toFixed(2);
+        let amountAfterDiscount = (roomPrice - (ele.find('.discount-amount').val() * noofnights)).toFixed(2);
         totalAmountBeforeTax += Number(amountAfterDiscount);
     });
     let gst = 0;
