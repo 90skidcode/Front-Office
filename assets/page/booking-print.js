@@ -4,11 +4,12 @@
 
 checkEditorAddBooking('booking_master_new', 'booking_master_id');
 
+
 function checkEditorAddBooking(databasename, conditionkey, imageFlag) {
     var url = new URL(window.location.href);
-    var id = url.searchParams.get("id");
+    var id = url.searchParams.get("invoice_id");
     if (!isEmptyValue(id)) {
-        let data = { "list_key": "booking_detail", "booking_no": id };
+        let data = { "list_key": "booking_detail", "invoice_no": id };
         let flag = false;
         if (imageFlag && typeof(imageFlag) != 'undefined') {
             flag = true;
@@ -33,10 +34,10 @@ function setBookingValue(responce) {
             <div class="col-md-4 col-sm-6">
                 <h6>Order Information</h6>
                 <p class="m-0">Date : ${(new Date()).toDateString().replace('GMT+0530 (India Standard Time)' , '')}</p>
-                <p class="m-0">Booking Id : ${master.booking_no}</p>
+                <p class="m-0">Booking No : ${master.process_no}</p>
             </div>
                 <div class="col-md-4 col-sm-6">
-                <h6 class="m-b-20">Invoice Number <span>#123685479624</span></h6>
+                <h6 class="m-b-20">Invoice Number : <span><b>${master.invoice_no}</b></span></h6>
                 <h6 class="text-uppercase text-primary">Total Due :
                     <span>Rs.${Number(master.total_amount)-Number(master.advance)}</span>
                 </h6>
@@ -61,16 +62,9 @@ function setBookingValue(responce) {
                 <th>Total Amount Before Tax :</th>
                 <td>Rs.${master.total_beforetax}</td>
             </tr>
+           
             <tr>
-                <th>CGST (${master.tax_cgst_percentage}%) :</th>
-                <td>Rs.${master.cgst}</td>
-            </tr>
-            <tr>
-                <th>SGST (${master.tax_sgst_percentage}%) :</th>
-                <td>Rs.${master.sgst}</td>
-            </tr>
-            <tr>
-                <th>Total Tax (${Number(master.tax_cgst_percentage) + Number(master.tax_sgst_percentage)}%):</th>
+                <th>Total Tax :</th>
                 <td>Rs.${master.total_taxamount}</td>
             </tr>           
             <tr>
@@ -92,7 +86,6 @@ function setBookingValue(responce) {
 
     var html = "";
     $.each(responce.result.details, function(index, value) {
-
         html += `
                     <tr class="thead-default">
                         <td class="text-left">${value.room_category}</td>
@@ -103,10 +96,10 @@ function setBookingValue(responce) {
                         <td class="text-right">RS.${value.hotel_price}</td>
                         <td class="text-right">${value.hotel_discount} %</td>
                         <td class="text-right">RS.${value.discount_amount}</td>
+                        <td class="text-right">${value.room_cgst}% / ${value.room_sgst}%</td>
                         <td class="text-right  font-weight-bolder">RS.${value.room_total}</td>
                     </tr>
             `;
-
     })
 
     $(".room-details").html(html);

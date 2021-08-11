@@ -485,6 +485,7 @@ $(document).on('click', '.btn-full-checkout', function() {
 
 function redirectToPrint(res) {
     console.log(res);
+    window.open('/booking-print.html?invoice_id=' + res.result, '_self');
 }
 
 /**
