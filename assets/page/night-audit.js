@@ -90,7 +90,7 @@ function nightAuditDom(responce) {
                             <td class="text-right border-right-0 border-bottom-0 ">${element.hotel_price}</td>
                             <td class="text-right border-right-0 border-bottom-0">${element.hotel_discount}%</td>
                             <td class="text-right border-bottom-0 item-total">${element.room_total}</td>
-                            <td class="text-right border-bottom-0 item-total"><a href="reservation-add.html?id=CHK1&amp;type=checkout" title="Checkout Booking" class="btn btn-icon btn-hover btn-sm btn-rounded ">
+                            <td class="text-right border-bottom-0 item-total"><a href="customer-ledger-details.html?booking_no=${element.booking_no}&room_no=${element.room_no}" title="Checkout Booking" class="btn btn-icon btn-hover btn-sm btn-rounded ">
                             <i class="anticon anticon-logout text-danger  font-size-20"></i>
                         </a> <a href="reservation-add.html?id=CHK1&amp;type=checkout" title="+1 Day" class="btn btn-icon btn-hover btn-sm btn-rounded ">
                         <i class="anticon anticon-plus-circle text-success font-size-20"></i>
