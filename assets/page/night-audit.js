@@ -156,7 +156,14 @@ function nightAudit() {
 }
 
 function afterNightAudit(responce) {
-    (responce.status_code == '200') ? locationReload(): showToast(responce.message, 'error')
+    if (responce.status_code == '200')
+        locationReload();
+    else {
+        showToast(responce.message, 'error');
+        setTimeout(() => {
+            locationReload();
+        }, 3000);
+    }
 }
 
 $(document).on('click', '.plus-one-day', function() {
