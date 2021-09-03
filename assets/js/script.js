@@ -1042,7 +1042,7 @@ let advanceHtml = `
                              </select>
                          </div>
                          <div class="form-group col-md-6">
-                             <label for="advance">Advance</label>
+                             <label for="advance">Amount</label>
                              <input type="number" name="advance" required class="advance font-weight-bolder form-control text-right">
                              <input type="hidden" name="customer_id" class="form-control customer-id">
                          </div>
