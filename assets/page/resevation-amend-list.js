@@ -127,8 +127,6 @@ $(document).on('click', ".btn-delete", function() {
         data['list_key'] = 'remove_advance';
         data['advance_master_id'] = $(this).attr('data-detete');
     }
-
     $("#delete").modal('hide');
     commonAjax('', 'POST', data, '', 'Record Deleted Sucessfully', '', { "functionName": "locationReload" });
-
-})
+});
