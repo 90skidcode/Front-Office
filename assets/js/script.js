@@ -1104,7 +1104,7 @@ $(document).on('click', ".save-advance", function() {
             data['income_type'] = $(this).attr('data-type');
             data['payment_type'] = $("#payment_mode").val();
             data['description'] = $(".description").val();
-            data['customer_id'] = $(".customer-id").val();
+            data['customer_id'] = $(".customer-id").html();
             /* if ($(this).attr('data-type') == 'Hotel')
                 data['description'] = $("#bill_no").val();*/
             var now = new Date();
