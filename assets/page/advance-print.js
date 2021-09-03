@@ -8,7 +8,7 @@ function checkEditorAddPrint(databasename, conditionkey, imageFlag) {
     var url = new URL(window.location.href);
     var id = url.searchParams.get("id");
     if (!isEmptyValue(id)) {
-        let data = { "list_key": "get_advance_detail", "advance_no": id };
+        let data = { "list_key": "print_advance_detail", "advance_no": id };
         let flag = false;
         if (imageFlag && typeof(imageFlag) != 'undefined') {
             flag = true;
