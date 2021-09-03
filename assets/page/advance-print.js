@@ -8,7 +8,7 @@ function checkEditorAddPrint(databasename, conditionkey, imageFlag) {
     var url = new URL(window.location.href);
     var id = url.searchParams.get("id");
     if (!isEmptyValue(id)) {
-        let data = { "list_key": "get_advance_detail", "advance_master_id": id };
+        let data = { "list_key": "get_advance_detail", "advance_no": id };
         let flag = false;
         if (imageFlag && typeof(imageFlag) != 'undefined') {
             flag = true;
@@ -26,7 +26,7 @@ function setPrintValue(responce) {
     let master = responce.result[0];
     var url = new URL(window.location.href);
     var id = url.searchParams.get("id");
-    $('.invoive-info').html(`  <div class="col-md-4 col-xs-12 invoice-client-info">
+    $('.invoive-info').html(`<div class="col-md-4 col-xs-12 invoice-client-info">
                 <h6>Billed To</h6>
                 <h6 class="m-0">${master.customer_title} ${master.customer_fname} ${master.customer_lname}</h6>
                 <p class="m-0 m-t-10">${master.customer_address} -  ${master.customer_pincode}</p>
@@ -35,10 +35,9 @@ function setPrintValue(responce) {
             <div class="col-md-4 col-sm-6">
                 <h6>Order Information</h6>
                 <p class="m-0">Date : ${(new Date()).toDateString().replace('GMT+0530 (India Standard Time)' , '')}</p>
-                <p class="m-0">Id : <b>${master.advance_no}</b></p>
             </div>
                 <div class="col-md-4 col-sm-6">
-                <h6 class="m-b-20">Invoice Number <span>#ADV${id}</span></h6>               
+                <h6 class="m-b-20">Invoice Number <span>#${master.advance_no}</span></h6>               
             </div>`);
 
     $('.meal-details').html(`
