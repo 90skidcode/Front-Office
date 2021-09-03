@@ -209,7 +209,7 @@ function displayCustomerList(response) {
         var advanceDate = new Date(element.created_at).toString().split("GMT");
         HotelDetails += `<tr>
                             <td class="text-center border-right-0 border-bottom-0">${advanceDate[0]}</td>
-                            <td class="text-right border-right-0 border-bottom-0">${element.customer_ledger_id}</td>
+                            <td class="text-right border-right-0 border-bottom-0">${element.bill_no}</td>
                             <td class="text-center border-right-0 border-bottom-0">${element.description} </td>
                             <td class="text-right border-right-0 border-bottom-0">${numberWithCommas(element.amount)} </td>
                         </tr>`;

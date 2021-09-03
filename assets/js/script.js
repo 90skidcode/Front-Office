@@ -1105,8 +1105,8 @@ $(document).on('click', ".save-advance", function() {
             data['payment_type'] = $("#payment_mode").val();
             data['description'] = $(".description").val();
             data['customer_id'] = $(".customer-id").html();
-            /* if ($(this).attr('data-type') == 'Hotel')
-                data['description'] = $("#bill_no").val();*/
+            if ($(this).attr('data-type') == 'Hotel')
+                data['bill_no'] = $(".bill_no").val();
             var now = new Date();
             now.setMinutes(now.getMinutes() - now.getTimezoneOffset());
             data['income_date'] = now.toISOString().slice(0, 16);
