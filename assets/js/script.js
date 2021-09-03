@@ -852,7 +852,7 @@ function multipleSetValue(responce, imageFlag) {
  */
 function docShow(imageFlag) {
     if (imageFlag) {
-        var uploadData = $('[name=customer_doc]').val().split(",");
+        uploadData = $('[name=customer_doc]').val().split(",");
         /**
          * To preload Image in edit  
          */
