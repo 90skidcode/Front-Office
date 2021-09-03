@@ -1121,7 +1121,7 @@ $(document).on('click', ".save-advance", function() {
         if ($(this).attr('data-reservation'))
             printFlag = false;
 
-        commonAjax('', 'POST', data, '', "Advance Added Succesfully", "Advance Added Failed!!! Please try Again.", { "functionName": "succesAdvanceUpdate", "param1": printFlag, "param2": refreshFlag });
+        commonAjax('', 'POST', data, '', "Added Succesfully", "Added Failed!!! Please try Again.", { "functionName": "succesAdvanceUpdate", "param1": printFlag, "param2": refreshFlag });
     }
 });
 
