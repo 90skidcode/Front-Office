@@ -866,7 +866,7 @@ function docShow(imageFlag) {
                                     <i class="anticon anticon-close"></i>
                                 </span>
                             </span>
-                            <img class="w-100" src=".in/frontoffice/admin/api/uploads/${v}" alt="">                        
+                            <img class="w-100" src="http://glowmedia.in/frontoffice/admin/api/uploads/${v}" alt="">                        
                         </div>`;
             })
             $(".image-prev-area").append(html);
