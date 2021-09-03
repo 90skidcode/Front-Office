@@ -187,9 +187,13 @@ function displayCustomerList(response) {
         var advanceDate = new Date(element.created_at).toString().split("GMT");
         advanceDetails += `<tr>
                             <td class="text-center border-right-0 border-bottom-0">${advanceDate[0]}</td>
-                            <td class="text-right border-right-0 border-bottom-0">${element.customer_ledger_id}</td>
+                            <td class="text-right border-right-0 border-bottom-0">${element.bill_no}</td>
                             <td class="text-center border-right-0 border-bottom-0">${element.description} </td>
                             <td class="text-right border-right-0 border-bottom-0">${numberWithCommas(element.amount)}</td>
+                            <td class="text-right border-right-0 border-bottom-0">
+                                <a class="btn btn-icon btn-hover btn-sm btn-rounded" href="/advance-print.html?id=${element.bill_no}"  target="_blank" data-room="${element.room_no}" data-type="swap"> 
+                                <i class="anticon anticon-printer  font-size-20 text-primary" title="Bill Swap"></i> </a>                                
+                            </td>
                         </tr>`;
         aTotal += Number(element.amount);
     });

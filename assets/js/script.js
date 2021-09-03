@@ -458,7 +458,7 @@ $("body").append(`
             </button>
         </div>
         <div class="modal-body">
-           <div class="table-advance-list"></div>
+         <div class="table-advance-list"></div>
         </div>
         <div class="modal-footer">
             <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
@@ -1129,4 +1129,47 @@ function succesAdvanceUpdate(res, printFlag, reservation) {
     $("#advance-modal").modal('hide');
     if (reservation)
         displayCustomerListInit();
+}
+
+
+$(document).on('click', ".btn-advance-list", function() {
+    let html = `<table width="100%" id="table-advance-list" class="table table-striped responsive-table">
+                    <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th>Payment Mode</th>
+                            <th>Advance Amount</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="text-center" colspan="4">No Record Found!!!</td>
+                        </tr>
+                    </tbody>
+                </table>`;
+    $(".table-advance-list").html(html);
+    let data = { "list_key": "get_advance_detail", "advance_no": $(this).attr('data-reservation') }
+    commonAjax('services.php', 'POST', data, '', '', '', { "functionName": "displayAdvanceList", "param1": "#table-advance-list tbody" });
+})
+
+function displayAdvanceList(response, dataTableId) {
+    let html = ``;
+    $.each(response.result, function(i, v) {
+        html += `  <tr>
+                        <td>${v.created_at}</td>
+                        <td>${v.payment_mode}</td>
+                        <td>${v.advance_amount}</td>
+                        <td>                                   
+                            <button class="btn btn-icon btn-hover btn-sm btn-rounded btn-delete-table" data-type="advance" data-delete="${v.advance_master_id}" data-toggle="modal" data-target="#delete">
+                                <i class="anticon anticon-delete text-danger"></i>
+                            </button>
+                            <a class="btn btn-icon btn-hover btn-sm btn-rounded" href="/advance-print.html?id=${v.advance_no}"  target="_blank" data-type="swap"> 
+                                <i class="anticon anticon-printer text-primary" title="Bill Swap"></i> </a>                                
+                        </td>
+                    </tr>`;
+    });
+
+    if (html.trim())
+        $("#table-advance-list tbody").html(html);
 }
