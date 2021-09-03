@@ -1011,3 +1011,121 @@ function disableDateinDatePicker(date, ele) {
     var minDate = today.substring(0, today.length - 1);
     ele.attr('min', minDate);
 }
+
+
+
+/**
+ * Advance
+ */
+
+let advanceHtml = `
+ <!-- Modal Floor -->
+ <div class="modal fade" id="advance-modal">
+     <div class="modal-dialog">
+         <div class="modal-content">
+             <div class="modal-header">
+                 <h5 class="modal-title" id="exampleModalLabel">Add Bill</h5>
+                 <button type="button" class="close" data-dismiss="modal">
+                 <i class="anticon anticon-close"></i>
+             </button>
+             </div>
+             <div class="modal-body">
+                 <form id="advance-payment-add">
+                     <div class="form-row">
+                     <div class="form-group col-md-12 hide" id="bill_no">
+                             <label for="payment_mode">Bill No</label>
+                             <input type="text" name="bill_no" required class="bill_no font-weight-bolder form-control text-right ">
+                         </div>
+                         <div class="form-group col-md-6">
+                             <label for="payment_mode">Payment Mode</label>
+                             <select class="select2 payment_mode"  id="payment_mode" name="payment_mode" required>                                                                                               
+                             </select>
+                         </div>
+                         <div class="form-group col-md-6">
+                             <label for="advance">Advance</label>
+                             <input type="number" name="advance" required class="advance font-weight-bolder form-control text-right">
+                             <input type="hidden" name="customer_id" class="form-control customer-id">
+                         </div>
+                         <div class="form-group col-md-12">
+                         <label for="payment_mode">Description</label>
+                         <textarea class="description font-weight-bolder form-control" required></textarea>
+                     </div>
+                     </div>
+                 </form>
+             </div>
+             <div class="modal-footer">
+                 <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                 <button type="button" class="btn btn-primary save-advance" data-print="true">Save</button>
+             </div>
+         </div>
+     </div>
+ </div>`;
+
+$("body").append(advanceHtml);
+
+$(document).on('click', ".btn-advance", function() {
+    $("#advance-payment-add")[0].reset();
+    $('#advance-modal').modal('show');
+    if ($(this).attr('data-type') == 'Hotel') {
+        $("#advance-payment-add #bill_no").show();
+        $("#advance-payment-add .bill_no").attr('required', 'required');
+        $("#advance-modal .modal-title").html("Add Bill");
+    } else if ($(this).attr('data-type') == 'Advance') {
+        $("#advance-payment-add #bill_no").hide();
+        $("#advance-payment-add .bill_no").removeAttr('required');
+        $("#advance-modal .modal-title").html("Add Advance");
+    } else if ($(this).attr('data-type') == 'reservation-advance') {
+        $("#advance-payment-add #bill_no").hide();
+        $("#advance-payment-add .bill_no").removeAttr('required');
+        $("#advance-modal .modal-title").html("Add Advance");
+        $(".save-advance").attr({
+            'data-reservation': $(this).attr('data-reservation'),
+            'data-customerid': $(this).attr('data-customerid')
+        });
+    }
+    $(".save-advance").attr('data-type', $(this).attr('data-type'));
+});
+
+$(document).on('click', ".save-advance", function() {
+    let data = '';
+    if (checkRequired('#advance-payment-add')) {
+        if ($(this).attr('data-type') == 'reservation-advance') {
+            data = {
+                "list_key": "advance_insert",
+                "reservation_no": $(this).attr('data-reservation'),
+                "advance": $("#advance-payment-add .advance").val(),
+                "payment_mode": $("#payment_mode").val(),
+                "customer_id": $(this).attr('data-customerid')
+            }
+        } else {
+            data = { "list_key": "Addledger" };
+            data['booking_id'] = $('.booking-id').text();
+            data['room_no'] = $('.room-no').text();
+            data['income_type'] = $(this).attr('data-type');
+            data['payment_type'] = $("#payment_mode").val();
+            data['description'] = $(".description").val();
+            /* if ($(this).attr('data-type') == 'Hotel')
+                data['description'] = $("#bill_no").val();*/
+            var now = new Date();
+            now.setMinutes(now.getMinutes() - now.getTimezoneOffset());
+            data['income_date'] = now.toISOString().slice(0, 16);
+            data['amount'] = $("#advance-payment-add .advance").val();
+        }
+
+        let printFlag = false;
+        if ($(this).attr('data-print') == 'true')
+            printFlag = true;
+
+        let refreshFlag = true;
+        if ($(this).attr('data-reservation'))
+            printFlag = false;
+
+        commonAjax('', 'POST', data, '', "Advance Added Succesfully", "Advance Added Failed!!! Please try Again.", { "functionName": "succesAdvanceUpdate", "param1": printFlag, "param2": refreshFlag });
+    }
+});
+
+function succesAdvanceUpdate(res, printFlag, reservation) {
+    $("#advance-modal").modal('hide');
+    if (reservation)
+        displayCustomerListInit();
+}

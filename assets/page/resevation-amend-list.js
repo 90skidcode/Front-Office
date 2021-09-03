@@ -50,7 +50,7 @@ function displayReservationList(response, dataTableId) {
                     <a href="reservation-add.html?id=${row.reservation_no}" class="btn btn-icon btn-hover btn-sm btn-rounded pull-right">
                         <i class="anticon anticon-edit text-primary"></i>
                     </a>
-                    <button class="btn btn-icon btn-hover btn-sm btn-rounded btn-advance" title='Add Advance' data-type="reservation" data-customerid="${row.customer_id}" data-total="${row.total_amount}" data-advance="${row.advance}" data-reservation="${row.reservation_no}" data-toggle="modal" data-target="#advance-modal">
+                    <button class="btn btn-icon btn-hover btn-sm btn-rounded btn-advance" title='Add Advance' data-type="reservation-advance" data-customerid="${row.customer_id}" data-total="${row.total_amount}" data-advance="${row.advance}" data-reservation="${row.reservation_no}" data-toggle="modal" data-target="#advance-modal">
                         <i class="anticon anticon-dollar text-primary"></i>
                     </button>         
                     <button class="btn btn-icon btn-hover btn-sm btn-rounded btn-advance-list" data-type="reservation"  data-customerid="${row.customer_id}" data-total="${row.total_amount}" data-advance="${row.advance}" data-reservation="${row.reservation_no}" data-toggle="modal" data-target="#advance-list-modal">
@@ -132,22 +132,3 @@ $(document).on('click', ".btn-delete", function() {
     commonAjax('', 'POST', data, '', 'Record Deleted Sucessfully', '', { "functionName": "locationReload" });
 
 })
-
-
-$(document).on('click', ".save-advance", function() {
-    if (checkRequired('#advance-payment-add')) {
-        let data = { "list_key": "advance_insert" };
-        data['reservation_no'] = $(this).attr('data-reservation');
-        data['payment_mode'] = $("#payment_mode").val();
-        data['customer_id'] = $(".customer-id").val();
-        data['advance'] = $(".advance").val();
-        let printFlag = false;
-        if ($(this).attr('data-print') == 'true')
-            printFlag = true;
-        commonAjax('', 'POST', data, '', "Advance Added Succesfully", "Advance Added Failed!!! Please try Again.", { "functionName": "succesAdvanceUpdate", "param1": printFlag });
-    }
-})
-
-function succesAdvanceUpdate(res, printFlag) {
-    $("#advance-modal").modal('hide');
-}

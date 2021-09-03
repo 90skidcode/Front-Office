@@ -131,23 +131,3 @@ function displayAdvanceList(response, dataTableId) {
     if (html.trim())
         $(dataTableId).html(html);
 }
-
-
-
-$(document).on('click', ".save-advance", function() {
-    if (checkRequired('#advance-payment-add')) {
-        let data = { "list_key": "advance_insert" };
-        data['reservation_no'] = $(this).attr('data-reservation');
-        data['payment_mode'] = $("#payment_mode").val();
-        data['customer_id'] = $(".customer-id").val();
-        data['advance'] = $(".advance").val();
-        let printFlag = false;
-        if ($(this).attr('data-print') == 'true')
-            printFlag = true;
-        commonAjax('', 'POST', data, '', "Advance Added Succesfully", "Advance Added Failed!!! Please try Again.", { "functionName": "succesAdvanceUpdate", "param1": printFlag });
-    }
-})
-
-function succesAdvanceUpdate(res, printFlag) {
-    $("#advance-modal").modal('hide');
-}
