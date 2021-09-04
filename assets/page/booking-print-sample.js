@@ -1,7 +1,8 @@
 /*
  * Check Edit or Add
  */
-
+let hTotal = 0;
+let aTotal = 0;
 checkEditorAddBooking('booking_master_new', 'booking_master_id');
 
 function checkEditorAddBooking(databasename, conditionkey, imageFlag) {
@@ -28,23 +29,7 @@ function setBookingValue(responce) {
     let master = responce.result.master[0];
     var url = new URL(window.location.href);
     var booking_no = url.searchParams.get("booking_no");
-    $('.invoive-info').html(`  <div class="col-md-4 col-xs-12 invoice-client-info">
-                <h6>Billed To</h6>
-                <h6 class="m-0">${master.customer_title} ${master.customer_fname} ${master.customer_lname}</h6>
-                <p class="m-0 m-t-10">${master.customer_address} -  ${master.customer_pincode}</p>
-                <p class="m-0">${master.customer_phone}</p>
-            </div>
-            <div class="col-md-4 col-sm-6">
-                <h6>Order Information</h6>
-                <p class="m-0">Date : ${(new Date()).toDateString().replace('GMT+0530 (India Standard Time)' , '')}</p>
-                <p class="m-0">Booking No : ${booking_no}</p>
-            </div>
-                <div class="col-md-4 col-sm-6">
-                <h6 class="m-b-20">Invoice Number : <span><b>Sample Bill</b></span></h6>
-                <h6 class="text-uppercase text-primary">Total Due :
-                    <span>${numberWithCommas(Number(master.total_amount)-Number(master.advance))}</span>
-                </h6>
-            </div>`);
+
 
     $('.meal-details').html(`
                             <tr>
@@ -56,7 +41,7 @@ function setBookingValue(responce) {
                         `);
 
     $('.invoice-total').html(`
-            <tbody>
+        <tbody>
             <tr>
                 <th>Total Discount Amount :</th>
                 <td>${numberWithCommas(master.total_discount)}</td>
@@ -64,28 +49,13 @@ function setBookingValue(responce) {
             <tr>
                 <th>Total Amount Before Tax :</th>
                 <td>${numberWithCommas(master.total_beforetax)}</td>
-            </tr>
-           
+            </tr>            
             <tr>
                 <th>Total Tax :</th>
                 <td>${numberWithCommas(master.total_taxamount)}</td>
-            </tr>           
-            <tr>
-                <th>Total Advance :</th>
-                <td>${numberWithCommas(master.advance)}</td>
-            </tr>
-            <tr class="text-info">
-                <td>
-                    <hr>
-                    <h5 class="text-primary m-r-10">Total :</h5>
-                </td>
-                <td>
-                    <hr>
-                    <h5 class="text-primary">${numberWithCommas(master.total_amount)}</h5>
-                </td>
-            </tr>
-            </tbody>
-    `);
+            </tr>  
+        </tbody> `);
+
 
     var html = "";
     $.each(responce.result.details, function(index, value) {
@@ -109,7 +79,7 @@ function setBookingValue(responce) {
 
 
     var hotelDetails = '';
-    let hTotal = 0;
+    hTotal = 0;
     responce.result.Hotel.forEach(element => {
         if (element) {
             var hotelDate = new Date(element.created_at).toString().split("GMT");
@@ -129,7 +99,7 @@ function setBookingValue(responce) {
 
 
     var advanceDetails = '';
-    let aTotal = 0;
+    aTotal = 0;
 
     responce.result.Advance.forEach(element => {
         if (element) {
@@ -148,4 +118,35 @@ function setBookingValue(responce) {
                             <td class="text-right font-size-14 font-weight-bold" >${numberWithCommas(aTotal)}</td>
                         </tr>`;
     $(".advance-details").html(advanceDetails);
+
+
+    $(".total-details ").html(`<tbody>
+            <tr class="text-info">
+                <td class="text-right">
+                    <h5 class="text-primary m-r-10 font-size-18">Total :</h5>
+                </td>
+                <td class="text-right font-size-14 font-weight-bold w-25">
+                    <h5 class="text-primary  font-size-16 font-weight-bold">${numberWithCommas(Number(master.total_amount) + Number(hTotal))}</h5>
+                </td>
+            </tr>
+            </tbody>
+    `);
+
+    $('.invoive-info').html(`<div class="col-md-4 col-xs-12 invoice-client-info">
+                                <h6>Billed To</h6>
+                                <h6 class="m-0">${master.customer_title} ${master.customer_fname} ${master.customer_lname}</h6>
+                                <p class="m-0 m-t-10">${master.customer_address} -  ${master.customer_pincode}</p>
+                                <p class="m-0">${master.customer_phone}</p>
+                            </div>
+                            <div class="col-md-4 col-sm-6">
+                                <h6>Order Information</h6>
+                                <p class="m-0">Date : ${(new Date()).toDateString().replace('GMT+0530 (India Standard Time)' , '')}</p>
+                                <p class="m-0">Booking No : ${booking_no}</p>
+                            </div>
+                                <div class="col-md-4 col-sm-6">
+                                <h6 class="m-b-20">Invoice Number : <span><b>Sample Bill</b></span></h6>
+                                <h6 class="text-uppercase text-primary font-size-20">Total Due :
+                                    <span>${numberWithCommas(Number(master.total_amount)+Number(hTotal)-Number(aTotal))}</span>
+                                </h6>
+                            </div>`);
 }
