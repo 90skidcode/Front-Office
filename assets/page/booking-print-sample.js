@@ -53,6 +53,10 @@ function setBookingValue(responce) {
             <tr>
                 <th>Total Tax :</th>
                 <td>${numberWithCommas(master.total_taxamount)}</td>
+            </tr>
+            <tr>
+                <th>Total :</th>
+                <td class="font-weight-bolder">${numberWithCommas(Number(master.total_beforetax)+Number(master.total_taxamount))}</td>
             </tr>  
         </tbody> `);
 
