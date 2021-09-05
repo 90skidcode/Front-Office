@@ -5,8 +5,6 @@ let hTotal = 0;
 let aTotal = 0;
 let rTotal = 0;
 let dTotal = 0;
-let tbTaxTotal = 0;
-let taxTotal = 0;
 let bTaxTotal = 0;
 checkEditorAddBooking('booking_master_new', 'booking_master_id');
 
@@ -51,8 +49,6 @@ function setBookingValue(responce) {
     var html = "";
     rTotal = 0;
     dTotal = 0;
-    tbTaxTotal = 0;
-    taxTotal = 0;
     bTaxTotal = 0;
     $.each(responce.result.Booking, function(index, value) {
         html += `
@@ -70,10 +66,8 @@ function setBookingValue(responce) {
             `;
 
         rTotal += Number(value.total_amount);
-        dTotal += Number(value.discount_amount);
-        tbTaxTotal += Number(value.total_amount);
-        taxTotal += Number(value.total_amount);
-        bTaxTotal += Number(value.hotel_price);
+        dTotal += Number(value.discount_amount) * Number(value.no_of_nights);
+        bTaxTotal += Number(value.hotel_price) * Number(value.no_of_nights);
     })
 
     $(".room-details").html(html);
