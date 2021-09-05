@@ -62,13 +62,12 @@ function setBookingValue(responce) {
 
 
     var html = "";
-    $.each(responce.result.details, function(index, value) {
+    $.each(responce.result.Booking, function(index, value) {
         html += `
                     <tr class="thead-default">
                         <td class="text-left">${value.room_category}</td>                        
-                        <td class="text-left">${value.hotel_from_date} / ${value.hotel_to_date}</td>
-                        <td class="text-center">${value.hotel_no_of_night}</td>
-                        <td class="text-center">${value.hotel_no_of_night}</td>
+                        <td class="text-left">${value.hotel_from_date} / ${value.to_date}</td>
+                        <td class="text-center">${value.no_of_nights}</td>
                         <td class="text-center">${value.hotel_no_of_adults} / ${value.hotel_no_of_childs}</td>
                         <td class="text-right">${numberWithCommas(value.hotel_price)}</td>
                         <td class="text-right">${value.hotel_discount} %</td>
@@ -84,45 +83,48 @@ function setBookingValue(responce) {
 
     var hotelDetails = '';
     hTotal = 0;
-    responce.result.Hotel.forEach(element => {
-        if (element) {
-            var hotelDate = new Date(element.created_at).toString().split("GMT");
-            hotelDetails += `<tr>
+    if (responce.result.Hotel) {
+        responce.result.Hotel.forEach(element => {
+            if (element) {
+                var hotelDate = new Date(element.created_at).toString().split("GMT");
+                hotelDetails += `<tr>
                                 <td class="text-left font-size-12">${hotelDate[0]}</td>
                                 <td class="text-left font-size-12">${element.bill_no}</td>
                                 <td class="text-right font-size-12">${numberWithCommas(element.amount)}</td>
                             </tr>`;
-            hTotal += Number(element.amount);
-        }
-    });
-    hotelDetails += `<tr class="bg">
+                hTotal += Number(element.amount);
+            }
+        });
+        hotelDetails += `<tr class="bg">
                         <td class="text-right font-size-14 font-weight-bold" colspan='2'>Hotel Total: </td>
                         <td class="text-right font-size-14 font-weight-bold" >${numberWithCommas(hTotal)}</td>
                     </tr>`;
-    $(".hotel-details").html(hotelDetails);
-
+        $(".hotel-details").html(hotelDetails);
+    } else
+        $(".hotel-details-html").hide();
 
     var advanceDetails = '';
     aTotal = 0;
-
-    responce.result.Advance.forEach(element => {
-        if (element) {
-            var advanceDate = new Date(element.created_at).toString().split("GMT");
-            advanceDetails += `<tr>
+    if (responce.result.Advance) {
+        responce.result.Advance.forEach(element => {
+            if (element) {
+                var advanceDate = new Date(element.created_at).toString().split("GMT");
+                advanceDetails += `<tr>
                                 <td class="text-left font-size-12">${advanceDate[0]}</td>
                                 <td class="text-left font-size-12">${element.advance_no}</td>
                                 <td class="text-right font-size-12">${numberWithCommas(element.advance_amount)}</td>
                             </tr>`;
-            aTotal += Number(element.advance_amount);
-        }
-    });
+                aTotal += Number(element.advance_amount);
+            }
+        });
 
-    advanceDetails += `<tr class="bg">
+        advanceDetails += `<tr class="bg">
                             <td class="text-right font-size-14 font-weight-bold" colspan='2'>Advance Total: </td>
                             <td class="text-right font-size-14 font-weight-bold" >${numberWithCommas(aTotal)}</td>
                         </tr>`;
-    $(".advance-details").html(advanceDetails);
-
+        $(".advance-details").html(advanceDetails);
+    } else
+        $(".advance-details-html").hide();
 
     $(".total-details ").html(`<tbody>
             <tr class="text-info">
