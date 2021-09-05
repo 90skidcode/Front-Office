@@ -3,6 +3,11 @@
  */
 let hTotal = 0;
 let aTotal = 0;
+let rTotal = 0;
+let dTotal = 0;
+let tbTaxTotal = 0;
+let taxTotal = 0;
+let bTaxTotal = 0;
 checkEditorAddBooking('booking_master_new', 'booking_master_id');
 
 function checkEditorAddBooking(databasename, conditionkey, imageFlag) {
@@ -40,28 +45,15 @@ function setBookingValue(responce) {
                             </tr>
                         `);
 
-    $('.invoice-total').html(`
-        <tbody>
-            <tr>
-                <th>Total Discount Amount :</th>
-                <td>${numberWithCommas(master.total_discount)}</td>
-            </tr>
-            <tr>
-                <th>Total Amount Before Tax :</th>
-                <td>${numberWithCommas(master.total_beforetax)}</td>
-            </tr>            
-            <tr>
-                <th>Total Tax :</th>
-                <td>${numberWithCommas(master.total_taxamount)}</td>
-            </tr>
-            <tr>
-                <th>Total :</th>
-                <td class="font-weight-bolder">${numberWithCommas(Number(master.total_beforetax)+Number(master.total_taxamount))}</td>
-            </tr>  
-        </tbody> `);
+
 
 
     var html = "";
+    rTotal = 0;
+    dTotal = 0;
+    tbTaxTotal = 0;
+    taxTotal = 0;
+    bTaxTotal = 0;
     $.each(responce.result.Booking, function(index, value) {
         html += `
                     <tr class="thead-default">
@@ -73,14 +65,39 @@ function setBookingValue(responce) {
                         <td class="text-right">${value.hotel_discount} %</td>
                         <td class="text-right">${numberWithCommas(value.discount_amount)}</td>
                         <td class="text-right">${value.room_cgst}% / ${value.room_sgst}%</td>
-                        <td class="text-right  font-weight-bolder">${numberWithCommas(value.room_total)}</td>
+                        <td class="text-right  font-weight-bolder">${numberWithCommas(value.total_amount)}</td>
                     </tr>
             `;
+
+        rTotal += Number(value.total_amount);
+        dTotal += Number(value.discount_amount);
+        tbTaxTotal += Number(value.total_amount);
+        taxTotal += Number(value.total_amount);
+        bTaxTotal += Number(value.hotel_price);
     })
 
     $(".room-details").html(html);
 
 
+    $('.invoice-total').html(`
+    <tbody>
+        <tr>
+            <th>Total Discount Amount :</th>
+            <td>${numberWithCommas(dTotal)}</td>
+        </tr>
+        <tr>
+            <th>Total Amount Before Tax :</th>
+            <td>${numberWithCommas(bTaxTotal - dTotal)}</td>
+        </tr>            
+        <tr>
+            <th>Total Tax :</th>
+            <td>${numberWithCommas(rTotal -(bTaxTotal - dTotal) )}</td>
+        </tr>
+        <tr>
+            <th>Total :</th>
+            <td class="font-weight-bolder">${numberWithCommas(rTotal)}</td>
+        </tr>  
+    </tbody> `);
     var hotelDetails = '';
     hTotal = 0;
     if (responce.result.Hotel) {
@@ -132,7 +149,7 @@ function setBookingValue(responce) {
                     <h5 class="text-primary m-r-10 font-size-18">Total :</h5>
                 </td>
                 <td class="text-right font-size-14 font-weight-bold w-25">
-                    <h5 class="text-primary  font-size-16 font-weight-bold">${numberWithCommas(Number(master.total_amount) + Number(hTotal))}</h5>
+                    <h5 class="text-primary  font-size-16 font-weight-bold">${numberWithCommas(Number(rTotal) + Number(hTotal))}</h5>
                 </td>
             </tr>
             </tbody>
@@ -152,7 +169,7 @@ function setBookingValue(responce) {
                                 <div class="col-md-4 col-sm-6">
                                 <h6 class="m-b-20">Invoice Number : <span><b>Sample Bill</b></span></h6>
                                 <h6 class="text-uppercase text-primary font-size-20">Total Due :
-                                    <span>${numberWithCommas(Number(master.total_amount)+Number(hTotal)-Number(aTotal))}</span>
+                                    <span>${numberWithCommas(Number(rTotal)+Number(hTotal)-Number(aTotal))}</span>
                                 </h6>
                             </div>`);
 }
