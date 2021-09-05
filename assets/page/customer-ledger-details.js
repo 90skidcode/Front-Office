@@ -93,7 +93,7 @@ function displayCustomerListInit() {
     var room_no = url.searchParams.get("room_no");
     if (typeof(room_no) != 'undefined' && room_no) {
         var data = { "list_key": "get_ledger", "booking_no": booking_no, "room_no": room_no };
-        $(".bill-sample").attr('href', "/booking-print-sample.html?booking_no=" + booking_no + "&room_no" + room_no);
+        $(".bill-sample").attr('href', "/booking-print-sample.html?booking_no=" + booking_no + "&room_no=" + room_no);
     } else {
         var data = { "list_key": "get_ledger", "booking_no": booking_no };
         $(".bill-sample").attr('href', "/booking-print-sample.html?booking_no=" + booking_no);
