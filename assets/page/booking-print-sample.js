@@ -6,6 +6,7 @@ let aTotal = 0;
 let rTotal = 0;
 let dTotal = 0;
 let bTaxTotal = 0;
+let fullTotal = 0;
 checkEditorAddBooking('booking_master_new', 'booking_master_id');
 
 function checkEditorAddBooking(databasename, conditionkey, imageFlag) {
@@ -33,7 +34,6 @@ function setBookingValue(responce) {
     var url = new URL(window.location.href);
     var booking_no = url.searchParams.get("booking_no");
 
-
     $('.meal-details').html(`
                             <tr>
                                 <td>${master.meal_plan_full}</td>
@@ -42,9 +42,6 @@ function setBookingValue(responce) {
                                 <td class="text-right">${numberWithCommas(master.meal_total)}</td>
                             </tr>
                         `);
-
-
-
 
     var html = "";
     rTotal = 0;
@@ -137,13 +134,15 @@ function setBookingValue(responce) {
     } else
         $(".advance-details-html").hide();
 
+
+    fullTotal = (Number(rTotal) + Number(hTotal) + Number(master.meal_total))
     $(".total-details ").html(`<tbody>
             <tr class="text-info">
                 <td class="text-right">
                     <h5 class="text-primary m-r-10 font-size-18">Total :</h5>
                 </td>
                 <td class="text-right font-size-14 font-weight-bold w-25">
-                    <h5 class="text-primary  font-size-16 font-weight-bold">${numberWithCommas(Number(rTotal) + Number(hTotal))}</h5>
+                    <h5 class="text-primary  font-size-16 font-weight-bold">${numberWithCommas(fullTotal)}</h5>
                 </td>
             </tr>
             </tbody>
@@ -163,7 +162,7 @@ function setBookingValue(responce) {
                                 <div class="col-md-4 col-sm-6">
                                 <h6 class="m-b-20">Invoice Number : <span><b>Sample Bill</b></span></h6>
                                 <h6 class="text-uppercase text-primary font-size-20">Total Due :
-                                    <span>${numberWithCommas(Number(rTotal)+Number(hTotal)-Number(aTotal))}</span>
+                                    <span>${numberWithCommas(Number(fullTotal)-Number(aTotal))}</span>
                                 </h6>
                             </div>`);
 }
