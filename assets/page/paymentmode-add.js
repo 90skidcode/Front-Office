@@ -16,7 +16,7 @@ $(document).ready(function() {
                     "databasename": 'payment_master',
                     "values": $("#paymentmode-add").serializeObject()
                 }
-                commonAjax('database.php', 'POST', data, '#paymentmode-add', 'Agent added successfully');
+                commonAjax('database.php', 'POST', data, '#paymentmode-add', 'Payment type added successfully');
             } else {
                 // Edit
                 var data = {
@@ -27,7 +27,7 @@ $(document).ready(function() {
                         "payment_master_id": id
                     }
                 }
-                commonAjax('database.php', 'POST', data, '', 'Agent updated successfully');
+                commonAjax('database.php', 'POST', data, '', 'Payment type updated successfully');
             }
         }
     });
