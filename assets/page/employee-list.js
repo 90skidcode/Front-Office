@@ -3,32 +3,30 @@ displayExpensesListInit()
 function displayExpensesListInit() {
     let data = {
         "query": "fetch",
-        "list_key": "list_expenses_tables",
+        "databasename": "employee_master",
         "column": {
             "*": "*"
         },
         "condition": {
-            "expenses_master.status": "1"
+            "employee_master.status": "1"
         },
         "like": "",
         "limit": "10000000"
     }
-    commonAjax('services.php', 'POST', data, '', '', '', { "functionName": "displayExpensesList", "param1": "table-expenses-list" });
+    commonAjax('database.php', 'POST', data, '', '', '', { "functionName": "displayExpensesList", "param1": "table-employee-list" });
 }
 
 function displayExpensesList(response, dataTableId) {
     var tableHeader = [{
-        "data": "expenses_date"
-    }, {
-        "data": "expenses_type_name"
+        "data": "employee_id"
     }, {
         "data": "employee_name"
     }, {
-        "data": "expenses_amount"
+        "data": "employee_address"
     }, {
-        "data": "expenses_description"
+        "data": "employee_email"
     }, {
-        "data": "expenses_remarks"
+        "data": "employee_phone"
     }, /* EDIT */ /* DELETE */ {
         "data": "room_name",
         mRender: function(data, type, row) {
@@ -42,7 +40,7 @@ function displayExpensesList(response, dataTableId) {
                 </td>`;
         }
     }];
-    dataTableDisplay(response.result, tableHeader, false, dataTableId)
+    dataTableDisplay(response, tableHeader, false, dataTableId)
 }
 
 $(document).on('click', ".btn-delete", function() {
