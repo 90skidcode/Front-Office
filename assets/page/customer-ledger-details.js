@@ -6,6 +6,7 @@ listPaymentType();
 listRoomType('room_category');
 let hTotal = 0;
 let rTotal = 0;
+let mTotal = 0;
 $(document).ready(function() {
     listCountry();
     listState($('#country').val());
@@ -200,8 +201,8 @@ function displayCustomerList(response) {
         aTotal += Number(element.amount);
     });
     advanceDetails += `<tr class="bg">
-                            <td class="text-right border-right-0 border-bottom-0 font-size-20" colspan='3'>Total</td>
-                            <td class="text-right border-right-0 border-bottom-0 font-size-20" >${numberWithCommas(aTotal)}</td>
+                            <td class="text-right border-right-0 border-bottom-0 font-size-20 font-weight-bolder" colspan='4'>Total</td>
+                            <td class="text-right border-right-0 border-bottom-0 font-size-20 font-weight-bolder" >${numberWithCommas(aTotal)}</td>
                         </tr>`;
     $(".advance-details").html(advanceDetails);
 
@@ -223,6 +224,24 @@ function displayCustomerList(response) {
 </tr>`;
     $(".hotel-details").html(HotelDetails);
 
+
+    var mealsDetails = '';
+    mTotal = 0;
+    if (response.result.Meals) {
+        response.result.Meals.forEach(element => {
+
+            mealsDetails += `<tr>
+                            <td class="text-center border-right-0 border-bottom-0">${element.meal_plan_full}</td>
+                            <td class="text-center border-right-0 border-bottom-0">${numberWithCommas(element.meal_price)}</td>
+                            <td class="text-center border-right-0 border-bottom-0">${element.meal_count}</td>
+                            <td class="text-right border-right-0 border-bottom-0">${numberWithCommas(element.meal_total)}</td>
+                        </tr>`;
+            mTotal += Number(element.meal_total);
+        });
+
+        $(".meals-details").html(mealsDetails);
+    }
+
     /**
      * Summary
      */
@@ -232,10 +251,13 @@ function displayCustomerList(response) {
                         <div class="list" data-id="v-pills-leadger-tab"> <p> Room Rent </p> <p>${ numberWithCommas(lTotal)} </p></div>                        
                         <div class="list" data-id="v-pills-leadger-tab"> <p> Hotel Bill </p> <p>${ numberWithCommas(hTotal)} </p></div>
                         <div class="list" data-id="v-pills-leadger-tab"> <p> Advance  </p> <p>${ numberWithCommas(aTotal)} </p></div>
-                        <div class="list font-size-16 font-weight-bold" data-id="v-pills-leadger-tab"> <p> Total </p> <p>${ numberWithCommas(lTotal-aTotal+hTotal)} </p></div>
+                        <div class="list" data-id="v-pills-leadger-tab"> <p> Meal Total </p> <p>${ numberWithCommas(mTotal)} </p></div>
+                        <div class="list font-size-16 font-weight-bold" data-id="v-pills-leadger-tab"> <p> Total </p> <p>${ numberWithCommas(lTotal-aTotal+hTotal + mTotal)} </p></div>
                     </div>`;
 
     $(".summary").html(summary);
+
+
 }
 
 
@@ -288,8 +310,15 @@ $(document).on('click', '.swap-bill', function() {
  */
 $(document).on('click', '.btn-room-swap', function() {
     $("#room-swap").modal('show');
-    $(".swap_room_no").val($(this).attr('data-room'));
+    var data = { "list_key": "get_ledger", "booking_no": booking_no, "room_no": $(this).attr('data-room') };
+    commonAjax('services.php', 'POST', data, '', '', '', { "functionName": "roomSwapSetValue", "param1": "false" });
 });
+
+function roomSwapSetValue(res) {
+    multipleSetValue(res.result.booking_details);
+    setCurrentDate('current_date');
+    $(".room_category").val(0).trigger('change');
+}
 
 /*  Room Number */
 

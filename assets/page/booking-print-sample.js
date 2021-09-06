@@ -13,7 +13,7 @@ function checkEditorAddBooking(databasename, conditionkey, imageFlag) {
     var url = new URL(window.location.href);
     var booking_no = url.searchParams.get("booking_no");
     var room_no = url.searchParams.get("room_no");
-    if (!isEmptyValue(room_no)) {
+    if (!isEmptyValue(booking_no)) {
         if (typeof(room_no) != 'undefined' && room_no) {
             var data = { "list_key": "booking_detail_ledger", "booking_no": booking_no, "room_no": room_no };
         } else {

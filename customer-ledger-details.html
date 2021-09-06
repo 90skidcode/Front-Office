@@ -74,6 +74,7 @@
                                                 <li><a class="nav-link text-left show" id="v-pills-hotel-tab" data-toggle="pill" href="#v-pills-hotel" role="tab" aria-controls="v-pills-hotel" aria-selected="false">Hotel Details</a></li>
                                                 <li><a class="nav-link text-left show" id="v-pills-advance-tab" data-toggle="pill" href="#v-pills-advance" role="tab" aria-controls="v-pills-advance" aria-selected="false">Advance List</a></li>
                                                 <li><a class="nav-link text-left show" id="v-pills-room-tab" data-toggle="pill" href="#v-pills-room" role="tab" aria-controls="v-pills-room" aria-selected="false">Booking Details</a></li>
+                                                <li><a class="nav-link text-left show" id="v-pills-meals-tab" data-toggle="pill" href="#v-pills-meals" role="tab" aria-controls="v-pills-meals" aria-selected="false">Meals Details</a></li>
                                             </ul>
                                         </div>
                                         <div class="col-md-12 col-sm-12 p-0">
@@ -145,6 +146,21 @@
                                                         </thead>
                                                         <tbody class="hotel-details">
                                                             <td colspan="3" class="text-center">No Records Found.</td>
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                                <div class="tab-pane fade" id="v-pills-meals" role="tabpanel" aria-labelledby="v-pills-meals-tab">
+                                                    <table class="table table-bordered">
+                                                        <thead class="thead-light">
+                                                            <tr>
+                                                                <th class="text-center border-right-0 border-bottom-0">Meal Plan</th>
+                                                                <th class="text-center border-right-0 border-bottom-0">Meal Price (Per Person)</th>
+                                                                <th class="text-center border-right-0 border-bottom-0">Meal Count</th>
+                                                                <th class="text-right border-right-0 border-bottom-0">Meal Total Amount</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody class="meals-details">
+                                                            <td colspan="4" class="text-center">No Records Found.</td>
                                                         </tbody>
                                                     </table>
                                                 </div>
@@ -341,7 +357,7 @@
                                     <tr>
                                         <td>
                                             <select class="select2 room_category" id="room_category" name="room_category" required>
-                                            <option  value="">Select a Room Type</option>
+                                            <option  value="0">Select a Room Type</option>
                                         </select>
                                         </td>
                                         <td class="hide" hidden>

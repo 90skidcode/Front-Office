@@ -9,7 +9,7 @@ $(document).on('click', '#button-add-item', function() {
                             </td>
                             <td>
                                 <select class="select2 room_category" id="room_${c}_category" name="room_category" required>
-                                    <option  value="">Select a Room Type</option>
+                                    <option  value="0">Select a Room Type</option>
                                 </select>
 
                                 <input type="hidden" name="hotel_room_category" autocomplete="off" data-item="room_category" class=" form-control text-right">
