@@ -227,10 +227,10 @@ function displayCustomerList(response) {
 
     var mealsDetails = '';
     mTotal = 0;
-    if (response.result.Meals) {
-        response.result.Meals.forEach(element => {
+    if (response.result.Booking) {
+        response.result.Booking.forEach(element => {
 
-            mealsDetails += `<tr>
+            mealsDetails = `<tr>
                             <td class="text-center border-right-0 border-bottom-0">${element.meal_plan_full}</td>
                             <td class="text-center border-right-0 border-bottom-0">${numberWithCommas(element.meal_price)}</td>
                             <td class="text-center border-right-0 border-bottom-0">${element.meal_count}</td>
@@ -315,9 +315,21 @@ $(document).on('click', '.btn-room-swap', function() {
 });
 
 function roomSwapSetValue(res) {
-    multipleSetValue(res.result.booking_details);
-    setCurrentDate('current_date');
-    $(".room_category").val(0).trigger('change');
+    let swapDate = res.result.booking_details[0];
+    $("#room-swap-add .room_category").val(0).trigger('change');
+    $("#room-swap-add .no_of_adults").val(swapDate.hotel_no_of_adults);
+    $("#room-swap-add .no_of_childs").val(swapDate.hotel_no_of_childs);
+    $("#room-swap-add [name='hotel_no_of_extra_bed']").val(swapDate.hotel_no_of_adults);
+    $("#room-swap-add [name='hotel_price']").val(swapDate.hotel_price);
+    $("#room-swap-add [name='hotel_discount']").val(swapDate.hotel_discount);
+    $("#room-swap-add [name='discount_amount']").val(swapDate.discount_amount);
+    $("#room-swap-add [name='hotel_cgst']").val(swapDate.room_cgst);
+    $("#room-swap-add [name='hotel_sgst']").val(swapDate.room_sgst);
+    $("#room-swap-add [name='room_total']").val(swapDate.room_total);
+    var now = new Date();
+    now.setMinutes(now.getMinutes() - now.getTimezoneOffset());
+    $("#room-swap-add .current_date").val(now.toISOString().slice(0, 16));
+    $("#room-swap-add .to_date").val(swapDate.hotel_to_date.replace(" ", "T").replace(":00", ""));
 }
 
 /*  Room Number */
