@@ -121,7 +121,7 @@ function nightAuditDom(responce) {
 
     var collection = responce.result.collection;
     var collectionED = 'data-toggle="collapse"';
-    var collectionIcon = 'bg-danger-light';
+    var collectionIcon = 'bg-success-light opacity-08 ';
     if (!collection.length) {
         collectionED = '';
         collectionIcon = 'bg-success-light opacity-08 ';
@@ -130,12 +130,36 @@ function nightAuditDom(responce) {
     <div class="card-header ${collectionIcon}" id="collection">
         <h5 class="p-10 m-0"><a href="#!" ${ collectionED } style="color: black;"  data-target="#collectionDetails" aria-expanded="true" aria-controls="collection">Collection</a><icon class="p-r-5">${(collection.length) ? collection.length : ''}</icon></h5>
     </div>
-    <div id="collectionDetails" class="card-body collapse" aria-labelledby="collection" data-parent="#night-audit"></div>
-    </div>`;
+    <div id="collectionDetails" class="card-body collapse" aria-labelledby="collection" data-parent="#night-audit">`;
+
+    nightAuditHtml += `<table class="table table-bordered">
+    <thead class="thead-light">
+        <tr>
+            <th class="text-center border-right-0 border-bottom-0">Date</th>
+            <th class="text-right border-right-0 border-bottom-0">Invoice No</th>
+            <th class="text-center border-right-0 border-bottom-0">Booking No</th>
+            <th class="text-center border-right-0 border-bottom-0">Payment Type</th>
+            <th class="text-right border-right-0 border-bottom-0 ">Total Amount</th>
+            <th class="text-right border-right-0 border-bottom-0">Recived Amount</th>
+        </tr>
+    </thead>
+    <tbody class="room-details">`;
+    collection.forEach(element => {
+        nightAuditHtml += `<tr>
+    <td class="text-center border-right-0 border-bottom-0">${element.created_at} </td>
+    <td class="text-right border-right-0 border-bottom-0">${element.invoice_no}</td>
+    <td class="text-center border-right-0 border-bottom-0">${element.process_no} </td>
+    <td class="text-center border-right-0 border-bottom-0">${element.payment_type}</td>
+    <td class="text-right border-right-0 border-bottom-0 ">${element.total_amount}</td>
+    <td class="text-right border-right-0 border-bottom-0">${element.total_received}</td>
+   
+</tr>`;
+    });
+    nightAuditHtml += `</tbody></table></div> </div>`;
 
     var income = responce.result.income;
     var incomeED = 'data-toggle="collapse"';
-    var incomeIcon = 'bg-danger-light';
+    var incomeIcon = 'bg-success-light opacity-08 ';
     if (!income.length) {
         incomeED = '';
         incomeIcon = 'bg-success-light opacity-08 ';
@@ -144,8 +168,31 @@ function nightAuditDom(responce) {
     <div class="card-header ${incomeIcon}" id="income">
         <h5 class="p-10 m-0"><a href="#!" ${ incomeED } style="color: black;"  data-target="#incomeDetails" aria-expanded="true" aria-controls="income">Income</a><icon class="p-r-5">${(income.length) ? income.length : ''}</icon></h5>
     </div>
-    <div id="incomeDetails" class="card-body collapse" aria-labelledby="income" data-parent="#night-audit"></div>
-    </div>`;
+    <div id="incomeDetails" class="card-body collapse" aria-labelledby="income" data-parent="#night-audit">`;
+    nightAuditHtml += `<table class="table table-bordered">
+    <thead class="thead-light">
+        <tr>
+            <th class="text-center border-right-0 border-bottom-0">Date</th>
+            <th class="text-right border-right-0 border-bottom-0">Invoice No</th>
+            <th class="text-center border-right-0 border-bottom-0">Booking No</th>
+            <th class="text-center border-right-0 border-bottom-0">Room No</th>
+            <th class="text-right border-right-0 border-bottom-0 ">Income Type</th>
+            <th class="text-right border-right-0 border-bottom-0">Total Amount</th>
+        </tr>
+    </thead>
+    <tbody class="room-details">`;
+    income.forEach(element => {
+        nightAuditHtml += `<tr>
+    <td class="text-center border-right-0 border-bottom-0">${element.income_date} </td>
+    <td class="text-right border-right-0 border-bottom-0">${element.customer_ledger_id}</td>
+    <td class="text-center border-right-0 border-bottom-0">${element.booking_no} </td>
+    <td class="text-center border-right-0 border-bottom-0">${element.room_no}</td>
+    <td class="text-right border-right-0 border-bottom-0 ">${element.income_type}</td>
+    <td class="text-right border-right-0 border-bottom-0">${element.amount}</td>
+   
+</tr>`;
+    });
+    nightAuditHtml += `</tbody></table></div> </div>`;
 
     $("#night-audit").html(nightAuditHtml);
 }

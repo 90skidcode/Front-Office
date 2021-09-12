@@ -2,16 +2,9 @@ displayExpensesListInit()
 
 function displayExpensesListInit() {
     let data = {
-        "query": "fetch",
+
         "list_key": "list_expenses_tables",
-        "column": {
-            "*": "*"
-        },
-        "condition": {
-            "expenses_master.status": "1"
-        },
-        "like": "",
-        "limit": "10000000"
+
     }
     commonAjax('services.php', 'POST', data, '', '', '', { "functionName": "displayExpensesList", "param1": "table-expenses-list" });
 }
