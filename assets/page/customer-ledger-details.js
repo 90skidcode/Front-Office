@@ -162,6 +162,10 @@ function displayCustomerList(response) {
             else
                 action = `<button type="button"  class="btn btn-icon btn-hover btn-sm btn-rounded swap-bill-room-select" data-room="${element.room_no}" data-type="swap"><i class="anticon anticon-retweet font-size-20 text-primary" title="Bill Swap"></i> </button><button type="button"  class="btn btn-icon btn-hover btn-sm btn-rounded btn-room-swap" data-room="${element.room_no}"> <i class="anticon anticon-warning font-size-20 text-warning" title="Room Swap"></i> </button><button type="button" class="btn btn-icon btn-hover btn-sm btn-rounded btn-split-bill" data-room="${element.room_no}" data-type="split"> <i class="anticon anticon-logout text-danger font-size-20" title="Split Bill"></i> </button>`;
         }
+
+        if (checkdate(response.result.audit_date, element.hotel_from_date)) {
+            action += `<button type="button" class="btn btn-icon btn-hover btn-sm btn-rounded" data-room="${element.room_no}"><i class="anticon anticon-edit font-size-20 text-primary" title="Edit"></i> </button>`;
+        }
         roomDetails += `<tr ststus="${element.room_status}">
                             <td class="text-center border-right-0 border-bottom-0">${element.room_category}</td>
                             <td class="text-center border-right-0 border-bottom-0">${element.hotel_no_of_night}</td>

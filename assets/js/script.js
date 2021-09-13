@@ -10,7 +10,7 @@ else {
      */
 
     $('form').append(`<input type="hidden" class="form-control" name="status" value="1">
-                      <input type="hidden" class="form-control" name="created_by" value="${JSON.parse(userData)[0].employee_type_id}">`);
+                      <input type="hidden" class="form-control" name="created_by" value="${JSON.parse(userData)[0].employee_id}">`);
 
 
     let menuHtml = ``;
@@ -1172,4 +1172,16 @@ function displayAdvanceList(response, dataTableId) {
 
     if (html.trim())
         $("#table-advance-list tbody").html(html);
+}
+
+
+function checkdate(checkDate, date) {
+    let currentDate = date.split(" ")
+    let check = Date.parse(new Date(checkDate));
+    currentDate = Date.parse(new Date(currentDate[0]));
+    console.log(check, currentDate);
+    if (check > checkDate)
+        return true;
+    else
+        return false;
 }
