@@ -1083,8 +1083,29 @@ $(document).on('click', ".btn-advance", function() {
             'data-customerid': $(this).attr('data-customerid')
         });
     }
+
+    if ($(this).attr('data-id') && $(this).attr('data-type') == 'Hotel') {
+        let data = customerBookingDetails.result.Hotel.find(x => x.customer_ledger_id === $(this).attr('data-id'));
+        console.log(data);
+        $("#advance-payment-add .payment_mode").val(data.payment_mode);
+        $("#advance-payment-add .advance").val(data.amount);
+        $("#advance-payment-add .description").val(data.description);
+        $("#advance-payment-add .bill_no").val(data.bill_no);
+        $(".save-advance").attr('data-id', data.bill_no);
+    }
+
+    if ($(this).attr('data-id') && $(this).attr('data-type') == 'Advance') {
+        let data = customerBookingDetails.result.Advance.find(x => x.bill_no === $(this).attr('data-id'));
+        $("#advance-payment-add .payment_mode").val(data.payment_mode);
+        $("#advance-payment-add .advance").val(data.amount);
+        $("#advance-payment-add .description").val(data.description);
+        $(".save-advance").attr('data-id', data.bill_no);
+    }
+
     $(".save-advance").attr('data-type', $(this).attr('data-type'));
 });
+
+
 
 $(document).on('click', ".save-advance", function() {
     let data = '';
@@ -1097,6 +1118,26 @@ $(document).on('click', ".save-advance", function() {
                 "payment_mode": $("#payment_mode").val(),
                 "customer_id": $(this).attr('data-customerid')
             }
+        } else if ($(this).attr('data-type') == 'Advance' && $(this).attr('data-type')) {
+            data = {
+                "list_key": "updateAdvance",
+                "advance_amount": $("#advance-payment-add .advance").val(),
+                "payment_mode": $("#advance-payment-add  #payment_mode").val(),
+                "advance_no": $(this).attr('data-id'),
+                "booking_no": $('.booking-id').text(),
+                "description": $("#advance-payment-add .description").val()
+            }
+
+        } else if ($(this).attr('data-type') == 'Hotel' && $(this).attr('data-type')) {
+            data = {
+                "list_key": "updateAdvance",
+                "advance_amount": $("#advance-payment-add .advance").val(),
+                "payment_mode": $("#advance-payment-add  #payment_mode").val(),
+                "advance_no": $(this).attr('data-id'),
+                "booking_no": $('.booking-id').text(),
+                "description": $("#advance-payment-add .description").val()
+            }
+
         } else {
             data = { "list_key": "Addledger" };
             data['booking_id'] = $('.booking-id').text();
@@ -1180,7 +1221,7 @@ function checkdate(checkDate, date) {
     let check = Date.parse(new Date(checkDate));
     currentDate = Date.parse(new Date(currentDate[0]));
     console.log(check, currentDate);
-    if (check > checkDate)
+    if (check < currentDate)
         return true;
     else
         return false;

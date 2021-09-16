@@ -1,12 +1,14 @@
 var url = new URL(window.location.href);
 var booking_no = url.searchParams.get("booking_no");
 var room_no = url.searchParams.get("room_no");
+var fullDetails = '';
 displayCustomerListInit();
 listPaymentType();
 listRoomType('room_category');
 let hTotal = 0;
 let rTotal = 0;
 let mTotal = 0;
+var customerBookingDetails = '';
 $(document).ready(function() {
     listCountry();
     listState($('#country').val());
@@ -103,6 +105,8 @@ function displayCustomerListInit() {
 }
 
 function displayCustomerList(response) {
+    customerBookingDetails = response;
+    fullDetails = response;
     var bookingArray = response.result.booking_details;
     var roomNo = bookingArray.map(x => x.room_no);
     var bookingDate = new Date(bookingArray[0].hotel_from_date).toString().split("GMT");
@@ -192,6 +196,12 @@ function displayCustomerList(response) {
     let aTotal = 0;
     response.result.Advance.forEach(element => {
         var advanceDate = new Date(element.created_at).toString().split("GMT");
+        let advanceBtn = '';
+        if (checkdate(response.result.audit_date, element.created_at)) {
+            advanceBtn = `  <button class="btn btn-icon btn-hover btn-sm btn-rounded btn-advance" data-type="Advance" data-id="${element.bill_no}">
+                                <i class="anticon anticon-edit  font-size-20 text-primary" title="Edit Advance"></i>
+                            </button>`;
+        }
         advanceDetails += `<tr>
                             <td class="text-center border-right-0 border-bottom-0">${advanceDate[0]}</td>
                             <td class="text-right border-right-0 border-bottom-0">${element.bill_no}</td>
@@ -199,7 +209,8 @@ function displayCustomerList(response) {
                             <td class="text-right border-right-0 border-bottom-0">${numberWithCommas(element.amount)}</td>
                             <td class="text-right border-right-0 border-bottom-0">
                                 <a class="btn btn-icon btn-hover btn-sm btn-rounded" href="/advance-print.html?id=${element.bill_no}"  target="_blank" data-room="${element.room_no}" data-type="swap"> 
-                                <i class="anticon anticon-printer  font-size-20 text-primary" title="Bill Swap"></i> </a>                                
+                                <i class="anticon anticon-printer  font-size-20 text-primary" title="Bill Swap"></i> </a>  
+                                ${advanceBtn}                                                             
                             </td>
                         </tr>`;
         aTotal += Number(element.amount);
@@ -213,17 +224,24 @@ function displayCustomerList(response) {
     var HotelDetails = '';
     let hTotal = 0;
     response.result.Hotel.forEach(element => {
+        var advanceBtn = '';
         var advanceDate = new Date(element.created_at).toString().split("GMT");
+        if (checkdate(response.result.audit_date, element.created_at)) {
+            advanceBtn = `  <button class="btn btn-icon btn-hover btn-sm btn-rounded btn-advance" data-type="Hotel" data-id="${element.customer_ledger_id}">
+                                <i class="anticon anticon-edit  font-size-20 text-primary" title="Edit Hotel"></i>
+                            </button>`;
+        }
         HotelDetails += `<tr>
                             <td class="text-center border-right-0 border-bottom-0">${advanceDate[0]}</td>
                             <td class="text-right border-right-0 border-bottom-0">${element.bill_no}</td>
                             <td class="text-center border-right-0 border-bottom-0">${element.description} </td>
                             <td class="text-right border-right-0 border-bottom-0">${numberWithCommas(element.amount)} </td>
+                            <td class="text-right border-right-0 border-bottom-0">${advanceBtn}
                         </tr>`;
         hTotal += Number(element.amount);
     });
     HotelDetails += `<tr class="bg">
-    <td class="text-right border-right-0 border-bottom-0 font-size-20" colspan='3'>Total</td>
+    <td class="text-right border-right-0 border-bottom-0 font-size-20" colspan='4'>Total</td>
     <td class="text-right border-right-0 border-bottom-0 font-size-20" >${numberWithCommas(hTotal)}</td>
 </tr>`;
     $(".hotel-details").html(HotelDetails);
