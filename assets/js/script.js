@@ -1137,7 +1137,6 @@ $(document).on('click', ".save-advance", function() {
                 "booking_no": $('.booking-id').text(),
                 "description": $("#advance-payment-add .description").val()
             }
-
         } else {
             data = { "list_key": "Addledger" };
             data['booking_id'] = $('.booking-id').text();
