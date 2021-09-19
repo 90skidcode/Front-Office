@@ -5,6 +5,7 @@ var fullDetails = '';
 displayCustomerListInit();
 listPaymentType();
 listRoomType('room_category');
+listMealPlan();
 let hTotal = 0;
 let rTotal = 0;
 let mTotal = 0;
@@ -44,6 +45,25 @@ function listPaymentType() {
     commonAjax('database.php', 'POST', data, '', '', '', { "functionName": "listSelect2Multiple", "param1": ".payment_mode", "param2": "payment_mode", "param3": "payment_master_id" });
 }
 
+/**
+ * List Meal plan in select 2
+ */
+
+function listMealPlan() {
+    let data = {
+        "query": 'fetch',
+        "databasename": 'meal_plan',
+        "column": {
+            "meal_plan_id": "meal_plan_id",
+            "meal_plan_short": "meal_plan_short"
+        },
+        "condition": {
+            "status": '1'
+        },
+        "like": ""
+    }
+    commonAjax('database.php', 'POST', data, '', '', '', { "functionName": "listSelect2", "param1": "#meal_plan_id", "param2": "meal_plan_short", "param3": "meal_plan_id" })
+}
 
 /**
  * To List in Select2
@@ -162,13 +182,14 @@ function displayCustomerList(response) {
         var action = '';
         if (roomStatus(element.room_status).status == 'In House') {
             if (!room_no && roomInHouseCount != 1)
-                action = `<button type="button"  class="btn btn-icon btn-hover btn-sm btn-rounded swap-bill-room-select" data-room="${element.room_no}" data-type="swap"> <i class="anticon anticon-retweet font-size-20 text-primary" title="Bill Swap"></i> </button><button type="button"  class="btn btn-icon btn-hover btn-sm btn-rounded btn-room-swap" data-room="${element.room_no}"> <i class="anticon anticon-warning font-size-20 text-warning" title="Room Swap"></i> </button><a href="customer-ledger-details.html?booking_no=${booking_no}&room_no=${element.room_no}" class="btn btn-icon btn-hover btn-sm btn-rounded" > <i class="anticon anticon-disconnect text-danger font-size-20" title="Split Bill"></i> </a>`;
+                action = `<button type="button"  class="btn btn-icon btn-hover btn-sm btn-rounded swap-bill-room-select" data-room="${element.room_no}" data-type="swap"> <i class="anticon anticon-retweet font-size-20 text-primary" title="Bill Swap"></i> </button><button type="button"  class="btn btn-icon btn-hover btn-sm btn-rounded btn-room-swap" data-type="swap" data-room="${element.room_no}"> <i class="anticon anticon-warning font-size-20 text-warning" title="Room Swap"></i> </button><a href="customer-ledger-details.html?booking_no=${booking_no}&room_no=${element.room_no}" class="btn btn-icon btn-hover btn-sm btn-rounded" > <i class="anticon anticon-disconnect text-danger font-size-20" title="Split Bill"></i> </a>`;
             else
-                action = `<button type="button"  class="btn btn-icon btn-hover btn-sm btn-rounded swap-bill-room-select" data-room="${element.room_no}" data-type="swap"><i class="anticon anticon-retweet font-size-20 text-primary" title="Bill Swap"></i> </button><button type="button"  class="btn btn-icon btn-hover btn-sm btn-rounded btn-room-swap" data-room="${element.room_no}"> <i class="anticon anticon-warning font-size-20 text-warning" title="Room Swap"></i> </button><button type="button" class="btn btn-icon btn-hover btn-sm btn-rounded btn-split-bill" data-room="${element.room_no}" data-type="split"> <i class="anticon anticon-logout text-danger font-size-20" title="Split Bill"></i> </button>`;
+                action = `<button type="button"  class="btn btn-icon btn-hover btn-sm btn-rounded swap-bill-room-select" data-room="${element.room_no}" data-type="swap"><i class="anticon anticon-retweet font-size-20 text-primary" title="Bill Swap"></i> </button><button type="button"  class="btn btn-icon btn-hover btn-sm btn-rounded btn-room-swap" data-type="swap" data-room="${element.room_no}"> <i class="anticon anticon-warning font-size-20 text-warning" title="Room Swap"></i> </button><button type="button" class="btn btn-icon btn-hover btn-sm btn-rounded btn-split-bill" data-room="${element.room_no}" data-type="split"> <i class="anticon anticon-logout text-danger font-size-20" title="Split Bill"></i> </button>`;
         }
 
-        if (checkdate(response.result.audit_date, element.hotel_from_date)) {
-            action += `<button type="button" class="btn btn-icon btn-hover btn-sm btn-rounded" data-room="${element.room_no}"><i class="anticon anticon-edit font-size-20 text-primary" title="Edit"></i> </button>`;
+        if (checkdate(response.result.audit_date, element.hotel_from_date) && element.room_status == 'I') {
+            action += `<button type="button" class="btn btn-icon btn-hover btn-sm btn-rounded btn-room-swap" data-type="edit" data-room="${element.room_no}"><i class="anticon anticon-edit font-size-20 text-primary" title="Edit"></i> </button>
+            <button type="button" class="btn btn-icon btn-hover btn-sm btn-rounded btn-room-delete" data-room="${element.room_no}"><i class="anticon anticon-delete font-size-20 text-danger" title="Delete"></i> </button>`;
         }
         roomDetails += `<tr ststus="${element.room_status}">
                             <td class="text-center border-right-0 border-bottom-0">${element.room_category}</td>
@@ -197,12 +218,14 @@ function displayCustomerList(response) {
     response.result.Advance.forEach(element => {
         var advanceDate = new Date(element.created_at).toString().split("GMT");
         let advanceBtn = '';
-        if (checkdate(response.result.audit_date, element.created_at)) {
-            advanceBtn = `  <button class="btn btn-icon btn-hover btn-sm btn-rounded btn-advance" data-type="Advance" data-id="${element.bill_no}">
+        if (element.status == 1) {
+            if (checkdate(response.result.audit_date, element.created_at)) {
+                advanceBtn = `  <button class="btn btn-icon btn-hover btn-sm btn-rounded btn-advance" data-type="Advance" data-id="${element.bill_no}">
                                 <i class="anticon anticon-edit  font-size-20 text-primary" title="Edit Advance"></i>
-                            </button>`;
-        }
-        advanceDetails += `<tr>
+                            </button>
+                            <button type="button" class="btn btn-icon btn-hover btn-sm btn-rounded btn-ledger-delete" data-id="${element.customer_ledger_id}"><i class="anticon anticon-delete font-size-20 text-danger" title="Delete"></i> </button>`;
+            }
+            advanceDetails += `<tr>
                             <td class="text-center border-right-0 border-bottom-0">${advanceDate[0]}</td>
                             <td class="text-right border-right-0 border-bottom-0">${element.bill_no}</td>
                             <td class="text-center border-right-0 border-bottom-0">${element.description} </td>
@@ -213,7 +236,8 @@ function displayCustomerList(response) {
                                 ${advanceBtn}                                                             
                             </td>
                         </tr>`;
-        aTotal += Number(element.amount);
+            aTotal += Number(element.amount);
+        }
     });
     advanceDetails += `<tr class="bg">
                             <td class="text-right border-right-0 border-bottom-0 font-size-20 font-weight-bolder" colspan='4'>Total</td>
@@ -226,19 +250,22 @@ function displayCustomerList(response) {
     response.result.Hotel.forEach(element => {
         var advanceBtn = '';
         var advanceDate = new Date(element.created_at).toString().split("GMT");
-        if (checkdate(response.result.audit_date, element.created_at)) {
-            advanceBtn = `  <button class="btn btn-icon btn-hover btn-sm btn-rounded btn-advance" data-type="Hotel" data-id="${element.customer_ledger_id}">
+        if (element.status == 1) {
+            if (checkdate(response.result.audit_date, element.created_at)) {
+                advanceBtn = `  <button class="btn btn-icon btn-hover btn-sm btn-rounded btn-advance" data-type="Hotel" data-id="${element.customer_ledger_id}">
                                 <i class="anticon anticon-edit  font-size-20 text-primary" title="Edit Hotel"></i>
-                            </button>`;
-        }
-        HotelDetails += `<tr>
+                            </button>
+                            <button type="button" class="btn btn-icon btn-hover btn-sm btn-rounded btn-ledger-delete" data-id="${element.customer_ledger_id}"><i class="anticon anticon-delete font-size-20 text-danger" title="Delete"></i> </button>`;
+            }
+            HotelDetails += `<tr>
                             <td class="text-center border-right-0 border-bottom-0">${advanceDate[0]}</td>
                             <td class="text-right border-right-0 border-bottom-0">${element.bill_no}</td>
                             <td class="text-center border-right-0 border-bottom-0">${element.description} </td>
                             <td class="text-right border-right-0 border-bottom-0">${numberWithCommas(element.amount)} </td>
                             <td class="text-right border-right-0 border-bottom-0">${advanceBtn}
                         </tr>`;
-        hTotal += Number(element.amount);
+            hTotal += Number(element.amount);
+        }
     });
     HotelDetails += `<tr class="bg">
     <td class="text-right border-right-0 border-bottom-0 font-size-20" colspan='4'>Total</td>
@@ -249,16 +276,22 @@ function displayCustomerList(response) {
 
     var mealsDetails = '';
     mTotal = 0;
+    var actionMeal = '';
     if (response.result.Booking) {
         response.result.Booking.forEach(element => {
-
+            if (checkdate(response.result.audit_date, element.created_at)) {
+                actionMeal = `  <button class="btn btn-icon btn-hover btn-sm btn-rounded edit-meal">
+                                    <i class="anticon anticon-edit font-size-20 text-primary" title="Edit Meal"></i>
+                                </button>`;
+            }
             mealsDetails = `<tr>
                             <td class="text-center border-right-0 border-bottom-0">${element.meal_plan_full}</td>
                             <td class="text-center border-right-0 border-bottom-0">${numberWithCommas(element.meal_price)}</td>
                             <td class="text-center border-right-0 border-bottom-0">${element.meal_count}</td>
                             <td class="text-right border-right-0 border-bottom-0">${numberWithCommas(element.meal_total)}</td>
+                            <td class="text-right border-right-0 border-bottom-0">${actionMeal}</td>
                         </tr>`;
-            mTotal += Number(element.meal_total);
+            mTotal = Number(element.meal_total);
         });
 
         $(".meals-details").html(mealsDetails);
@@ -278,10 +311,7 @@ function displayCustomerList(response) {
                     </div>`;
 
     $(".summary").html(summary);
-
-
 }
-
 
 $(document).on('click', '.swap-bill-room-select,.btn-split-bill', function() {
     var url = new URL(window.location.href);
@@ -311,7 +341,6 @@ function getroomnumbers(responce, selectedRoom, booking_no, type) {
         } else if (type == 'split') {
             $("#split-bill-modal").modal('show');
         }
-
     } else {
         (type == 'swap') ? showToast('No rooms avaliable to swap the bill', 'error'): showToast('Only one room avalible so cant able to split the bill', 'error');
     }
@@ -333,12 +362,93 @@ $(document).on('click', '.swap-bill', function() {
 $(document).on('click', '.btn-room-swap', function() {
     $("#room-swap").modal('show');
     var data = { "list_key": "get_ledger", "booking_no": booking_no, "room_no": $(this).attr('data-room') };
-    commonAjax('services.php', 'POST', data, '', '', '', { "functionName": "roomSwapSetValue", "param1": "false" });
+    commonAjax('services.php', 'POST', data, '', '', '', { "functionName": "roomSwapSetValue", "param1": $(this).attr('data-type') });
 });
 
-function roomSwapSetValue(res) {
+
+/**
+ * Add Room
+ */
+
+$(document).on('click', '.hotel-room-add', function() {
+    $(".room-swap").attr('data-type', "add");
+});
+
+
+/**
+ * Edit Meal
+ */
+
+$(document).on('click', '.edit-meal', function() {
+    $("#meal-edit").modal('show');
+    let meal = customerBookingDetails.result.Booking[0];
+    $("#meal_plan_id").val(meal.meal_plan_id).trigger('change');
+    $('[name="meal_price"]').val(meal.meal_price);
+    $('[name="meal_count"]').val(meal.meal_count);
+    $('[name="meal_total"]').val(meal.meal_total);
+});
+
+$(document).on('click', '.btn-meal-save', function() {
+    if (checkRequired('#meal-edit-form')) {
+        let object = $("#meal-edit-form").serializeObject();
+        object['list_key'] = 'updateMeal';
+        object['booking_no'] = $(".booking-id").text();
+        commonAjax('services.php', 'POST', object, '', '', '', {
+            "functionName": "locationReload"
+        });
+    }
+
+})
+
+/**
+ * Delete Room
+ */
+
+$(document).on('click', '.btn-room-delete', function() {
+    if (confirm("Are you sure want to delete the room?")) {
+        let object = { "list_key": "DeleteBookingLedger", "booking_no": $(".booking-id").text(), "room_no": $(this).attr('data-room') }
+        commonAjax('services.php', 'POST', object, '', '', '', {
+            "functionName": "locationReload"
+        });
+    }
+});
+
+
+/**
+ * Delete ledger
+ */
+
+$(document).on('click', '.btn-ledger-delete', function() {
+    if (confirm("Are you sure want to delete?")) {
+        let object = { "list_key": "ledgerStatus", "customer_ledger_id": $(this).attr('data-id'), "status": 0 }
+        commonAjax('services.php', 'POST', object, '', '', '', {
+            "functionName": "locationReload"
+        });
+    }
+});
+
+/**
+ * 
+ * @param {*} res 
+ * @param {*} type 
+ */
+
+function roomSwapSetValue(res, type) {
     let swapDate = res.result.booking_details[0];
     $("#room-swap-add .room_category").val(0).trigger('change');
+    var now = new Date();
+    now.setMinutes(now.getMinutes() - now.getTimezoneOffset());
+    $("#room-swap-add .current_date").val(now.toISOString().slice(0, 16));
+    $("#room-swap-add .to_date").val(swapDate.hotel_to_date.replace(" ", "T").replace(":00", ""));
+    if (type == 'edit') {
+        $("#room-swap-add .room_category").val(swapDate.room_category_id).trigger('change');
+        setTimeout(() => {
+            $("#room-swap-add #room_no").append(`<option value="${swapDate.room_no}" selected>${swapDate.room_no}</option>`)
+            $("#room-swap-add #room_no").val(swapDate.room_no);
+            $(".room-swap").attr('data-type', "edit");
+            $("#room-swap-add .current_date").val(swapDate.hotel_from_date.replace(" ", "T").replace(":00", ""));
+        }, 1500);
+    }
     $("#room-swap-add .no_of_adults").val(swapDate.hotel_no_of_adults);
     $("#room-swap-add .no_of_childs").val(swapDate.hotel_no_of_childs);
     $("#room-swap-add [name='hotel_no_of_extra_bed']").val(swapDate.hotel_no_of_adults);
@@ -348,10 +458,9 @@ function roomSwapSetValue(res) {
     $("#room-swap-add [name='hotel_cgst']").val(swapDate.room_cgst);
     $("#room-swap-add [name='hotel_sgst']").val(swapDate.room_sgst);
     $("#room-swap-add [name='room_total']").val(swapDate.room_total);
-    var now = new Date();
-    now.setMinutes(now.getMinutes() - now.getTimezoneOffset());
-    $("#room-swap-add .current_date").val(now.toISOString().slice(0, 16));
-    $("#room-swap-add .to_date").val(swapDate.hotel_to_date.replace(" ", "T").replace(":00", ""));
+
+
+
 }
 
 /*  Room Number */
@@ -371,7 +480,7 @@ $(document).on('change blur', '.room_category,.no_of_night,.from_date', function
             },
             "like": ""
         }
-        commonAjax('database.php', 'POST', data, '', '', '', { 'functionName': 'showRoomNumber', "param1": $(this).closest('tr').find('.room_no').attr('id') });
+        commonAjax('database.php', 'POST', data, '', '', '', { 'functionName': 'showRoomNumber', "param1": $(this).closest('tr').find('.room_no').attr('id') }, { 'functionName': 'showRoomNumber', "param1": $(this).closest('tr').find('.room_no').attr('id') });
     }
 });
 
@@ -446,7 +555,12 @@ $(document).on('click', '.room-swap', function() {
     object['list_key'] = 'SwapRoom';
     object['booking_no'] = $(".booking-id").text();
     object['room_status'] = "1";
-    console.log(object);
+    if ($(this).attr('data-type') == 'edit') {
+        object['list_key'] = 'updateBooking';
+    }
+    if ($(this).attr('data-type') == 'add') {
+        object['list_key'] = 'LedgerBookingInsert';
+    }
     commonAjax('services.php', 'POST', object, '', '', '', {
         "functionName": "locationReload"
     });

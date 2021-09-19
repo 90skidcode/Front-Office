@@ -93,7 +93,7 @@ function setBookingValue(responce) {
     hTotal = 0;
     if (responce.result.Hotel) {
         responce.result.Hotel.forEach(element => {
-            if (element) {
+            if (element && element.status == 1) {
                 var hotelDate = new Date(element.created_at).toString().split("GMT");
                 hotelDetails += `<tr>
                                 <td class="text-left font-size-12">${hotelDate[0]}</td>
@@ -115,7 +115,7 @@ function setBookingValue(responce) {
     aTotal = 0;
     if (responce.result.Advance) {
         responce.result.Advance.forEach(element => {
-            if (element) {
+            if (element && element.status == 1) {
                 var advanceDate = new Date(element.created_at).toString().split("GMT");
                 advanceDetails += `<tr>
                                 <td class="text-left font-size-12">${advanceDate[0]}</td>
