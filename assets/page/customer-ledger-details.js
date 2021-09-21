@@ -223,7 +223,7 @@ function displayCustomerList(response) {
                 advanceBtn = `  <button class="btn btn-icon btn-hover btn-sm btn-rounded btn-advance" data-type="Advance" data-id="${element.bill_no}">
                                 <i class="anticon anticon-edit  font-size-20 text-primary" title="Edit Advance"></i>
                             </button>
-                            <button type="button" class="btn btn-icon btn-hover btn-sm btn-rounded btn-ledger-delete" data-id="${element.customer_ledger_id}"><i class="anticon anticon-delete font-size-20 text-danger" title="Delete"></i> </button>`;
+                            <button type="button" class="btn btn-icon btn-hover btn-sm btn-rounded btn-advance-delete" data-id="${element.bill_no}"><i class="anticon anticon-delete font-size-20 text-danger" title="Delete"></i> </button>`;
             }
             advanceDetails += `<tr>
                             <td class="text-center border-right-0 border-bottom-0">${advanceDate[0]}</td>
@@ -421,6 +421,19 @@ $(document).on('click', '.btn-room-delete', function() {
 $(document).on('click', '.btn-ledger-delete', function() {
     if (confirm("Are you sure want to delete?")) {
         let object = { "list_key": "ledgerStatus", "customer_ledger_id": $(this).attr('data-id'), "status": 0 }
+        commonAjax('services.php', 'POST', object, '', '', '', {
+            "functionName": "locationReload"
+        });
+    }
+});
+
+/**
+ * Delete advance
+ */
+
+$(document).on('click', '.btn-advance-delete', function() {
+    if (confirm("Are you sure want to delete the advance?")) {
+        let object = { "list_key": "remove_advance", "bill_no": $(this).attr('data-id') }
         commonAjax('services.php', 'POST', object, '', '', '', {
             "functionName": "locationReload"
         });
