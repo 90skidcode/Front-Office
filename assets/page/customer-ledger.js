@@ -8,6 +8,8 @@ function displayCustomerListInit() {
 
 function displayCustomerList(response, dataTableId) {
     var tableHeader = [{
+        "data": "booking_no"
+    }, {
         "data": "customer_fname",
         mRender: function(data, type, row) {
             return row.customer_fname.toUpperCase();
