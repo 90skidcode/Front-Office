@@ -343,9 +343,7 @@ function displayCustomerList(response) {
     if (response.result.invoice_details) {
         response.result.invoice_details.forEach(element => {
 
-            var invoiceDate = new Date(element.created_at).toString().split("GMT");
             invoice += `<tr>
-                            <td class="text-center border-right-0 border-bottom-0">${invoiceDate[0]}</td>
                             <td class="text-center border-right-0 border-bottom-0">${element.invoice_no}</td> 
                             <td class="text-right border-right-0 border-bottom-0"> 
                                 <a class="btn btn-icon btn-hover btn-sm btn-rounded" href="/booking-print.html?invoice_id=${element.invoice_no}&type=hotel"  target="_blank" > 
