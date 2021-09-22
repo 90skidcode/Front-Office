@@ -55,25 +55,48 @@ function setBookingValue(responce) {
                              </tr>
                          `);*/
 
+
+
+    var html = "";
+    var total = 0;
+    var totalDiscount = 0;
+    var price = 0;
+
+    $.each(responce.result.details, function(index, value) {
+        html += `
+                    <tr class="thead-default">
+                        <td class="text-left">${value.room_category}</td>                        
+                        <td class="text-left">${value.hotel_from_date} / ${value.hotel_to_date}</td>
+                        <td class="text-center">${value.hotel_no_of_night}</td>
+                        <td class="text-center">${value.hotel_no_of_adults} / ${value.hotel_no_of_childs}</td>
+                        <td class="text-right">${numberWithCommas(value.hotel_price)}</td>
+                        <td class="text-right">${value.hotel_discount} %</td>
+                        <td class="text-right">${numberWithCommas(value.discount_amount)}</td>
+                        <td class="text-right">${value.room_cgst}% / ${value.room_sgst}%</td>
+                        <td class="text-right  font-weight-bolder">${numberWithCommas(value.room_total)}</td>
+                    </tr>
+            `;
+        total += Number(value.room_total);
+        totalDiscount += Number(value.discount_amount);
+        price += Number(value.hotel_price);
+    });
+
     $('.invoice-total').html(`
             <tbody>
             <tr>
                 <th>Total Discount Amount :</th>
-                <td>Rs.${master.total_discount}</td>
+                <td>Rs.${totalDiscount}</td>
             </tr>
             <tr>
                 <th>Total Amount Before Tax :</th>
-                <td>Rs.${master.total_beforetax}</td>
+                <td>Rs.${price - totalDiscount }</td>
             </tr>
            
             <tr>
                 <th>Total Tax :</th>
-                <td>Rs.${master.total_taxamount}</td>
+                <td>Rs.${total - (price - totalDiscount)}</td>
             </tr>           
-            <tr>
-                <th>Total Advance :</th>
-                <td>Rs.${master.advance}</td>
-            </tr>
+           
             <tr class="text-info">
                 <td>
                     <hr>
@@ -81,29 +104,11 @@ function setBookingValue(responce) {
                 </td>
                 <td>
                     <hr>
-                    <h5 class="text-primary">Rs.${master.total_amount}</h5>
+                    <h5 class="text-primary">${numberWithCommas(total)}</h5>
                 </td>
             </tr>
             </tbody>
     `);
-
-    var html = "";
-    $.each(responce.result.details, function(index, value) {
-        html += `
-                    <tr class="thead-default">
-                        <td class="text-left">${value.room_category}</td>                        
-                        <td class="text-left">${value.hotel_from_date} / ${value.hotel_to_date}</td>
-                        <td class="text-center">${value.hotel_no_of_night}</td>
-                        <td class="text-center">${value.hotel_no_of_night}</td>
-                        <td class="text-center">${value.hotel_no_of_adults} / ${value.hotel_no_of_childs}</td>
-                        <td class="text-right">RS.${value.hotel_price}</td>
-                        <td class="text-right">${value.hotel_discount} %</td>
-                        <td class="text-right">RS.${value.discount_amount}</td>
-                        <td class="text-right">${value.room_cgst}% / ${value.room_sgst}%</td>
-                        <td class="text-right  font-weight-bolder">RS.${value.room_total}</td>
-                    </tr>
-            `;
-    })
 
     $(".room-details").html(html);
 }
