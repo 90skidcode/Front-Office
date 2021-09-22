@@ -25,6 +25,7 @@ function checkEditorAddBooking(databasename, conditionkey, imageFlag) {
 
 function setBookingValue(responce) {
     let master = responce.result.master[0];
+    let details = responce.result.details[0];
     $('.invoive-info').html(`  <div class="col-md-4 col-xs-12 invoice-client-info">
                 <h6>Billed To</h6>
                 <h6 class="m-0">${master.customer_title} ${master.customer_fname} ${master.customer_lname}</h6>
@@ -34,23 +35,25 @@ function setBookingValue(responce) {
             <div class="col-md-4 col-sm-6">
                 <h6>Order Information</h6>
                 <p class="m-0">Date : ${(new Date()).toDateString().replace('GMT+0530 (India Standard Time)' , '')}</p>
-                <p class="m-0">Booking No : ${master.process_no}</p>
+                <p class="m-0">Booking No : ${details.booking_no}</p>
             </div>
                 <div class="col-md-4 col-sm-6">
-                <h6 class="m-b-20">Invoice Number : <span><b>${master.invoice_no}</b></span></h6>
-                <h6 class="text-uppercase text-primary">Total Due :
-                    <span>Rs.${Number(master.total_amount)-Number(master.advance)}</span>
-                </h6>
+                <h6 class="m-b-20">Invoice Number : <span><b>${details.invoice_no}</b></span></h6>
+               
             </div>`);
 
+    /* 
+     <h6 class="text-uppercase text-primary">Total Due :
+                    <span>Rs.${Number(master.total_amount)-Number(master.advance)}</span>
+                </h6>
     $('.meal-details').html(`
-                            <tr>
-                                <td>${master.meal_plan_id}</td>
-                                <td>${master.meal_price}</td>
-                                <td>${master.meal_count}</td>
-                                <td>${master.meal_total}</td>
-                            </tr>
-                        `);
+                             <tr>
+                                 <td>${master.meal_plan_id}</td>
+                                 <td>${master.meal_price}</td>
+                                 <td>${master.meal_count}</td>
+                                 <td>${master.meal_total}</td>
+                             </tr>
+                         `);*/
 
     $('.invoice-total').html(`
             <tbody>
@@ -88,8 +91,7 @@ function setBookingValue(responce) {
     $.each(responce.result.details, function(index, value) {
         html += `
                     <tr class="thead-default">
-                        <td class="text-left">${value.room_category}</td>
-                        
+                        <td class="text-left">${value.room_category}</td>                        
                         <td class="text-left">${value.hotel_from_date} / ${value.hotel_to_date}</td>
                         <td class="text-center">${value.hotel_no_of_night}</td>
                         <td class="text-center">${value.hotel_no_of_night}</td>

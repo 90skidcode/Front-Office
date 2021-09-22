@@ -1218,7 +1218,6 @@ function checkdate(checkDate, date) {
     let currentDate = date.split(" ")
     let check = Date.parse(new Date(checkDate));
     currentDate = Date.parse(new Date(currentDate[0]));
-    console.log(check, currentDate);
     if (check < currentDate)
         return true;
     else

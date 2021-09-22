@@ -129,6 +129,8 @@ function displayCustomerList(response) {
     customerBookingDetails = response;
     fullDetails = response;
     var bookingArray = response.result.booking_details;
+
+    var bookingMaster = response.result.Booking_master[0];
     var roomNo = bookingArray.map(x => x.room_no);
     var bookingDate = new Date(bookingArray[0].hotel_from_date).toString().split("GMT");
     $('h4.float-left').html("Ledger Details");
@@ -149,6 +151,18 @@ function displayCustomerList(response) {
                             <li>
                                 <p><b>Room No</b></p>
                                 <p  class="room-no">${roomNo.toString()}</p>
+                            </li>
+                            <li>
+                                <p><b>Booking Type</b></p>
+                                <p  class="room-no">${ (bookingMaster.booking_type == 'I') ? 'Individual' : 'Group' }</p>
+                            </li>
+                            <li>
+                                <p><b>Booked Via</b></p>
+                                <p  class="room-no">${bookingMaster.travel_agency_name}</p>
+                            </li>
+                            <li>
+                                <p><b>Transaction No</b></p>
+                                <p  class="room-no">${bookingMaster.travel_agency_transaction_no}</p>
                             </li>
                             
                         </ul>`;
@@ -294,7 +308,6 @@ function displayCustomerList(response) {
                         </tr>`;
             mTotal = Number(element.meal_total);
         });
-
         $(".meals-details").html(mealsDetails);
     }
 
