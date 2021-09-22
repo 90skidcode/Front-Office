@@ -664,8 +664,8 @@ $(document).on('click', '.btn-full-checkout', function() {
 });
 
 function redirectToPrint(res) {
-    console.log(res);
     window.open('/booking-print.html?invoice_id=' + res.result + '&type=hotel', '_self');
+    window.open('/booking-print.html?invoice_id=' + res.result + '&type=miss', '_self');
 }
 
 /**
