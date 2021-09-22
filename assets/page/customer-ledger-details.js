@@ -246,7 +246,7 @@ function displayCustomerList(response) {
                             <td class="text-center border-right-0 border-bottom-0">${element.description} </td>
                             <td class="text-right border-right-0 border-bottom-0">${numberWithCommas(element.amount)}</td>
                             <td class="text-right border-right-0 border-bottom-0">
-                                <a class="btn btn-icon btn-hover btn-sm btn-rounded" href="/advance-print.html?id=${element.bill_no}"  target="_blank" data-room="${element.room_no}" data-type="swap"> 
+                                <a class="btn btn-icon btn-hover btn-sm btn-rounded" href="/advance-print.html?id=${element.bill_no}"  target="_blank" > 
                                 <i class="anticon anticon-printer  font-size-20 text-primary" title="Bill Swap"></i> </a>  
                                 ${advanceBtn}                                                             
                             </td>
@@ -334,7 +334,34 @@ function displayCustomerList(response) {
         });
 
         $(".miscellaneous-details").html(miscellaneousDetails);
+
     }
+
+
+
+    var invoice = '';
+    if (response.result.invoice_details) {
+        response.result.invoice_details.forEach(element => {
+
+            var invoiceDate = new Date(element.created_at).toString().split("GMT");
+            invoice += `<tr>
+                            <td class="text-center border-right-0 border-bottom-0">${invoiceDate[0]}</td>
+                            <td class="text-center border-right-0 border-bottom-0">${element.invoice_no}</td> 
+                            <td class="text-right border-right-0 border-bottom-0"> 
+                                <a class="btn btn-icon btn-hover btn-sm btn-rounded" href="/booking-print.html?invoice_id=${element.invoice_no}&type=hotel"  target="_blank" > 
+                                    <i class="anticon anticon-printer  font-size-20 text-primary" title="Bill Hotel"></i> 
+                                </a>  
+                                <a class="btn btn-icon btn-hover btn-sm btn-rounded" href="/booking-print.html?invoice_id=${element.invoice_no}&type=miss"  target="_blank" > 
+                                    <i class="anticon anticon-file-ppt  font-size-20 text-primary" title="Bill Miscellaneous"></i> 
+                                </a>  
+                            </td>
+                        </tr>`;
+        });
+    }
+    $(".invoice-details").html(invoice);
+
+
+
 
     /**
      * Summary
@@ -640,7 +667,7 @@ $(document).on('click', '.btn-full-checkout', function() {
 
 function redirectToPrint(res) {
     console.log(res);
-    window.open('/booking-print.html?invoice_id=' + res.result, '_self');
+    window.open('/booking-print.html?invoice_id=' + res.result + '&type=hotel', '_self');
 }
 
 /**
