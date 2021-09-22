@@ -9,6 +9,7 @@ listMealPlan();
 let hTotal = 0;
 let rTotal = 0;
 let mTotal = 0;
+let miTotal = 0;
 var customerBookingDetails = '';
 $(document).ready(function() {
     listCountry();
@@ -268,9 +269,9 @@ function displayCustomerList(response) {
         }
     });
     HotelDetails += `<tr class="bg">
-    <td class="text-right border-right-0 border-bottom-0 font-size-20" colspan='4'>Total</td>
-    <td class="text-right border-right-0 border-bottom-0 font-size-20" >${numberWithCommas(hTotal)}</td>
-</tr>`;
+                        <td class="text-right border-right-0 border-bottom-0 font-size-20" colspan='4'>Total</td>
+                        <td class="text-right border-right-0 border-bottom-0 font-size-20" >${numberWithCommas(hTotal)}</td>
+                    </tr>`;
     $(".hotel-details").html(HotelDetails);
 
 
@@ -297,6 +298,31 @@ function displayCustomerList(response) {
         $(".meals-details").html(mealsDetails);
     }
 
+
+    var miscellaneousDetails = '';
+    miTotal = 0;
+    var actionmiscellaneous = '';
+    if (response.result.Miscellaneous) {
+        response.result.Miscellaneous.forEach(element => {
+            if (checkdate(response.result.audit_date, element.created_at)) {
+                actionmiscellaneous = `  <button class="btn btn-icon btn-hover btn-sm btn-rounded edit-miscellaneous" data-id="${element.miscellaneous_expenses_id}">
+                                    <i class="anticon anticon-edit font-size-20 text-primary" title="Edit Miscellaneous"></i>
+                                </button>
+                                <button type="button" class="btn btn-icon btn-hover btn-sm btn-rounded btn-ledger-delete" data-id="${element.customer_ledger_id}"><i class="anticon anticon-delete font-size-20 text-danger" title="Delete"></i> </button>`;
+            }
+            var miscellaneousDate = new Date(element.created_at).toString().split("GMT");
+            miscellaneousDetails += `<tr>
+                            <td class="text-center border-right-0 border-bottom-0">${miscellaneousDate[0]}</td>
+                            <td class="text-center border-right-0 border-bottom-0">${element.description}</td>                           
+                            <td class="text-right border-right-0 border-bottom-0">${numberWithCommas(element.miscellaneous_total)}</td>
+                            <td class="text-right border-right-0 border-bottom-0">${actionmiscellaneous}</td>
+                        </tr>`;
+            miTotal += Number(element.miscellaneous_total);
+        });
+
+        $(".miscellaneous-details").html(miscellaneousDetails);
+    }
+
     /**
      * Summary
      */
@@ -307,7 +333,8 @@ function displayCustomerList(response) {
                         <div class="list" data-id="v-pills-leadger-tab"> <p> Hotel Bill </p> <p>${ numberWithCommas(hTotal)} </p></div>
                         <div class="list" data-id="v-pills-leadger-tab"> <p> Advance  </p> <p>${ numberWithCommas(aTotal)} </p></div>
                         <div class="list" data-id="v-pills-leadger-tab"> <p> Meal Total </p> <p>${ numberWithCommas(mTotal)} </p></div>
-                        <div class="list font-size-16 font-weight-bold" data-id="v-pills-leadger-tab"> <p> Total </p> <p>${ numberWithCommas(lTotal-aTotal+hTotal + mTotal)} </p></div>
+                        <div class="list" data-id="v-pills-leadger-tab"> <p> Miscellaneous Total </p> <p>${ numberWithCommas(miTotal)} </p></div>
+                        <div class="list font-size-16 font-weight-bold d-none" data-id="v-pills-leadger-tab"> <p> Total </p> <p>${ numberWithCommas(lTotal-aTotal+hTotal + mTotal)} </p></div>
                     </div>`;
 
     $(".summary").html(summary);
@@ -716,3 +743,58 @@ $(document).on('blur', '[name = "customer_phone"]', function() {
         showToast("Enter Valid Phone No", "error");
     }
 })
+
+
+/**
+ * Add Model Miscellaneous Show
+ */
+$(document).on('click', '.btn-miscellaneous', function() {
+    $("#room-miscellaneous").modal('show');
+    $("#miscellaneous-form")[0].reset();
+    $(".select2").val('').trigger('change');
+    $('.btn-miscellaneous-save').attr('data-type', 'new');
+});
+
+$(document).on('keyup blur', '.miscellaneous-calc', function() {
+    let price = $('[name="miscellaneous_amount"]').val();
+    let cgst = $('[name="miscellaneous_cgst"]').val();
+    let sgst = $('[name="miscellaneous_sgst"]').val();
+    if (price && cgst && sgst) {
+        let gst = (Number(price) / 100) * (Number(cgst) + Number(sgst))
+        $('[name="miscellaneous_total"]').val((Number(price) + gst).toFixed(2));
+    }
+});
+
+$(document).on('click', '.btn-miscellaneous-save', function() {
+    if (checkRequired('#miscellaneous-form')) {
+        let object = $("#miscellaneous-form").serializeObject();
+        object['booking_no'] = $(".booking-id").text();
+        object['room_no'] = $(".room-no").text();
+        object['miscellaneous_payment_type'] = $('[name="payment_mode"]').val();
+        object['list_key'] = 'MiscellaneousInsert';
+        if ($(this).attr('data-type') == 'edit') {
+            object['list_key'] = 'MiscellaneousUpdate';
+            object['miscellaneous_expenses_id'] = $(this).attr('data-id');
+        }
+        commonAjax('services.php', 'POST', object, '', '', '', {
+            "functionName": "locationReload"
+        });
+    }
+});
+
+/**
+ * Edit Meal
+ */
+
+$(document).on('click', '.edit-miscellaneous', function() {
+    $("#room-miscellaneous").modal('show');
+    let data = customerBookingDetails.result.Miscellaneous.find(x => x.miscellaneous_expenses_id === $(this).attr('data-id'));
+    $('#miscellaneous-form [name="miscellaneous_expenses"]').val(data.miscellaneous_expenses).trigger('change');
+    $('#miscellaneous-form [name="payment_mode"]').val(data.miscellaneous_payment_type).trigger('change');
+    $('#miscellaneous-form [name="miscellaneous_amount"]').val(data.miscellaneous_amount);
+    $('#miscellaneous-form [name="miscellaneous_cgst"]').val(data.miscellaneous_cgst);
+    $('#miscellaneous-form [name="miscellaneous_sgst"]').val(data.miscellaneous_sgst);
+    $('#miscellaneous-form [name="miscellaneous_total"]').val(data.miscellaneous_total);
+    $('.btn-miscellaneous-save').attr('data-id', $(this).attr('data-id'));
+    $('.btn-miscellaneous-save').attr('data-type', 'edit');
+});
