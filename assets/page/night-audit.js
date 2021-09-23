@@ -68,10 +68,10 @@ function nightAuditDom(responce) {
     let reservationHtml = `<table class="table table-bordered">
     <thead class="thead-light">
         <tr>
+        <th class="text-left border-right-0 border-bottom-0">Reservation NO</th>
             <th class="text-left border-right-0 border-bottom-0">Room Type</th>
             <th class="text-left border-right-0 border-bottom-0">No of Night</th>
             <th class="text-left border-right-0 border-bottom-0">From Date/To Date</th>
-            <th class="text-center border-right-0 border-bottom-0">Rooms Number</th>
             <th class="text-center border-right-0 border-bottom-0">No of Guest (Adult/Child)</th>
             <th class="text-right border-right-0 border-bottom-0 ">Price</th>
             <th class="text-right border-right-0 border-bottom-0">Discount%</th>
@@ -81,19 +81,21 @@ function nightAuditDom(responce) {
     </thead>
     <tbody class="room-details">`;
     reservation.forEach(element => {
-        reservationHtml += `<tr>
+        if (element.reservation_status != 'N') {
+            reservationHtml += `<tr>
+                            <td class="text-center border-right-0 border-bottom-0">${element.reservation_no}</td>
                             <td class="text-center border-right-0 border-bottom-0">${element.room_category}</td>
                             <td class="text-right border-right-0 border-bottom-0">${element.hotel_no_of_night}</td>
                             <td class="text-center border-right-0 border-bottom-0">${element.hotel_from_date} / ${element.hotel_to_date}</td>
-                            <td class="text-center border-right-0 border-bottom-0">${element.room_no} </td>
                             <td class="text-center border-right-0 border-bottom-0">${element.hotel_no_of_adults} / ${element.hotel_no_of_childs}</td>
                             <td class="text-right border-right-0 border-bottom-0 ">${element.hotel_price}</td>
                             <td class="text-right border-right-0 border-bottom-0">${element.hotel_discount}%</td>
                             <td class="text-right border-bottom-0 item-total">${element.room_total}</td>
-                            <td class="text-right border-bottom-0 item-total"><a href="" title="No Show" class="btn btn-icon btn-hover btn-sm btn-rounded ">
+                            <td class="text-right border-bottom-0 item-total"><button type="button" data-reservation-no="${element.reservation_no}" title="No Show" class="btn btn-icon btn-hover btn-sm btn-rounded no-show" data->
                             <i class="anticon anticon-logout text-danger  font-size-20"></i>
-                        </a> </td>
+                        </button> </td>
                         </tr>`;
+        }
     });
     reservationHtml += `</tbody></table>`;
     nightAuditHtml += `<div class="card m-b-10">
@@ -216,4 +218,19 @@ $(document).on('click', '.plus-one-day', function() {
     commonAjax('services.php', 'POST', data, '', '', '', {
         "functionName": "locationReload"
     });
+});
+
+
+$(document).on('click', '.no-show', function() {
+    var data = {
+        "query": 'update',
+        "databasename": 'reservation_master_new',
+        "values": {
+            "reservation_status": 'N'
+        },
+        "condition": {
+            "reservation_no": $(this).attr('data-reservation-no')
+        }
+    }
+    commonAjax('database.php', 'POST', data, '', 'Processed successfully', '', { 'functionName': 'locationReload' });
 });

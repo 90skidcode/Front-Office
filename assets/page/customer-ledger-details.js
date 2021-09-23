@@ -231,10 +231,10 @@ function displayCustomerList(response) {
     var advanceDetails = '';
     let aTotal = 0;
     response.result.Advance.forEach(element => {
-        var advanceDate = new Date(element.created_at).toString().split("GMT");
+        var advanceDate = new Date(element.income_date).toString().split("GMT");
         let advanceBtn = '';
         if (element.status == 1) {
-            if (checkdate(response.result.audit_date, element.created_at)) {
+            if (checkdate(response.result.audit_date, element.income_date)) {
                 advanceBtn = `  <button class="btn btn-icon btn-hover btn-sm btn-rounded btn-advance  c-status" data-type="Advance" data-id="${element.bill_no}">
                                 <i class="anticon anticon-edit  font-size-20 text-primary" title="Edit Advance"></i>
                             </button>
