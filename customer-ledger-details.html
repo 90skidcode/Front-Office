@@ -74,6 +74,7 @@
                                                 <li><a class="nav-link text-left show" id="v-pills-meals-tab" data-toggle="pill" href="#v-pills-meals" role="tab" aria-controls="v-pills-meals" aria-selected="false">Meals Details</a></li>
                                                 <li><a class="nav-link text-left show" id="v-pills-miscellaneous-tab" data-toggle="pill" href="#v-pills-miscellaneous" role="tab" aria-controls="v-pills-miscellaneous" aria-selected="false">Miscellaneous </a></li>
                                                 <li><a class="nav-link text-left show" id="v-pills-invoice-tab" data-toggle="pill" href="#v-pills-invoice" role="tab" aria-controls="v-pills-invoice" aria-selected="false">Invoice </a></li>
+                                                <li><a class="nav-link text-left show" id="v-pills-docs-tab" data-toggle="pill" href="#v-pills-docs" role="tab" aria-controls="v-pills-docs" aria-selected="false">Docs </a></li>
                                                 <li><a class="nav-link text-left show" id="v-pills-room-tab" data-toggle="pill" href="#v-pills-room" role="tab" aria-controls="v-pills-room" aria-selected="false">Booking Details</a></li>
                                             </ul>
                                         </div>
@@ -95,10 +96,10 @@
                                                     </table>
                                                 </div>
                                                 <div class="tab-pane fade show" id="v-pills-room" role="tabpanel" aria-labelledby="v-pills-room-tab">
-                                                    <button class="btn btn-primary float-right m-b-10 btn-checkout c-status" data-toggle="modal" data-target="#checkout">Checkout</button>
+                                                    <button class="btn btn-danger float-right m-b-10 btn-checkout c-status" data-toggle="modal" data-target="#checkout">Checkout</button>
                                                     <button type="button" class="btn btn-primary float-right m-b-10 m-l-10 m-r-10 hotel-room-add c-status" data-toggle="modal" data-target="#room-swap" data-type="add">
                                                         Add Room </button>
-                                                    <a class="btn btn-warning float-right m-b-10 m-l-10 m-r-10 bill-sample c-status" target="_blank">Bill Sample</a>
+                                                    <a class="btn btn-success float-right m-b-10  bill-sample c-status" target="_blank">Bill Sample</a>
                                                     <table class="table table-bordered room-full-details">
                                                         <thead class="thead-light">
                                                             <tr>
@@ -200,7 +201,7 @@
                                                             </tr>
                                                         </thead>
                                                         <tbody class="miscellaneous-details">
-                                                            <td colspan="5" class="text-center">No Records Found.</td>
+                                                            <td colspan="4" class="text-center">No Records Found.</td>
                                                         </tbody>
                                                     </table>
                                                 </div>
@@ -217,6 +218,24 @@
                                                             <td colspan="3" class="text-center">No Records Found.</td>
                                                         </tbody>
                                                     </table>
+                                                </div>
+
+                                                <div class="tab-pane fade" id="v-pills-docs" role="tabpanel" aria-labelledby="v-pills-docs-tab">
+                                                    <form id="docs-add">
+                                                        <div class="form-group col-md-2 d-none">
+                                                            <label for="inputEmail4">Docs</label>
+                                                            <input type="text" class="form-control" name="booking_doc">
+                                                        </div>
+                                                        <div class="form-group col-md-12">
+                                                            <label class="pointer btn btn-primary" for="upload">Upload Documnet
+                                                            Files</label>
+                                                            <input type="file" id="upload" accept="image/*">
+                                                        </div>
+                                                        <div class="row image-prev-area d-none">
+
+                                                        </div>
+                                                        <button type="button" class="btn btn-primary m-b-10 btn-upload c-status">Save</button>
+                                                    </form>
                                                 </div>
                                             </div>
                                         </div>

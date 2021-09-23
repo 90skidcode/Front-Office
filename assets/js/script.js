@@ -850,9 +850,9 @@ function multipleSetValue(responce, imageFlag) {
  * Based on the flag
  * @param {Booleen} imageFlag 
  */
-function docShow(imageFlag) {
+function docShow(imageFlag, ele) {
     if (imageFlag) {
-        uploadData = $('[name=customer_doc]').val().split(",");
+        (ele) ? uploadData = ele.val().split(","): uploadData = $('[name=customer_doc]').val().split(",");
         /**
          * To preload Image in edit  
          */
@@ -869,8 +869,13 @@ function docShow(imageFlag) {
                             <img class="w-100" src="http://glowmedia.in/frontoffice/admin/api/uploads/${v}" alt="">                        
                         </div>`;
             })
-            $(".image-prev-area").append(html);
-            $(".image-prev-area").removeClass('d-none');
+            if (ele) {
+                $("#v-pills-tabContent .image-prev-area").append(html);
+                $("#v-pills-tabContent .image-prev-area").removeClass('d-none');
+            } else {
+                $(".image-prev-area").append(html);
+                $(".image-prev-area").removeClass('d-none');
+            }
         }
     }
 }

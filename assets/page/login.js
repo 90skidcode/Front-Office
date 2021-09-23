@@ -1,4 +1,5 @@
 $(document).ready(function() {
+    localStorage.clear();
     $(document).on("click", ".sign-in", function() {
         loader(true);
         let data = { "list_key": "master_login", "user_name": $('#userName').val(), "user_password": $('#password').val() }
