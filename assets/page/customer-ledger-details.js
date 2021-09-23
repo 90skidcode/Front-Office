@@ -390,7 +390,6 @@ function displayCustomerList(response) {
         $('[name="booking_doc"]').val(bookingMaster.booking_documents);
         docShow(true, $('[name="booking_doc"]'));
     }
-
 }
 
 $(document).on('click', '.swap-bill-room-select,.btn-split-bill', function() {

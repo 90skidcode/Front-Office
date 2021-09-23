@@ -310,8 +310,6 @@ $(document).ready(function() {
     }
 
 
-
-
     /**
      * Checking Audit
      */
@@ -328,8 +326,8 @@ $(document).ready(function() {
 
 function checkAudit(responce) {
     var now = new Date();
-    auditDateLocal = responce.result.audit_date;
-    if (!checkdate(responce.result.audit_date, now.toISOString().slice(0, 16))) {
+    auditDateLocal = responce.result;
+    if (!checkdate(auditDateLocal, now.toISOString().slice(0, 16))) {
         $('.no-add, .c-status').addClass('d-none');
     }
 }
