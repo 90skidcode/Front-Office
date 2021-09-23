@@ -158,10 +158,8 @@ function nightAuditDom(responce) {
                         <thead class="thead-light">
                             <tr>
                                 <th class="text-center border-right-0 border-bottom-0">Date</th>
-                                <th class="text-right border-right-0 border-bottom-0">Invoice No</th>
                                 <th class="text-center border-right-0 border-bottom-0">Booking No</th>
-                                <th class="text-center border-right-0 border-bottom-0">Payment Type</th>
-                                <th class="text-right border-right-0 border-bottom-0 ">Total Amount</th>
+                                <th class="text-right border-right-0 border-bottom-0 ">Invoice No</th>
                                 <th class="text-right border-right-0 border-bottom-0">Recived Amount</th>
                             </tr>
                         </thead>
@@ -169,11 +167,9 @@ function nightAuditDom(responce) {
     collection.forEach(element => {
         nightAuditHtml += `<tr>
                                 <td class="text-center border-right-0 border-bottom-0">${element.created_at} </td>
-                                <td class="text-right border-right-0 border-bottom-0">${element.invoice_no}</td>
-                                <td class="text-center border-right-0 border-bottom-0">${element.process_no} </td>
-                                <td class="text-center border-right-0 border-bottom-0">${element.payment_type}</td>
-                                <td class="text-right border-right-0 border-bottom-0 ">${element.total_amount}</td>
-                                <td class="text-right border-right-0 border-bottom-0">${element.total_received}</td>
+                                <td class="text-right border-right-0 border-bottom-0">${element.process_no}</td>
+                                <td class="text-center border-right-0 border-bottom-0">${(typeof(element.advance_no) != 'undefined') ? element.advance_no : element.invoice_no} </td>
+                                <td class="text-center border-right-0 border-bottom-0">${ numberWithCommas((typeof(element.advance_amount) != 'undefined') ? element.advance_amount : element.total_received)}</td>
                             
                             </tr>`;
     });
@@ -195,7 +191,6 @@ function nightAuditDom(responce) {
     <thead class="thead-light">
         <tr>
             <th class="text-center border-right-0 border-bottom-0">Date</th>
-            <th class="text-right border-right-0 border-bottom-0">Invoice No</th>
             <th class="text-center border-right-0 border-bottom-0">Booking No</th>
             <th class="text-center border-right-0 border-bottom-0">Room No</th>
             <th class="text-right border-right-0 border-bottom-0 ">Income Type</th>
@@ -206,7 +201,6 @@ function nightAuditDom(responce) {
     income.forEach(element => {
         nightAuditHtml += `<tr>
     <td class="text-center border-right-0 border-bottom-0">${element.income_date} </td>
-    <td class="text-right border-right-0 border-bottom-0">${element.customer_ledger_id}</td>
     <td class="text-center border-right-0 border-bottom-0">${element.booking_no} </td>
     <td class="text-center border-right-0 border-bottom-0">${element.room_no}</td>
     <td class="text-right border-right-0 border-bottom-0 ">${element.income_type}</td>
