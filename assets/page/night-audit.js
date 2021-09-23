@@ -216,10 +216,8 @@ function nightAuditDom(responce) {
 
     var now = new Date();
     auditDateLocal = responce.result;
-    let currentDate = now.split(" ");
-    let check = Date.parse(new Date(auditDate));
-    currentDate = Date.parse(new Date(currentDate[0]));
-    if (check > currentDate) {
+    let check = new Date(auditDate);
+    if (new Date(formatDate(now)) < check) {
         $('[onclick="nightAudit()"], td .btn').addClass('d-none');
     }
 

@@ -327,13 +327,24 @@ $(document).ready(function() {
 function checkAudit(responce) {
     var now = new Date();
     auditDateLocal = responce.result;
-    let currentDate = now.split(" ");
-    let check = Date.parse(new Date(auditDateLocal));
-    currentDate = Date.parse(new Date(currentDate[0]));
-    if (check > currentDate) {
+    let check = new Date(auditDateLocal);
+    if (new Date(formatDate(now)) < check) {
         $('.no-add, .c-status').addClass('d-none');
     }
 
+}
+
+function formatDate(date) {
+    var dd = date.getDate();
+    var mm = date.getMonth() + 1; //January is 0!
+    var yyyy = date.getFullYear();
+    if (dd < 10) {
+        dd = '0' + dd;
+    }
+    if (mm < 10) {
+        mm = '0' + mm;
+    }
+    return yyyy + '-' + mm + '-' + dd;
 }
 
 
