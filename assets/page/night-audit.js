@@ -12,9 +12,7 @@ function nightAuditDom(responce) {
     var booking = responce.result.booking;
     auditDate = responce.result.audit_date;
     var now = new Date();
-    if (!checkdate(auditDate, now.toISOString().slice(0, 16))) {
-        $('[onclick="nightAudit()"]').addClass('d-none');
-    }
+
     $('h4').html('Night Audit - ' + auditDate);
     var bookingED = 'data-toggle="collapse"';
     var bookingIcon = 'bg-danger-light';
@@ -215,6 +213,10 @@ function nightAuditDom(responce) {
     nightAuditHtml += `</tbody></table></div> </div>`;
 
     $("#night-audit").html(nightAuditHtml);
+
+    if (!checkdate(auditDate, now.toISOString().slice(0, 16))) {
+        $('[onclick="nightAudit()"], td .btn').addClass('d-none');
+    }
 }
 
 function nightAudit() {
