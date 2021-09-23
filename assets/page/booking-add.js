@@ -159,8 +159,8 @@ function setCheckinValueByReservation(responce) {
 
             }
             $('[name="meal_count"]').trigger('blur');
-            $('.no_of_adults').val('');
-            $('.no_of_childs').val('');
+            // $('.no_of_adults').val('');
+            //  $('.no_of_childs').val('');
         }, 2000);
     })
     docShow(true);
