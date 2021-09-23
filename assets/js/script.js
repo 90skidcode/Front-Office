@@ -1223,3 +1223,8 @@ function checkdate(checkDate, date) {
     else
         return false;
 }
+
+$(document).on('click', '[type="datetime-local"]', function() {
+    var today = new Date();
+    $('[type="datetime-local"]').attr('min', today.toISOString().slice(0, 16));
+})
