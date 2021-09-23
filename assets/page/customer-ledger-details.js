@@ -380,7 +380,7 @@ function displayCustomerList(response) {
     var allCheckOutStatus = true;
     response.result.booking_details.forEach(element => {
         if (element.room_status != "O")
-            checkOutStatus = false;
+            allCheckOutStatus = false;
     });
 
     if (allCheckOutStatus)
