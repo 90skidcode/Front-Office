@@ -58,6 +58,9 @@ function nightAuditDom(responce) {
     <div id="bookingDetails" class="card-body collapse" aria-labelledby="booking" data-parent="#night-audit">  ${ bookingHtml }  </div>
     </div>`;
 
+
+
+
     var reservation = responce.result.reservation;
     var reservationED = 'data-toggle="collapse"';
     var reservationIcon = 'bg-danger-light';
@@ -69,12 +72,8 @@ function nightAuditDom(responce) {
     <thead class="thead-light">
         <tr>
         <th class="text-left border-right-0 border-bottom-0">Reservation NO</th>
-            <th class="text-left border-right-0 border-bottom-0">Room Type</th>
-            <th class="text-left border-right-0 border-bottom-0">No of Night</th>
-            <th class="text-left border-right-0 border-bottom-0">From Date/To Date</th>
-            <th class="text-center border-right-0 border-bottom-0">No of Guest (Adult/Child)</th>
-            <th class="text-right border-right-0 border-bottom-0 ">Price</th>
-            <th class="text-right border-right-0 border-bottom-0">Discount%</th>
+            <th class="text-left border-right-0 border-bottom-0">Name</th>
+            <th class="text-left border-right-0 border-bottom-0">Phone</th>
             <th class="text-right border-bottom-0 item-total">Total</th>
             <th class="text-right border-bottom-0">Action</th>
         </tr>
@@ -84,13 +83,9 @@ function nightAuditDom(responce) {
         if (element.reservation_status != 'N') {
             reservationHtml += `<tr>
                             <td class="text-center border-right-0 border-bottom-0">${element.reservation_no}</td>
-                            <td class="text-center border-right-0 border-bottom-0">${element.room_category}</td>
-                            <td class="text-right border-right-0 border-bottom-0">${element.hotel_no_of_night}</td>
-                            <td class="text-center border-right-0 border-bottom-0">${element.hotel_from_date} / ${element.hotel_to_date}</td>
-                            <td class="text-center border-right-0 border-bottom-0">${element.hotel_no_of_adults} / ${element.hotel_no_of_childs}</td>
-                            <td class="text-right border-right-0 border-bottom-0 ">${element.hotel_price}</td>
-                            <td class="text-right border-right-0 border-bottom-0">${element.hotel_discount}%</td>
-                            <td class="text-right border-bottom-0 item-total">${element.room_total}</td>
+                            <td class="text-left border-right-0 border-bottom-0">${element.customer_fname}</td>
+                            <td class="text-left border-right-0 border-bottom-0">${element.customer_phone}</td>
+                            <td class="text-right border-bottom-0 item-total">${numberWithCommas(element.total_amount)}</td>
                             <td class="text-right border-bottom-0 item-total"><button type="button" data-reservation-no="${element.reservation_no}" title="No Show" class="btn btn-icon btn-hover btn-sm btn-rounded no-show" data->
                             <i class="anticon anticon-logout text-danger  font-size-20"></i>
                         </button> </td>
@@ -105,18 +100,45 @@ function nightAuditDom(responce) {
     <div id="reservationDetails" class="card-body collapse" aria-labelledby="reservation" data-parent="#night-audit">  ${ reservationHtml }  </div>
     </div>`;
 
+
+
+
+
+
     var expenses = responce.result.expenses;
-    var expensesED = 'data-toggle="collapse"';
-    var expensesIcon = 'bg-danger-light';
-    if (!expenses.length) {
-        expensesED = '';
-        expensesIcon = 'bg-success-light opacity-08 ';
-    }
+    let expensesHtml = `<table class="table table-bordered">
+    <thead class="thead-light">
+        <tr>
+        <th class="text-center border-right-0 border-bottom-0">Expenses Id</th>
+            <th class="text-left border-right-0 border-bottom-0">Type</th>
+            <th class="text-left border-right-0 border-bottom-0">Payment Mode</th>
+            <th class="text-right border-bottom-0 item-total">Description</th>
+            <th class="text-right border-bottom-0 item-total">Remarks</th>
+            <th class="text-right border-bottom-0">Amount</th>
+        </tr>
+    </thead>
+    <tbody class="room-details">`;
+    expenses.forEach(element => {
+        if (element.status == '1') {
+            expensesHtml += `<tr>
+                            <td class="text-center border-right-0 border-bottom-0">${element.expenses_id}</td>
+                            <td class="text-left border-right-0 border-bottom-0">${element.expenses_type}</td>
+                            <td class="text-left border-right-0 border-bottom-0">${element.payment_mode}</td>
+                            <td class="text-left border-right-0 border-bottom-0">${element.expenses_description}</td>
+                            <td class="text-left border-right-0 border-bottom-0">${element.expenses_remarks}</td>
+                            <td class="text-right border-bottom-0 item-total">${numberWithCommas(element.expenses_amount)}</td>
+                            
+                        </tr>`;
+        }
+    });
+    expensesHtml += `</tbody></table>`;
+
+
     nightAuditHtml += `<div class="card m-b-10">
-    <div class="card-header ${expensesIcon}" id="expenses">
-        <h5 class="p-10 m-0"><a href="#!" ${ expensesED } style="color: black;"  data-target="#expensesDetails" aria-expanded="true" aria-controls="expenses">Expences</a><icon class="p-r-5">${(expenses.length) ? expenses.length : ''}</icon></h5>
+    <div class="card-header bg-success-light opacity-08" id="expenses">
+        <h5 class="p-10 m-0"><a href="#!" data-toggle="collapse" style="color: black;"  data-target="#expensesDetails" aria-expanded="true" aria-controls="expenses">Expences</a><icon class="p-r-5">${(expenses.length) ? expenses.length : ''}</icon></h5>
     </div>
-    <div id="expensesDetails" class="card-body collapse" aria-labelledby="expenses" data-parent="#night-audit"></div>
+    <div id="expensesDetails" class="card-body collapse" aria-labelledby="expenses" data-parent="#night-audit">${expensesHtml}</div>
     </div>`;
 
     var collection = responce.result.collection;
@@ -133,27 +155,27 @@ function nightAuditDom(responce) {
     <div id="collectionDetails" class="card-body collapse" aria-labelledby="collection" data-parent="#night-audit">`;
 
     nightAuditHtml += `<table class="table table-bordered">
-    <thead class="thead-light">
-        <tr>
-            <th class="text-center border-right-0 border-bottom-0">Date</th>
-            <th class="text-right border-right-0 border-bottom-0">Invoice No</th>
-            <th class="text-center border-right-0 border-bottom-0">Booking No</th>
-            <th class="text-center border-right-0 border-bottom-0">Payment Type</th>
-            <th class="text-right border-right-0 border-bottom-0 ">Total Amount</th>
-            <th class="text-right border-right-0 border-bottom-0">Recived Amount</th>
-        </tr>
-    </thead>
-    <tbody class="room-details">`;
+                        <thead class="thead-light">
+                            <tr>
+                                <th class="text-center border-right-0 border-bottom-0">Date</th>
+                                <th class="text-right border-right-0 border-bottom-0">Invoice No</th>
+                                <th class="text-center border-right-0 border-bottom-0">Booking No</th>
+                                <th class="text-center border-right-0 border-bottom-0">Payment Type</th>
+                                <th class="text-right border-right-0 border-bottom-0 ">Total Amount</th>
+                                <th class="text-right border-right-0 border-bottom-0">Recived Amount</th>
+                            </tr>
+                        </thead>
+                        <tbody class="room-details">`;
     collection.forEach(element => {
         nightAuditHtml += `<tr>
-    <td class="text-center border-right-0 border-bottom-0">${element.created_at} </td>
-    <td class="text-right border-right-0 border-bottom-0">${element.invoice_no}</td>
-    <td class="text-center border-right-0 border-bottom-0">${element.process_no} </td>
-    <td class="text-center border-right-0 border-bottom-0">${element.payment_type}</td>
-    <td class="text-right border-right-0 border-bottom-0 ">${element.total_amount}</td>
-    <td class="text-right border-right-0 border-bottom-0">${element.total_received}</td>
-   
-</tr>`;
+                                <td class="text-center border-right-0 border-bottom-0">${element.created_at} </td>
+                                <td class="text-right border-right-0 border-bottom-0">${element.invoice_no}</td>
+                                <td class="text-center border-right-0 border-bottom-0">${element.process_no} </td>
+                                <td class="text-center border-right-0 border-bottom-0">${element.payment_type}</td>
+                                <td class="text-right border-right-0 border-bottom-0 ">${element.total_amount}</td>
+                                <td class="text-right border-right-0 border-bottom-0">${element.total_received}</td>
+                            
+                            </tr>`;
     });
     nightAuditHtml += `</tbody></table></div> </div>`;
 
@@ -188,7 +210,7 @@ function nightAuditDom(responce) {
     <td class="text-center border-right-0 border-bottom-0">${element.booking_no} </td>
     <td class="text-center border-right-0 border-bottom-0">${element.room_no}</td>
     <td class="text-right border-right-0 border-bottom-0 ">${element.income_type}</td>
-    <td class="text-right border-right-0 border-bottom-0">${element.amount}</td>
+    <td class="text-right border-right-0 border-bottom-0">${numberWithCommas(element.amount)}</td>
    
 </tr>`;
     });
