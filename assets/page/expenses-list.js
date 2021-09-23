@@ -25,14 +25,18 @@ function displayExpensesList(response, dataTableId) {
     }, /* EDIT */ /* DELETE */ {
         "data": "room_name",
         mRender: function(data, type, row) {
-            return `<td class="text-right">
-                    <a href="expenses-add.html?id=${row.expenses_id}" class="btn btn-icon btn-hover btn-sm btn-rounded pull-right">
-                        <i class="anticon anticon-edit text-primary"></i>
-                    </a>
-                    <button class="btn btn-icon btn-hover btn-sm btn-rounded btn-delete-table" data-delete="${row.expenses_id}" data-toggle="modal" data-target="#delete">
-                        <i class="anticon anticon-delete text-danger"></i>
-                    </button>
-                </td>`;
+            if (checkdate(auditDateLocal, row.expenses_date)) {
+                return `<td class="text-right">
+                        <a href="expenses-add.html?id=${row.expenses_id}" class="btn btn-icon btn-hover btn-sm btn-rounded pull-right">
+                            <i class="anticon anticon-edit text-primary"></i>
+                        </a>
+                        <button class="btn btn-icon btn-hover btn-sm btn-rounded btn-delete-table" data-delete="${row.expenses_id}" data-toggle="modal" data-target="#delete">
+                            <i class="anticon anticon-delete text-danger"></i>
+                        </button>
+                    </td>`;
+            } else {
+                return '';
+            }
         }
     }];
     dataTableDisplay(response.result, tableHeader, false, dataTableId)

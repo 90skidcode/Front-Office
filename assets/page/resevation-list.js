@@ -75,19 +75,19 @@ function displayReservationList(response, dataTableId) {
                     <a href="reservation-add.html?id=${row.reservation_no}" class="btn btn-icon btn-hover btn-sm btn-rounded pull-right">
                         <i class="anticon anticon-edit text-primary"></i>
                     </a>          
-                    <button class="btn btn-icon btn-hover btn-sm btn-rounded btn-advance" title='Add Advance' data-type="reservation-advance" data-customerid="${row.customer_id}" data-total="${row.total_amount}" data-advance="${row.advance}" data-reservation="${row.reservation_no}" data-toggle="modal" data-target="#advance-modal">
+                    <button class="btn btn-icon btn-hover btn-sm btn-rounded btn-advance no-add" title='Add Advance' data-type="reservation-advance" data-customerid="${row.customer_id}" data-total="${row.total_amount}" data-advance="${row.advance}" data-reservation="${row.reservation_no}" data-toggle="modal" data-target="#advance-modal">
                         <i class="anticon anticon-dollar text-primary"></i>
                     </button>         
-                    <button class="btn btn-icon btn-hover btn-sm btn-rounded btn-advance-list" data-type="reservation"  data-customerid="${row.customer_id}" data-total="${row.total_amount}" data-advance="${row.advance}" data-reservation="${row.reservation_no}" data-toggle="modal" data-target="#advance-list-modal">
+                    <button class="btn btn-icon btn-hover btn-sm btn-rounded btn-advance-list no-add" data-type="reservation"  data-customerid="${row.customer_id}" data-total="${row.total_amount}" data-advance="${row.advance}" data-reservation="${row.reservation_no}" data-toggle="modal" data-target="#advance-list-modal">
                         <i class="anticon anticon-solution text-primary"></i>
                     </button>     
                     <a href="reservation-print.html?id=${row.reservation_no}" class="btn btn-icon btn-hover btn-sm btn-rounded pull-right">
                         <i class="anticon anticon-printer text-primary"></i>
                     </a> 
-                    <a title="Convert To Booking" href="booking-add.html?type=reservation&id=${row.reservation_no}" class="btn btn-icon btn-hover btn-sm btn-rounded pull-right">
+                    <a title="Convert To Booking" href="booking-add.html?type=reservation&id=${row.reservation_no}" class="btn btn-icon btn-hover btn-sm btn-rounded pull-right no-add">
                         <i class="anticon anticon-plus text-primary"></i>
                     </a>                   
-                    <button  title='Checkout' class="btn btn-icon btn-hover btn-sm btn-rounded pull-right"  data-checkout="${row.reservation_no}" >
+                    <button type="button" title='No Show' class="btn btn-icon btn-hover btn-sm btn-rounded pull-right no-add no-show" data-reservation-no="${element.reservation_no}" >
                         <i class="anticon anticon-trash-o text-danger"></i>
                     </button>
                 </td>`;
@@ -112,3 +112,17 @@ $(document).on('click', ".btn-delete", function() {
     $("#delete").modal('hide');
     commonAjax('', 'POST', data, '', 'Record Deleted Sucessfully', '', { "functionName": "locationReload" });
 })
+
+$(document).on('click', '.no-show', function() {
+    var data = {
+        "query": 'update',
+        "databasename": 'reservation_master_new',
+        "values": {
+            "reservation_status": 'N'
+        },
+        "condition": {
+            "reservation_no": $(this).attr('data-reservation-no')
+        }
+    }
+    commonAjax('database.php', 'POST', data, '', 'Processed successfully', '', { 'functionName': 'locationReload' });
+});

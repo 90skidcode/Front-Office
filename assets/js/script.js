@@ -1,7 +1,7 @@
 /* Menu */
 
 let userData = localStorage.getItem("user");
-
+var auditDateLocal = '';
 if (!userData && location.pathname != '/' && location.pathname != '/index.html')
     window.location.href = 'index.html';
 else {
@@ -308,7 +308,32 @@ $(document).ready(function() {
             }
         })
     }
+
+
+
+
+    /**
+     * Checking Audit
+     */
+
+    let data = { "list_key": "GetNightaudit" };
+    commonAjax('services.php', 'POST', data, '', '', '', { "functionName": "checkAudit" });
 });
+
+
+/**
+ * 
+ * @returns 
+ */
+
+function checkAudit(responce) {
+    var now = new Date();
+    auditDateLocal = responce.result.audit_date;
+    if (!checkdate(responce.result.audit_date, now.toISOString().slice(0, 16))) {
+        $('.no-add, .c-status').addClass('d-none');
+    }
+}
+
 
 /**
  * To Serlize object

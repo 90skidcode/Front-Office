@@ -44,7 +44,7 @@ function nightAuditDom(responce) {
                             <td class="text-right border-right-0 border-bottom-0">${element.hotel_discount}%</td>
                             <td class="text-right border-bottom-0 item-total">${element.room_total}</td>
                             <td class="text-right border-bottom-0 item-total">
-                                        <a href="booking-add.html?id=CHK1&amp;type=checkout" title="Checkout Booking" class="btn btn-icon btn-hover btn-sm btn-rounded ">
+                                        <a href="customer-ledger-details.html?booking_no=${element.booking_no}&room_no=${element.room_no}" title="Checkout Booking" class="btn btn-icon btn-hover btn-sm btn-rounded ">
                                             <i class="anticon anticon-logout text-danger  font-size-20"></i>
                                         </a> 
                                         <button  title="+1 Day" data-booking-no="${element.booking_no}" data-room-no=${element.room_no} class="btn btn-icon btn-hover btn-sm btn-rounded plus-one-day">
@@ -221,7 +221,9 @@ function nightAuditDom(responce) {
 
 function nightAudit() {
     let data = { "list_key": "CloseNightaudit", "created_by": JSON.parse(userData)[0].employee_id, "audit_date": auditDate }
-    commonAjax('', 'POST', data, 'afterNightAudit', '', '');
+    commonAjax('services.php', 'POST', data, '', '', '', {
+        "functionName": "afterNightAudit"
+    });
 }
 
 function afterNightAudit(responce) {
@@ -229,9 +231,7 @@ function afterNightAudit(responce) {
         locationReload();
     else {
         showToast(responce.message, 'error');
-        setTimeout(() => {
-            locationReload();
-        }, 3000);
+        loader('hide');
     }
 }
 
