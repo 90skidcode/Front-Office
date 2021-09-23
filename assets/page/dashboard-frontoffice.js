@@ -49,12 +49,12 @@ function dashboard(responce) {
                         status = "In House";
                         inhouseCount += 1;
                         break;
-                    case "OFS":
+                    case "OS":
                         statusDesc = "outofservice";
                         status = "Out Of Service";
                         outofserviceCount += 1;
                         break;
-                    case "OFO":
+                    case "OD":
                         statusDesc = "outoforder";
                         status = "Out Of Order";
                         outoforderCount += 1;
