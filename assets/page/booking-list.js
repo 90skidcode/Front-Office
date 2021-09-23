@@ -24,7 +24,7 @@ function listPaymentType() {
 }
 
 function displayBookingListInit() {
-    let data = { "list_key": "list_booking", "status": "A" };
+    let data = { "list_key": "list_booking" };
     commonAjax('services.php', 'POST', data, '', '', '', { "functionName": "displayBookingList", "param1": "table-resevation-list" });
 }
 
