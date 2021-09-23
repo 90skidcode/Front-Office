@@ -214,9 +214,16 @@ function nightAuditDom(responce) {
 
     $("#night-audit").html(nightAuditHtml);
 
-    if (!checkdate(auditDate, now.toISOString().slice(0, 16))) {
+    var now = new Date();
+    auditDateLocal = responce.result;
+    let currentDate = now.split(" ");
+    let check = Date.parse(new Date(auditDate));
+    currentDate = Date.parse(new Date(currentDate[0]));
+    if (check > currentDate) {
         $('[onclick="nightAudit()"], td .btn').addClass('d-none');
     }
+
+
 }
 
 function nightAudit() {

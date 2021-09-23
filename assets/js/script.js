@@ -327,9 +327,13 @@ $(document).ready(function() {
 function checkAudit(responce) {
     var now = new Date();
     auditDateLocal = responce.result;
-    if (!checkdate(auditDateLocal, now.toISOString().slice(0, 16))) {
+    let currentDate = now.split(" ");
+    let check = Date.parse(new Date(auditDateLocal));
+    currentDate = Date.parse(new Date(currentDate[0]));
+    if (check > currentDate) {
         $('.no-add, .c-status').addClass('d-none');
     }
+
 }
 
 
