@@ -6,7 +6,7 @@ $(document).ready(function() {
     listState($('#country').val());
     $('#country').select2().on('change', function() {
         listState($(this).val());
-    })
+    });
     $('#state').select2().on('change', function() {
         listCity($(this).val());
     });
@@ -17,10 +17,12 @@ $(document).ready(function() {
      */
 
     checkEditorAddReservation('reservation_master_new', 'reservation_master_id');
+    var url = new URL(window.location.href);
+    var id = url.searchParams.get("id");
+    var viewType = url.searchParams.get("type");
 
     function checkEditorAddReservation(databasename, conditionkey, imageFlag) {
-        var url = new URL(window.location.href);
-        var id = url.searchParams.get("id");
+
         if (!isEmptyValue(id)) {
             let data = { "list_key": "reservation_detail", "reservation_no": id };
             let flag = false;
@@ -34,6 +36,8 @@ $(document).ready(function() {
         }
     }
     $('[readonly]').prop('tabindex', '-1');
+    if (viewType)
+        $(".btn-save").addClass('d-none');
 });
 
 /**
@@ -78,8 +82,8 @@ function setReservationValue(responce) {
 function setReservationNo(responce) {
     $.each(responce.result[0], function(i, v) {
         let count = Number(v) + 1;
-        setValue('reservation_no', "RES" + count)
-    })
+        setValue('reservation_no', "RES" + count);
+    });
 }
 
 /**
@@ -182,12 +186,12 @@ $(document).on('change', '#meal_plan_id', function() {
         commonAjax('database.php', 'POST', data, '', '', '', { "functionName": "mealPriceUpdate", "param1": "meal_plan_id" }, { "functionName": "mealCalculationClear" });
     } else
         mealCalculationClear();
-})
+});
 
 
 $(document).on('blur', '[name = "meal_price"],[name = "meal_count"],[name = "meal_total"]', function() {
     taxAmountCalculation();
-})
+});
 
 function mealPriceUpdate(responce, id) {
     $("[name=meal_price]").val(responce[0].meal_price);
@@ -226,7 +230,7 @@ $(document).on('blur', '[name = "customer_phone"]', function() {
         $(this).addClass('is-invalid');
         showToast("Enter Valid Phone No", "error");
     }
-})
+});
 
 
 /**

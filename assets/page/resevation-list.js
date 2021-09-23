@@ -24,7 +24,7 @@ function listPaymentType() {
 }
 
 function displayReservationListInit() {
-    let data = { "list_key": "list_reservation", "status": "A" };
+    let data = { "list_key": "list_reservation", "status": "'B','A','AM','D','N'" };
     commonAjax('services.php', 'POST', data, '', '', '', { "functionName": "displayReservationList", "param1": "table-resevation-list" });
 }
 
@@ -42,11 +42,36 @@ function displayReservationList(response, dataTableId) {
     }, {
         "data": "advance"
     }, {
+        "data": "reservation_status",
+        mRender: function(data, type, row) {
+            switch (row.reservation_status) {
+                case 'B':
+                    return 'Booking';
+                    break;
+                case 'N':
+                    return 'No Show';
+                    break;
+                case 'D':
+                    return 'Deleted';
+                    break;
+                case 'AM':
+                    return 'Amend';
+                    break;
+                case 'A':
+                    return 'Reserved';
+                    break;
+                default:
+                    return '';
+                    break;
+            }
+        }
+    }, {
         "data": "total_amount"
     }, /* EDIT */ /* DELETE */ {
         "data": "reservation_no",
         mRender: function(data, type, row) {
-            return `<td class="text-right">
+            if (row.reservation_status == 'A') {
+                return `<td class="text-right">
                     <a href="reservation-add.html?id=${row.reservation_no}" class="btn btn-icon btn-hover btn-sm btn-rounded pull-right">
                         <i class="anticon anticon-edit text-primary"></i>
                     </a>          
@@ -66,6 +91,12 @@ function displayReservationList(response, dataTableId) {
                         <i class="anticon anticon-trash-o text-danger"></i>
                     </button>
                 </td>`;
+            } else
+                return `<td class="text-right">
+                        <a href="reservation-add.html?id=${row.reservation_no}&type=view" class="btn btn-icon btn-hover btn-sm btn-rounded pull-right">
+                            <i class="anticon anticon-eye text-primary"></i>
+                        </a> 
+                    </td>`;
         }
     }];
     dataTableDisplay(response.result, tableHeader, false, dataTableId)
