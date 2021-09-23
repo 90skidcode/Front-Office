@@ -197,14 +197,14 @@ function displayCustomerList(response) {
         var action = '';
         if (roomStatus(element.room_status).status == 'In House') {
             if (!room_no && roomInHouseCount != 1)
-                action = `<button type="button"  class="btn btn-icon btn-hover btn-sm btn-rounded swap-bill-room-select" data-room="${element.room_no}" data-type="swap"> <i class="anticon anticon-retweet font-size-20 text-primary" title="Bill Swap"></i> </button><button type="button"  class="btn btn-icon btn-hover btn-sm btn-rounded btn-room-swap" data-type="swap" data-room="${element.room_no}"> <i class="anticon anticon-warning font-size-20 text-warning" title="Room Swap"></i> </button><a href="customer-ledger-details.html?booking_no=${booking_no}&room_no=${element.room_no}" class="btn btn-icon btn-hover btn-sm btn-rounded" > <i class="anticon anticon-disconnect text-danger font-size-20" title="Split Bill"></i> </a>`;
+                action = `<button type="button"  class="btn btn-icon btn-hover btn-sm btn-rounded swap-bill-room-select c-status" data-room="${element.room_no}" data-type="swap"> <i class="anticon anticon-retweet font-size-20 text-primary" title="Bill Swap"></i> </button><button type="button"  class="btn btn-icon btn-hover btn-sm btn-rounded btn-room-swap c-status" data-type="swap" data-room="${element.room_no}"> <i class="anticon anticon-warning font-size-20 text-warning" title="Room Swap"></i> </button><a href="customer-ledger-details.html?booking_no=${booking_no}&room_no=${element.room_no}" class="btn btn-icon btn-hover btn-sm btn-rounded c-status" > <i class="anticon anticon-disconnect text-danger font-size-20" title="Split Bill"></i> </a>`;
             else
-                action = `<button type="button"  class="btn btn-icon btn-hover btn-sm btn-rounded swap-bill-room-select" data-room="${element.room_no}" data-type="swap"><i class="anticon anticon-retweet font-size-20 text-primary" title="Bill Swap"></i> </button><button type="button"  class="btn btn-icon btn-hover btn-sm btn-rounded btn-room-swap" data-type="swap" data-room="${element.room_no}"> <i class="anticon anticon-warning font-size-20 text-warning" title="Room Swap"></i> </button><button type="button" class="btn btn-icon btn-hover btn-sm btn-rounded btn-split-bill" data-room="${element.room_no}" data-type="split"> <i class="anticon anticon-logout text-danger font-size-20" title="Split Bill"></i> </button>`;
+                action = `<button type="button"  class="btn btn-icon btn-hover btn-sm btn-rounded swap-bill-room-select c-status" data-room="${element.room_no}" data-type="swap"><i class="anticon anticon-retweet font-size-20 text-primary" title="Bill Swap"></i> </button><button type="button"  class="btn btn-icon btn-hover btn-sm btn-rounded btn-room-swap c-status" data-type="swap" data-room="${element.room_no}"> <i class="anticon anticon-warning font-size-20 text-warning" title="Room Swap"></i> </button><button type="button" class="btn btn-icon btn-hover btn-sm btn-rounded btn-split-bill c-status" data-room="${element.room_no}" data-type="split"> <i class="anticon anticon-logout text-danger font-size-20" title="Split Bill"></i> </button>`;
         }
 
         if (checkdate(response.result.audit_date, element.hotel_from_date) && element.room_status == 'I') {
-            action += `<button type="button" class="btn btn-icon btn-hover btn-sm btn-rounded btn-room-swap" data-type="edit" data-room="${element.room_no}"><i class="anticon anticon-edit font-size-20 text-primary" title="Edit"></i> </button>
-            <button type="button" class="btn btn-icon btn-hover btn-sm btn-rounded btn-room-delete" data-room="${element.room_no}"><i class="anticon anticon-delete font-size-20 text-danger" title="Delete"></i> </button>`;
+            action += `<button type="button" class="btn btn-icon btn-hover btn-sm btn-rounded btn-room-swap  c-status" data-type="edit" data-room="${element.room_no}"><i class="anticon anticon-edit font-size-20 text-primary" title="Edit"></i> </button>
+            <button type="button" class="btn btn-icon btn-hover btn-sm btn-rounded btn-room-delete c-status" data-room="${element.room_no}"><i class="anticon anticon-delete font-size-20 text-danger" title="Delete"></i> </button>`;
         }
         roomDetails += `<tr ststus="${element.room_status}">
                             <td class="text-center border-right-0 border-bottom-0">${element.room_category}</td>
@@ -235,10 +235,10 @@ function displayCustomerList(response) {
         let advanceBtn = '';
         if (element.status == 1) {
             if (checkdate(response.result.audit_date, element.created_at)) {
-                advanceBtn = `  <button class="btn btn-icon btn-hover btn-sm btn-rounded btn-advance" data-type="Advance" data-id="${element.bill_no}">
+                advanceBtn = `  <button class="btn btn-icon btn-hover btn-sm btn-rounded btn-advance  c-status" data-type="Advance" data-id="${element.bill_no}">
                                 <i class="anticon anticon-edit  font-size-20 text-primary" title="Edit Advance"></i>
                             </button>
-                            <button type="button" class="btn btn-icon btn-hover btn-sm btn-rounded btn-advance-delete" data-id="${element.bill_no}"><i class="anticon anticon-delete font-size-20 text-danger" title="Delete"></i> </button>`;
+                            <button type="button" class="btn btn-icon btn-hover btn-sm btn-rounded btn-advance-delete  c-status" data-id="${element.bill_no}"><i class="anticon anticon-delete font-size-20 text-danger" title="Delete"></i> </button>`;
             }
             advanceDetails += `<tr>
                             <td class="text-center border-right-0 border-bottom-0">${advanceDate[0]}</td>
@@ -267,10 +267,10 @@ function displayCustomerList(response) {
         var advanceDate = new Date(element.created_at).toString().split("GMT");
         if (element.status == 1) {
             if (checkdate(response.result.audit_date, element.created_at)) {
-                advanceBtn = `  <button class="btn btn-icon btn-hover btn-sm btn-rounded btn-advance" data-type="Hotel" data-id="${element.customer_ledger_id}">
+                advanceBtn = `  <button class="btn btn-icon btn-hover btn-sm btn-rounded btn-advance  c-status" data-type="Hotel" data-id="${element.customer_ledger_id}">
                                 <i class="anticon anticon-edit  font-size-20 text-primary" title="Edit Hotel"></i>
                             </button>
-                            <button type="button" class="btn btn-icon btn-hover btn-sm btn-rounded btn-ledger-delete" data-id="${element.customer_ledger_id}"><i class="anticon anticon-delete font-size-20 text-danger" title="Delete"></i> </button>`;
+                            <button type="button" class="btn btn-icon btn-hover btn-sm btn-rounded btn-ledger-delete  c-status" data-id="${element.customer_ledger_id}"><i class="anticon anticon-delete font-size-20 text-danger" title="Delete"></i> </button>`;
             }
             HotelDetails += `<tr>
                             <td class="text-center border-right-0 border-bottom-0">${advanceDate[0]}</td>
@@ -295,7 +295,7 @@ function displayCustomerList(response) {
     if (response.result.Booking) {
         response.result.Booking.forEach(element => {
             if (checkdate(response.result.audit_date, element.created_at)) {
-                actionMeal = `  <button class="btn btn-icon btn-hover btn-sm btn-rounded edit-meal">
+                actionMeal = `  <button class="btn btn-icon btn-hover btn-sm btn-rounded edit-meal  c-status">
                                     <i class="anticon anticon-edit font-size-20 text-primary" title="Edit Meal"></i>
                                 </button>`;
             }
@@ -318,10 +318,10 @@ function displayCustomerList(response) {
     if (response.result.Miscellaneous) {
         response.result.Miscellaneous.forEach(element => {
             if (checkdate(response.result.audit_date, element.created_at)) {
-                actionmiscellaneous = `  <button class="btn btn-icon btn-hover btn-sm btn-rounded edit-miscellaneous" data-id="${element.miscellaneous_expenses_id}">
+                actionmiscellaneous = `  <button class="btn btn-icon btn-hover btn-sm btn-rounded edit-miscellaneous  c-status" data-id="${element.miscellaneous_expenses_id}">
                                     <i class="anticon anticon-edit font-size-20 text-primary" title="Edit Miscellaneous"></i>
                                 </button>
-                                <button type="button" class="btn btn-icon btn-hover btn-sm btn-rounded btn-ledger-delete" data-id="${element.customer_ledger_id}"><i class="anticon anticon-delete font-size-20 text-danger" title="Delete"></i> </button>`;
+                                <button type="button" class="btn btn-icon btn-hover btn-sm btn-rounded btn-ledger-delete  c-status" data-id="${element.customer_ledger_id}"><i class="anticon anticon-delete font-size-20 text-danger" title="Delete"></i> </button>`;
             }
             var miscellaneousDate = new Date(element.created_at).toString().split("GMT");
             miscellaneousDetails += `<tr>
@@ -376,6 +376,16 @@ function displayCustomerList(response) {
                     </div>`;
 
     $(".summary").html(summary);
+
+    var allCheckOutStatus = true;
+    response.result.booking_details.forEach(element => {
+        if (element.room_status != "O")
+            checkOutStatus = false;
+    });
+
+    if (allCheckOutStatus)
+        $(".c-status").addClass('d-none');
+
 }
 
 $(document).on('click', '.swap-bill-room-select,.btn-split-bill', function() {

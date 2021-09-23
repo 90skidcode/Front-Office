@@ -31,7 +31,7 @@ function displayExpensesList(response, dataTableId) {
         "data": "room_name",
         mRender: function(data, type, row) {
             return `<td class="text-right">
-                    <a href="expenses-add.html?id=${row.expenses_id}" class="btn btn-icon btn-hover btn-sm btn-rounded pull-right">
+                    <a href="employee-add.html?id=${row.employee_id}" class="btn btn-icon btn-hover btn-sm btn-rounded pull-right">
                         <i class="anticon anticon-edit text-primary"></i>
                     </a>
                     <button class="btn btn-icon btn-hover btn-sm btn-rounded btn-delete-table" data-delete="${row.expenses_id}" data-toggle="modal" data-target="#delete">
