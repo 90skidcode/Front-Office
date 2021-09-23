@@ -436,6 +436,8 @@ $(document).on('click', '.swap-bill', function() {
  */
 $(document).on('click', '.btn-room-swap', function() {
     $("#room-swap").modal('show');
+    $("#room-swap-add")[0].reset();
+    $(".select2").val('').trigger('change');
     var data = { "list_key": "get_ledger", "booking_no": booking_no, "room_no": $(this).attr('data-room') };
     commonAjax('services.php', 'POST', data, '', '', '', { "functionName": "roomSwapSetValue", "param1": $(this).attr('data-type') });
 });
@@ -447,6 +449,9 @@ $(document).on('click', '.btn-room-swap', function() {
 
 $(document).on('click', '.hotel-room-add', function() {
     $(".room-swap").attr('data-type', "add");
+    $("#room-title").html('Add Room');
+    $("#room-swap-add")[0].reset();
+    $(".select2").val('').trigger('change');
 });
 
 
@@ -528,7 +533,9 @@ function roomSwapSetValue(res, type) {
     now.setMinutes(now.getMinutes() - now.getTimezoneOffset());
     $("#room-swap-add .current_date").val(now.toISOString().slice(0, 16));
     $("#room-swap-add .to_date").val(swapDate.hotel_to_date.replace(" ", "T").replace(":00", ""));
+    $("#room-title").html('Room Swap');
     if (type == 'edit') {
+        $("#room-title").html('Edit Room');
         $("#room-swap-add .room_category").val(swapDate.room_category_id).trigger('change');
         setTimeout(() => {
             $("#room-swap-add #room_no").append(`<option value="${swapDate.room_no}" selected>${swapDate.room_no}</option>`)
@@ -602,11 +609,11 @@ $(document).on('change', '.room_no', function() {
 
 /**
  * Price Clear for room category change
- */
+ 
 $(document).on('change', '.room_category', function() {
     $(".price").val(' ');
 });
-
+*/
 /**
  * Discount Amount Calculation
  * @param {*} price Room Price
@@ -620,7 +627,7 @@ function discountAmountCalculation(price, discountPercentage, totalNoOfDays) {
 /**
  * Total Calculation
  */
-$(document).on('change blur', '.room_category,.to_date,.from_date,.price,.cgst,.sgst,.discount', function() {
+$(document).on('change blur', '.to_date,.from_date,.price,.cgst,.sgst,.discount', function() {
     var t = $(this).closest('tr');
     var fromDate = t.find('.from_date').val();
     var toDate = t.find('.to_date').val();
