@@ -421,7 +421,7 @@ function getroomnumbers(responce, selectedRoom, booking_no, type) {
             $("#split-bill-modal").modal('show');
         }
     } else {
-        (type == 'swap') ? showToast('No rooms avaliable to swap the bill', 'error'): showToast('Only one room avalible so cant able to split the bill', 'error');
+        (type == 'swap') ? showToast('No rooms avaliable to swap the bill', 'error'): $("#checkout").modal('show');
     }
 }
 

@@ -331,6 +331,9 @@ function checkAudit(responce) {
     if (new Date(formatDate(now)) < check) {
         $('.no-add, .c-status').addClass('d-none');
     }
+    if (new Date(formatDate(now)) > check) {
+        $('.no-less-add').addClass('d-none');
+    }
 
 }
 
